@@ -4,22 +4,22 @@ export default function CtaSection() {
   return (
     <section className="bg-ink py-24 px-6 lg:px-8">
       <div className="mx-auto max-w-4xl text-center">
-        <h2 className="text-3xl font-semibold tracking-tight text-canvas sm:text-5xl">
-          You will never log into Meta Ads Manager separately again.
+        <h2 className="text-4xl font-black text-canvas sm:text-5xl sm:font-normal sm:tracking-tight">
+          Ready to scale your <span className="text-primary">creator outreach?</span>
         </h2>
-        <p className="mt-6 text-lg text-steel max-w-2xl mx-auto">
-          Stop waiting 48 hours for an agency to pull a failing ad. Stop paying percentages that grow as you scale. Start running ads intelligently.
+        <p className="mt-6 text-lg font-normal text-canvas-soft/80 max-w-2xl mx-auto">
+          Stop manually sending DMs and tracking responses in spreadsheets. Join the modern agencies using Scalo to close more creator partnerships.
         </p>
         <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
           <Link
             href="/signup"
-            className="inline-flex h-12 items-center justify-center rounded-full bg-brand-green px-8 text-base font-medium text-primary transition-colors hover:bg-brand-green-deep"
+            className="inline-flex h-12 items-center justify-center rounded-xl bg-primary px-8 text-base font-semibold text-on-primary transition-colors hover:bg-primary-active"
           >
-            Create your account
+            Start your campaign
           </Link>
           <Link
             href="/login"
-            className="inline-flex h-12 items-center justify-center rounded-full bg-transparent border border-steel px-8 text-base font-medium text-canvas transition-colors hover:bg-slate"
+            className="inline-flex h-12 items-center justify-center rounded-xl bg-transparent border border-canvas-soft px-8 text-base font-semibold text-canvas transition-colors hover:bg-canvas-soft/10"
           >
             Log in to Scalo
           </Link>
