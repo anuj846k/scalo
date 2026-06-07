@@ -48,6 +48,16 @@
   --color-negative-bg: var(--negative-bg);
   --color-accent-orange: var(--accent-orange);
   --color-accent-cyan: var(--accent-cyan);
+  --color-brand-green: #00d4a4;
+  --color-brand-green-deep: #00b48a;
+  --color-hairline: #e5e5e5;
+  --color-hairline-soft: #ededed;
+  --color-surface: #f7f7f7;
+  --color-surface-soft: #fafafa;
+  --color-charcoal: #1c1c1e;
+  --color-slate: #3a3a3c;
+  --color-steel: #5a5a5c;
+  --color-stone: #888888;
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --radius-xs: 2px;
   --radius-sm: 8px;
