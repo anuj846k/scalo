@@ -23,33 +23,33 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="bg-canvas-soft py-24 sm:py-32 px-6 lg:px-8">
+    <section id="how-it-works" className="bg-gray-50 py-24 sm:py-32 px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-black text-ink">
+          <h2 className="text-4xl font-semibold text-gray-900">
             The Outreach Pipeline.
           </h2>
-          <p className="mt-4 text-lg font-normal text-ink/70 max-w-2xl mx-auto">
+          <p className="mt-4 text-lg font-normal text-gray-500 max-w-2xl mx-auto">
             From first touch to signed partnership, managed seamlessly in one place.
           </p>
         </div>
 
         <div className="relative max-w-4xl mx-auto">
 
-          <div className="absolute left-[27px] top-4 bottom-4 w-px bg-canvas-soft border-l-2 border-dashed border-mute/30 hidden md:block" />
+          <div className="absolute left-[27px] top-4 bottom-4 w-px bg-gray-50 border-l-2 border-dashed border-mute/30 hidden md:block" />
 
           <div className="space-y-12">
             {steps.map((step, index) => (
               <div key={index} className="relative flex flex-col md:flex-row gap-8 items-start">
-                <div className="hidden md:flex shrink-0 w-14 h-14 rounded-full bg-primary-pale border border-primary-neutral items-center justify-center text-base font-semibold text-ink z-10">
+                <div className="hidden md:flex shrink-0 w-14 h-14 rounded-full bg-blue-50 border border-blue-100 items-center justify-center text-base font-semibold text-gray-900 z-10">
                   {index + 1}
                 </div>
-                <div className="bg-canvas border border-canvas-soft rounded-xl p-8 flex-1 shadow-sm transition-transform hover:-translate-y-1">
-                  <div className="inline-block mb-3 px-2 py-1 bg-canvas-soft rounded-md text-xs font-semibold tracking-wider text-mute">
+                <div className="bg-white border border-gray-100 rounded-xl p-8 flex-1 shadow-sm transition-transform hover:-translate-y-1">
+                  <div className="inline-block mb-3 px-2 py-1 bg-gray-50 rounded-md text-xs font-semibold tracking-wider text-gray-400">
                     {step.stage}
                   </div>
-                  <h3 className="text-2xl font-bold tracking-tight text-ink">{step.title}</h3>
-                  <p className="mt-3 text-base font-normal text-ink/70 leading-relaxed">{step.desc}</p>
+                  <h3 className="text-2xl font-semibold tracking-tight text-gray-900">{step.title}</h3>
+                  <p className="mt-3 text-base font-normal text-gray-500 leading-relaxed">{step.desc}</p>
                 </div>
               </div>
             ))}

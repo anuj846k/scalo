@@ -9,10 +9,10 @@ import Footer from "@/components/landing/Footer";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col font-sans pt-16">
+    <main className="flex min-h-screen flex-col font-sans bg-[#f5f5f5]">
       <Navbar />
       <Hero />
-      <DashboardMockup />
+      {/* <DashboardMockup /> */}
       <ProblemSection />
       <HowItWorks />
       <FeaturesSection />

@@ -16,7 +16,7 @@ export default function AuthLayout({ children, imageSrc }: AuthLayoutProps) {
     (pathname?.includes("signup") ? "/auth/signup.png" : "/auth/image.png");
 
   return (
-    <main className="relative flex h-[calc(100vh-4rem)] font-sans overflow-hidden bg-neutral-100">
+    <main className="relative flex h-screen font-sans overflow-hidden bg-neutral-100">
       <div className="absolute inset-0 z-0 hidden lg:flex items-center justify-center w-[calc(100%-520px)] p-12 xl:p-20">
         <div className="relative w-full h-full max-w-[1130px] max-h-[1014px] left-28">
           <Image

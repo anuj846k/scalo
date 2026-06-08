@@ -1,32 +1,85 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-canvas-soft px-6 py-24 sm:py-32 lg:px-8">
-      <div className="mx-auto  text-center relative z-10">
-        <div className="mb-8 inline-flex items-center rounded-pill border border-ink/10 bg-canvas px-4 py-1 text-sm font-semibold text-ink shadow-sm">
-          Introducing Scalo for Agencies
+    // <section className="relative overflow-hidden bg-gray-50 px-6 py-24 sm:py-32 lg:px-8">
+    //   <div className="mx-auto  text-center relative z-10">
+    //     <div className="mb-8 inline-flex items-center rounded-pill border border-gray-200 bg-white px-4 py-1 text-sm font-semibold text-gray-900 shadow-sm">
+    //       Introducing Scalo for Agencies
+    //     </div>
+    //     <h1 className="text-5xl font-semibold sm:text-6xl text-gray-900">
+    //       Creator outreach, <span className="text-primary">SCALED</span>.
+    //     </h1>
+    //     <p className="mt-8 text-lg font-normal text-gray-600 max-w-2xl mx-auto">
+    //       The AI-powered CRM for creator partnerships. Manage creators, run personalized outreach campaigns, and track pipeline metrics from a single dashboard.
+    //     </p>
+    //     <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+    //       <Link
+    //         href="/signup"
+    //         className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-base font-semibold text-white transition-colors hover:opacity-90"
+    //       >
+    //         Start your campaign
+    //       </Link>
+    //       <Link
+    //         href="#how-it-works"
+    //         className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-base font-semibold text-gray-900 transition-colors hover:bg-gray-50 border border-gray-900"
+    //       >
+    //         See how it works
+    //       </Link>
+    //     </div>
+    //   </div>
+    // </section>
+
+    <section className="relative flex flex-col h-screen w-full items-center justify-center overflow-hidden">
+      <div className="absolute bottom-[25%] flex h-[600px] w-[1000px]">
+        <svg className="absolute inset-0 h-full w-full pointer-events-none" style={{ zIndex: 0 }}>
+          <path
+            d="M 500 300 L 400 300 C 300 300, 300 120, 200 120 M 400 300 L 100 300 M 400 300 C 300 300, 300 480, 200 480"
+            stroke="#000000" strokeWidth="1.5" strokeOpacity="0.15" fill="none" strokeDasharray="6 6" strokeLinecap="round"
+          />
+          <path
+            d="M 500 300 L 600 300 C 700 300, 700 120, 800 120 M 600 300 L 900 300 M 600 300 C 700 300, 700 480, 800 480"
+            stroke="#000000" strokeWidth="1.5" strokeOpacity="0.15" fill="none" strokeDasharray="6 6" strokeLinecap="round"
+          />
+        </svg>
+
+        <div className="absolute left-[20%] top-[20%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-yellow-200 to-yellow-500 shadow-xs drop-shadow-sm p-2 overflow-hidden">
+          {/* <div className="absolute inset-0 bg-white/30 pointer-events-none z-0"></div> */}
+          <Image src="/landing/broadcast.png" alt="broadcasting" width={70} height={70} className="relative z-10 rounded-xl object-contain" />
         </div>
-        <h1 className="text-5xl font-black sm:text-7xl text-ink">
-          Creator outreach, scaled.
-        </h1>
-        <p className="mt-8 text-lg font-normal text-ink/80 max-w-2xl mx-auto">
-          The AI-powered CRM for creator partnerships. Manage creators, run personalized outreach campaigns, and track pipeline metrics from a single dashboard.
-        </p>
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
-            href="/signup"
-            className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-base font-semibold text-on-primary transition-colors hover:bg-primary-active"
-          >
-            Start your campaign
-          </Link>
-          <Link
-            href="#how-it-works"
-            className="inline-flex items-center justify-center rounded-xl bg-canvas px-6 py-3 text-base font-semibold text-ink transition-colors hover:bg-canvas-soft border border-ink"
-          >
-            See how it works
-          </Link>
+
+        <div className="absolute left-[10%] top-[50%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-green-200 to-green-500 shadow-xs drop-shadow-sm p-2">
+          <Image src="/landing/connect.png" alt="connect" width={110} height={110} className="rounded-2xl object-contain" />
         </div>
+
+        <div className="absolute left-[20%] top-[80%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-blue-200 to-blue-500 shadow-xs drop-shadow-sm p-4">
+          <Image src="/landing/schedule.png" alt="schedule" width={70} height={70} className="rounded-xl object-contain" />
+        </div>
+
+        <div className="absolute left-[50%] top-[50%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-white shadow-xl p-4">
+          <Image src="/logos/logo.svg" alt="Logo" width="100" height="100" className="rounded-xl object-contain" />
+        </div>
+
+        <div className="absolute left-[80%] top-[20%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-purple-200 to-purple-500 shadow-xs drop-shadow-sm p-2">
+          <Image src="/landing/growth.png" alt="growth" width={70} height={70} className="rounded-xl object-contain" />
+        </div>
+
+        <div className="absolute left-[90%] top-[50%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-orange-200 to-orange-500 shadow-xs drop-shadow-sm p-4">
+          <Image src="/landing/insights.png" alt="insights" width={110} height={110} className="rounded-2xl object-contain" />
+        </div>
+
+        <div className="absolute left-[80%] top-[80%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-red-200 to-red-500 shadow-xs drop-shadow-sm p-4">
+          <Image src="/landing/advert.png" alt="advertisment" width={70} height={70} className="rounded-xl object-contain" />
+        </div>
+
+      </div>
+
+      <div className="absolute bottom-16 flex flex-col items-center justify-center">
+        <p className="text-6xl font-semibold mb-2 text-center selection:bg-[#3a04ff] selection:text-white">Publish everywhere.</p>
+        <p className="text-lg text-[#000000] mb-4 text-center leading-tight">Manage your social media presence with ease. <br/> Create and manage campaigns from a single dashboard.</p>
+        <Link href="/signup" className="bg-linear-to-b from-[#3a04ff] to-[#8b5cf6] text-white p-2 px-5 rounded-xl shadow-md hover:shadow-lg hover:opacity-90 transition-all">
+          Get Started</Link>
       </div>
     </section>
   );

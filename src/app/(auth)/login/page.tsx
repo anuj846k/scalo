@@ -1,7 +1,13 @@
+import Navbar from "@/components/landing/Navbar";
 import LoginForm from "@/features/auth/components/login-form";
 import { requireUnauth } from "@/lib/auth-utils";
 
 export default async function Login() {
   await requireUnauth();
-  return <LoginForm />;
+  return (
+    <div>
+      <Navbar />
+      <LoginForm />
+    </div>
+  );
 }
