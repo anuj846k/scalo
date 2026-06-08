@@ -1,9 +1,7 @@
-import React from 'react'
+import LoginForm from "@/features/auth/components/login-form";
+import { requireUnauth } from "@/lib/auth-utils";
 
-const Login = () => {
-    return (
-        <div>Login</div>
-    )
+export default async function Login() {
+  await requireUnauth();
+  return <LoginForm />;
 }
-
-export default Login
