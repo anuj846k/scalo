@@ -1,10 +1,7 @@
-import AuthLayout from "@/features/auth/components/auth-layout";
 import RegisterForm from "@/features/auth/components/register-form";
+import { requireUnauth } from "@/lib/auth-utils";
 
-export default function SignUp() {
-  return (
-    <AuthLayout imageSrc="/auth/signup.png">
-      <RegisterForm />
-    </AuthLayout>
-  );
+export default async function SignUp() {
+  await requireUnauth();
+  return <RegisterForm />;
 }

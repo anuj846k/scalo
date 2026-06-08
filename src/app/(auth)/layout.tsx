@@ -1,9 +1,12 @@
-import React from "react";
+import AuthLayout from '@/features/auth/components/auth-layout';
+import React from 'react';
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <>{children}</>;
-}
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div>
+      <AuthLayout>{children}</AuthLayout>
+    </div>
+  );
+};
+
+export default Layout;

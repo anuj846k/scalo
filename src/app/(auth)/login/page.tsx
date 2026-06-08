@@ -1,10 +1,7 @@
-import AuthLayout from "@/features/auth/components/auth-layout";
 import LoginForm from "@/features/auth/components/login-form";
+import { requireUnauth } from "@/lib/auth-utils";
 
-export default function Login() {
-  return (
-    <AuthLayout imageSrc="/auth/image.png">
-      <LoginForm />
-    </AuthLayout>
-  );
+export default async function Login() {
+  await requireUnauth();
+  return <LoginForm />;
 }

@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { getUser } from "@/lib/auth-utils";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const user = await getUser();
+
   return (
     <nav className="fixed top-0 left-0 right-0 bg-canvas/80 backdrop-blur-md border-b border-canvas-soft z-50">
       <div className="mx-auto max-w-5xl px-6 lg:px-8">
@@ -11,18 +14,29 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="flex items-center gap-4">
-            <Link
-              href="/login"
-              className="text-sm font-semibold text-ink hover:text-ink/80 transition-colors"
-            >
-              Log in
-            </Link>
-            <Link
-              href="/signup"
-              className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-on-primary transition-colors hover:bg-primary-active"
-            >
-              Register
-            </Link>
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-on-primary transition-colors hover:bg-primary-active"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-sm font-semibold text-ink hover:text-ink/80 transition-colors"
+                >
+                  Log in
+                </Link>
+                <Link
+                  href="/signup"
+                  className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-on-primary transition-colors hover:bg-primary-active"
+                >
+                  Register
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
