@@ -1,7 +1,13 @@
+import Navbar from "@/components/landing/Navbar";
 import RegisterForm from "@/features/auth/components/register-form";
 import { requireUnauth } from "@/lib/auth-utils";
 
 export default async function SignUp() {
   await requireUnauth();
-  return <RegisterForm />;
+  return (
+    <div>
+      <Navbar />
+      <RegisterForm />
+    </div>
+  )
 }

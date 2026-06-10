@@ -1,13 +1,37 @@
+import Image from "next/image";
+import Link from "next/link";
+
 export default function Footer() {
   return (
-    <footer className="bg-ink border-t border-ink-deep py-12 px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold tracking-tight text-primary">Scalo</span>
+    <footer className="py-12 px-6 lg:px-8 bg-linear-to-b from-[#d5e8ff] to-[#102b9f] text-white w-full rounded-2xl">
+      <div className="mx-auto w-[70%]">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-white/20">
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm">
+              <Image
+                src="/logos/logo.svg"
+                alt="Logo"
+                width={28}
+                height={28}
+                className="h-7 w-7 object-contain"
+              />
+            </div>
+            <span className="text-3xl font-semibold tracking-tight">Scalo</span>
+          </div>
+
+          <div className="flex items-center gap-8 text-[15px] font-medium text-blue-100">
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link>
+          </div>
         </div>
-        <p className="text-sm font-normal text-canvas-soft/60">
-          © {new Date().getFullYear()} Scalo Inc. The Creator Outreach CRM. All rights reserved.
-        </p>
+
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 text-sm font-medium text-blue-200/80">
+          <p>
+            © {new Date().getFullYear()} Scalo Inc. All rights reserved.
+          </p>
+          <p>The Creator Outreach CRM</p>
+        </div>
       </div>
     </footer>
   );

@@ -1,6 +1,5 @@
 import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
-import DashboardMockup from "@/components/landing/DashboardMockup";
 import ProblemSection from "@/components/landing/ProblemSection";
 import HowItWorks from "@/components/landing/HowItWorks";
 import FeaturesSection from "@/components/landing/FeaturesSection";
@@ -9,10 +8,9 @@ import Footer from "@/components/landing/Footer";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col font-sans pt-16">
+    <main className="flex min-h-screen flex-col font-sans bg-[#f5f5f5]">
       <Navbar />
       <Hero />
-      <DashboardMockup />
       <ProblemSection />
       <HowItWorks />
       <FeaturesSection />
