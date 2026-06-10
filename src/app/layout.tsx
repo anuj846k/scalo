@@ -7,6 +7,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 const elmsSans = Elms_Sans({
   subsets: ['latin'],
   variable: '--font-elms-sans',
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {

@@ -1,6 +1,5 @@
 import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
-import DashboardMockup from "@/components/landing/DashboardMockup";
 import ProblemSection from "@/components/landing/ProblemSection";
 import HowItWorks from "@/components/landing/HowItWorks";
 import FeaturesSection from "@/components/landing/FeaturesSection";
@@ -12,12 +11,11 @@ export default function Home() {
     <main className="flex min-h-screen flex-col font-sans bg-[#f5f5f5]">
       <Navbar />
       <Hero />
-      {/* <DashboardMockup /> */}
       <ProblemSection />
       <HowItWorks />
       <FeaturesSection />
-      <CtaSection />
-      <Footer />
+      {/* <CtaSection /> */}
+      {/* <Footer /> */}
     </main>
   );
 }
