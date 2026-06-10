@@ -14,8 +14,8 @@ export default function Home() {
       <ProblemSection />
       <HowItWorks />
       <FeaturesSection />
-      {/* <CtaSection /> */}
-      {/* <Footer /> */}
+      <CtaSection />
+      <Footer />
     </main>
   );
 }
