@@ -10,10 +10,10 @@ export default async function Navbar() {
     <nav className="fixed top-6 flex w-full items-center justify-center max-w-full z-50 px-4">
       <div className="relative flex w-full max-w-5xl items-center justify-between px-6 py-3 rounded-2xl border border-[#e4e4ff] bg-white backdrop-blur-md shadow-sm transition-all duration-300 md:w-[85%] lg:w-[70%] xl:w-[50%]">
 
-        <div className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3 cursor-pointer">
           <Image src="/logos/logo.svg" alt="Scalo Logo" width={40} height={40} className="w-10 h-10" />
           <span className="text-2xl font-bold tracking-tight text-gray-900">Scalo</span>
-        </div>
+        </Link>
 
         <input type="checkbox" id="mobile-menu-toggle" className="peer hidden" />
 

@@ -46,31 +46,31 @@ export default function Hero() {
           </svg>
 
           <div className="absolute left-[20%] top-[20%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-yellow-200 to-yellow-500 shadow-xs drop-shadow-sm p-2 overflow-hidden">
-            <Image src="/landing/broadcast.png" alt="broadcasting" width={70} height={70} className="relative z-10 rounded-xl object-contain" />
+            <Image src="/landing/broadcast.png" alt="broadcasting" width={60} height={60} className="relative z-10 rounded-xl object-contain" />
           </div>
 
           <div className="absolute left-[10%] top-[50%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-green-200 to-green-500 shadow-xs drop-shadow-sm p-2">
-            <Image src="/landing/connect.png" alt="connect" width={110} height={110} className="rounded-2xl object-contain" />
+            <Image src="/landing/connect.png" alt="connect" width={60} height={60} className="rounded-2xl object-contain" />
           </div>
 
-          <div className="absolute left-[20%] top-[80%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-blue-200 to-blue-500 shadow-xs drop-shadow-sm p-4">
-            <Image src="/landing/schedule.png" alt="schedule" width={70} height={70} className="rounded-xl object-contain" />
+          <div className="absolute left-[20%] top-[80%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-blue-200 to-blue-500 shadow-xs drop-shadow-sm p-2">
+            <Image src="/landing/schedule.png" alt="schedule" width={60} height={60} className="rounded-xl object-contain" />
           </div>
 
           <div className="absolute left-[50%] top-[50%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-white shadow-xl p-4">
-            <Image src="/logos/logo.svg" alt="Logo" width="100" height="100" className="rounded-xl object-contain" />
+            <Image src="/logos/logo.svg" alt="Logo" width={60} height={60} className="rounded-xl object-contain" />
           </div>
 
           <div className="absolute left-[80%] top-[20%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-purple-200 to-purple-500 shadow-xs drop-shadow-sm p-2">
-            <Image src="/landing/growth.png" alt="growth" width={70} height={70} className="rounded-xl object-contain" />
+            <Image src="/landing/growth.png" alt="growth" width={60} height={60} className="rounded-xl object-contain" />
           </div>
 
-          <div className="absolute left-[90%] top-[50%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-orange-200 to-orange-500 shadow-xs drop-shadow-sm p-4">
-            <Image src="/landing/insights.png" alt="insights" width={110} height={110} className="rounded-2xl object-contain" />
+          <div className="absolute left-[90%] top-[50%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-orange-200 to-orange-500 shadow-xs drop-shadow-sm p-2">
+            <Image src="/landing/insights.png" alt="insights" width={60} height={60} className="rounded-2xl object-contain" />
           </div>
 
-          <div className="absolute left-[80%] top-[80%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-red-200 to-red-500 shadow-xs drop-shadow-sm p-4">
-            <Image src="/landing/advert.png" alt="advertisment" width={70} height={70} className="rounded-xl object-contain" />
+          <div className="absolute left-[80%] top-[80%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-linear-to-b from-red-200 to-red-500 shadow-xs drop-shadow-sm p-2">
+            <Image src="/landing/advert.png" alt="advertisment" width={60} height={60} className="rounded-xl object-contain" />
           </div>
         </div>
       </div>

@@ -59,30 +59,32 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-ink mb-2">
-          Welcome back
+      <div className="mb-4 ">
+        <h2 className="text-2xl font-medium tracking-tight">
+          Sign in to your account
         </h2>
       </div>
 
       <a
         href="/api/auth/google"
-        className="flex items-center justify-center gap-2.5 w-full h-12 bg-canvas border border-ink rounded-xl text-base font-semibold text-ink cursor-pointer no-underline transition-colors duration-150 hover:bg-canvas-soft"
+        className="relative overflow-hidden flex items-center justify-center gap-2.5 w-full h-10 bg-canvas border border-ink/20 rounded-xl font-medium text-base text-ink cursor-pointer no-underline transition-all hover:bg-canvas-soft hover:border-ink/30"
       >
-        <Image src="/google.svg" alt="Google" width={24} height={24} />
-        Continue with Google
+        <div className="absolute inset-y-0 left-0 w-12 bg-linear-to-r from-[#3a04ff]/15 to-transparent pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-12 bg-linear-to-l from-[#8b5cf6]/15 to-transparent pointer-events-none" />
+        <Image src="/google.svg" alt="Google" width={16} height={16} className="z-10" />
+        <span className="z-10">Continue with Google</span>
       </a>
 
-      <div className="flex items-center gap-3 my-6">
-        <div className="flex-1 h-px bg-ink/10" />
-        <span className="text-sm font-normal text-ink/50 whitespace-nowrap">
+      <div className="flex items-center gap-3 my-4">
+        <div className="flex-1 border-t border-ink/20" />
+        <span className="text-sm font-medium text-ink/50 whitespace-nowrap">
           or continue with email
         </span>
-        <div className="flex-1 h-px bg-ink/10" />
+        <div className="flex-1 border-t border-ink/20" />
       </div>
 
       <form
-        className="flex flex-col gap-5"
+        className="flex flex-col gap-3"
         onSubmit={form.handleSubmit(onSubmit)}
         noValidate
       >
@@ -99,7 +101,7 @@ export default function LoginForm() {
                     type="email"
                     placeholder="you@company.com"
                     autoComplete="email"
-                    className="h-12 px-4 bg-canvas"
+                    className="h-10 px-3 bg-canvas text-sm"
                     {...field}
                   />
                 </div>
@@ -130,14 +132,14 @@ export default function LoginForm() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     autoComplete="current-password"
-                    className="h-12 pl-4 pr-10 bg-canvas"
+                    className="h-10 pl-3 pr-10 bg-canvas text-sm"
                     {...field}
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 text-ink/40 hover:text-ink/80 hover:bg-transparent"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-ink/40 hover:text-ink/80 hover:bg-transparent"
                     onClick={() => setShowPassword((v) => !v)}
                   >
                     {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
@@ -157,13 +159,13 @@ export default function LoginForm() {
         <Button
           type="submit"
           disabled={isPending}
-          className="w-full h-12 mt-2 rounded-xl text-base font-semibold"
+          className="w-full h-10 mt-1 rounded-xl text-base font-semibold"
         >
           {isPending ? "Signing in..." : "Sign in"}
         </Button>
       </form>
 
-      <p className="mt-8 text-center text-sm font-normal text-ink/60">
+      <p className="mt-4 text-center text-sm font-normal text-ink/60">
         New to Scalo?{" "}
         <Link
           href="/signup"
@@ -173,7 +175,7 @@ export default function LoginForm() {
         </Link>
       </p>
 
-      <p className="mt-6 text-center text-xs font-normal text-ink/50 leading-normal">
+      <p className="mt-4 max-w-[280px] mx-auto text-center text-xs font-normal text-ink/50 leading-normal">
         By signing in you agree to our{" "}
         <a
           href="/terms"
