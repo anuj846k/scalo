@@ -1,10 +1,10 @@
 import {
   LayoutDashboard,
-  Megaphone,
+  Inbox,
   Users,
-  MessageSquare,
+  Megaphone,
+  Building2,
   BarChart3,
-  FileText,
   Settings,
 } from 'lucide-react';
 
@@ -15,9 +15,9 @@ export const navItems = [
     icon: LayoutDashboard,
   },
   {
-    title: 'Campaigns',
-    url: '/dashboard/campaigns',
-    icon: Megaphone,
+    title: 'Inbox',
+    url: '/dashboard/inbox',
+    icon: Inbox,
   },
   {
     title: 'Creators',
@@ -25,14 +25,14 @@ export const navItems = [
     icon: Users,
   },
   {
-    title: 'Templates',
-    url: '/dashboard/templates',
-    icon: FileText,
+    title: 'Campaigns',
+    url: '/dashboard/campaigns',
+    icon: Megaphone,
   },
   {
-    title: 'Conversations',
-    url: '/dashboard/conversations',
-    icon: MessageSquare,
+    title: 'Accounts',
+    url: '/dashboard/accounts',
+    icon: Building2,
   },
   {
     title: 'Analytics',
