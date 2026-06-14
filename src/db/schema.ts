@@ -79,9 +79,26 @@ export const verification = pgTable(
     (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
+export const instagramAccount = pgTable("instagram_account", {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+        .notNull()
+        .references(() => user.id, { onDelete: "cascade" }),
+    igUserId: text("ig_user_id").notNull(),
+    igUsername: text("ig_username"),
+    accessToken: text("access_token").notNull(),
+    tokenExpiresAt: timestamp("token_expires_at"),
+    connectedAt: timestamp("connected_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+        .defaultNow()
+        .$onUpdate(() => new Date())
+        .notNull(),
+});
+
 export const userRelations = relations(user, ({ many }) => ({
     sessions: many(session),
     accounts: many(account),
+    instagramAccounts: many(instagramAccount),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -94,6 +111,13 @@ export const sessionRelations = relations(session, ({ one }) => ({
 export const accountRelations = relations(account, ({ one }) => ({
     user: one(user, {
         fields: [account.userId],
+        references: [user.id],
+    }),
+}));
+
+export const instagramAccountRelations = relations(instagramAccount, ({ one }) => ({
+    user: one(user, {
+        fields: [instagramAccount.userId],
         references: [user.id],
     }),
 }));
