@@ -1,7 +1,7 @@
 import { requireAuth } from '@/lib/auth-utils';
-import { getConnectedAccount } from '@/features/settings/instagram/actions';
-import { InstagramSection } from '@/features/settings/instagram/components/instagram-section';
-import { InstagramMedia } from '@/features/settings/instagram/components/instagram-media';
+import { getConnectedAccount } from '@/features/account/instagram/actions';
+import { InstagramSection } from '@/features/account/instagram/components/instagram-section';
+import { InstagramMedia } from '@/features/account/instagram/components/instagram-media';
 
 const SettingsPage = async () => {
     const user = await requireAuth();

@@ -5,7 +5,7 @@ import {
   Megaphone,
   Building2,
   BarChart3,
-  Settings,
+  FileText,
 } from 'lucide-react';
 
 export const navItems = [
@@ -15,13 +15,18 @@ export const navItems = [
     icon: LayoutDashboard,
   },
   {
+    title: 'Accounts',
+    url: '/dashboard/accounts',
+    icon: Building2,
+  },
+  {
     title: 'Inbox',
     url: '/dashboard/inbox',
     icon: Inbox,
   },
   {
-    title: 'Creators',
-    url: '/dashboard/creators',
+    title: 'Leads',
+    url: '/dashboard/leads',
     icon: Users,
   },
   {
@@ -29,19 +34,15 @@ export const navItems = [
     url: '/dashboard/campaigns',
     icon: Megaphone,
   },
+
   {
-    title: 'Accounts',
-    url: '/dashboard/accounts',
-    icon: Building2,
-  },
-  {
-    title: 'Analytics',
-    url: '/dashboard/analytics',
+    title: 'Overview',
+    url: '/dashboard/overview',
     icon: BarChart3,
   },
   {
-    title: 'Settings',
-    url: '/dashboard/settings',
-    icon: Settings,
+    title: 'Templates',
+    url: '/dashboard/templates',
+    icon: FileText,
   },
 ];
