@@ -49,7 +49,7 @@ export default function RegisterForm() {
       },
       {
         onSuccess: () => {
-          router.push("/dashboard"); // redirect to dashboard
+          router.push("/setup");
         },
         onError: (ctx) => {
           alert(ctx.error.message || "An error occurred during registration.");

@@ -1,11 +1,26 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
 export const metadata: Metadata = {
-  title: 'Scalo',
-  description: 'Scalo — global transfers, simplified.',
+  title: {
+    default: 'Murmur',
+    template: '%s · Murmur',
+  },
+  description: 'Murmur — Unified AI feedback.',
+  keywords: ['AI', 'feedback', 'murmur', 'productivity', 'reviews'],
+  authors: [{ name: 'Murmur', url: 'https://example.com' }],
+  creator: 'Murmur',
+  openGraph: {
+    title: 'Murmur',
+    description: 'Unified AI feedback for teams and products.',
+    type: 'website',
+    url: 'https://example.com',
+  },
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' },
+  ],
 };
 
 export default function RootLayout({

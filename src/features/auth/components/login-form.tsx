@@ -46,7 +46,7 @@ export default function LoginForm() {
       },
       {
         onSuccess: () => {
-          router.push("/dashboard"); // redirect to dashboard
+          router.push("/dashboard");
         },
         onError: (ctx) => {
           alert(ctx.error.message || "An error occurred during login.");

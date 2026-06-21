@@ -12,9 +12,11 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.83",
     "@base-ui/react": "^1.5.0",
     "@hookform/resolvers": "^5.4.0",
     "@neondatabase/serverless": "^1.1.0",
+    "ai": "^6.0.208",
     "better-auth": "^1.6.14",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -28,6 +30,7 @@
     "lucide-react": "^1.17.0",
     "next": "16.2.7",
     "next-themes": "^0.4.6",
+    "papaparse": "^5.5.4",
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
     "react-day-picker": "^10.0.1",
@@ -46,6 +49,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.10",

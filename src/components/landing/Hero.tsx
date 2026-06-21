@@ -3,34 +3,6 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    // <section className="relative overflow-hidden bg-gray-50 px-6 py-24 sm:py-32 lg:px-8">
-    //   <div className="mx-auto  text-center relative z-10">
-    //     <div className="mb-8 inline-flex items-center rounded-pill border border-gray-200 bg-white px-4 py-1 text-sm font-semibold text-gray-900 shadow-sm">
-    //       Introducing Scalo for Agencies
-    //     </div>
-    //     <h1 className="text-5xl font-semibold sm:text-6xl text-gray-900">
-    //       Creator outreach, <span className="text-primary">SCALED</span>.
-    //     </h1>
-    //     <p className="mt-8 text-lg font-normal text-gray-600 max-w-2xl mx-auto">
-    //       The AI-powered CRM for creator partnerships. Manage creators, run personalized outreach campaigns, and track pipeline metrics from a single dashboard.
-    //     </p>
-    //     <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-    //       <Link
-    //         href="/signup"
-    //         className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-base font-semibold text-white transition-colors hover:opacity-90"
-    //       >
-    //         Start your campaign
-    //       </Link>
-    //       <Link
-    //         href="#how-it-works"
-    //         className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-base font-semibold text-gray-900 transition-colors hover:bg-gray-50 border border-gray-900"
-    //       >
-    //         See how it works
-    //       </Link>
-    //     </div>
-    //   </div>
-    // </section>
-
     <section className="relative flex flex-col h-screen w-full items-center justify-center overflow-hidden">
       <div className="absolute inset-0 flex items-center justify-center -translate-y-24 sm:-translate-y-20 md:-translate-y-16 lg:-translate-y-12 transition-transform duration-300">
         <div className="relative flex h-[600px] w-[1000px] origin-center scale-[0.45] sm:scale-[0.6] md:scale-[0.75] lg:scale-[0.9] xl:scale-100 2xl:scale-125 transition-transform duration-300">
