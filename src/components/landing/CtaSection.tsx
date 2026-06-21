@@ -1,6 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import Link from 'next/link';
+import Image from 'next/image';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 export default function CtaSection() {
   return (

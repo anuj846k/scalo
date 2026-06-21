@@ -1,5 +1,5 @@
-import RegisterForm from "@/features/auth/components/register-form";
-import { requireUnauth } from "@/lib/auth-utils";
+import RegisterForm from '@/features/auth/components/register-form';
+import { requireUnauth } from '@/lib/auth-utils';
 
 export default async function SignUp() {
   await requireUnauth();
@@ -7,5 +7,5 @@ export default async function SignUp() {
     <div>
       <RegisterForm />
     </div>
-  )
+  );
 }

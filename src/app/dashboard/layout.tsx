@@ -15,7 +15,7 @@ export default async function DashboardRootLayout({
       <AppSidebar user={user} />
       <SidebarInset>
         <DashboardHeader />
-        <main className='flex-1 p-6'>{children}</main>
+        <main className="flex-1 p-6">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

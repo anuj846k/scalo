@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 export default function AuthImage({ imageSrc }: { imageSrc?: string }) {
   const pathname = usePathname();
   const activeImage =
     imageSrc ||
-    (pathname?.includes("signup") ? "/auth/signup.png" : "/auth/image.png");
+    (pathname?.includes('signup') ? '/auth/signup.png' : '/auth/image.png');
 
   return (
     <div className="absolute inset-0 z-0 hidden lg:flex items-center justify-center w-[calc(100%-520px)] p-12 xl:p-20">

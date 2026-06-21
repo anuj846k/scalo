@@ -3,27 +3,27 @@ import { redirect } from 'next/navigation';
 import { auth } from './auth';
 
 export const requireAuth = async () => {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
-    if (!session) {
-        redirect('/login');
-    }
-    return session.user;
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    redirect('/login');
+  }
+  return session.user;
 };
 
 export const requireUnauth = async () => {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
-    if (session) {
-        redirect('/dashboard');
-    }
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (session) {
+    redirect('/dashboard');
+  }
 };
 
 export const getUser = async () => {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
-    return session ? session.user : null;
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  return session ? session.user : null;
 };

@@ -1,6 +1,6 @@
-import React from "react";
-import Navbar from "@/components/landing/Navbar";
-import AuthImage from "./auth-image";
+import React from 'react';
+import Navbar from '@/components/landing/Navbar';
+import AuthImage from './auth-image';
 
 interface AuthLayoutProps {
   children: React.ReactNode;

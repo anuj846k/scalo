@@ -1,0 +1,11 @@
+text,rating,author_name,source_item_id,created_at
+"The app crashes every time I try to check out",1,John Doe,CSV001,2026-06-01
+"Love the new dark mode feature!",5,Jane Smith,CSV002,2026-06-02
+"Shipping took way too long",2,Bob Wilson,CSV003,2026-06-03
+"The checkout flow is confusing and I keep getting errors",1,Alice Brown,CSV004,2026-06-04
+"Customer support was incredibly helpful",4,Charlie Davis,CSV005,2026-06-05
+"I wish there was a way to filter by category",3,Diana Evans,CSV006,2026-06-06
+"The mobile app is much better than the desktop version",4,Frank Green,,2026-06-07
+"Please add dark mode to the web app",3,Grace Hall,CSV008,2026-06-08
+"Great product but the pricing is too high",3,,CSV009,2026-06-09
+"Onboarding was seamless and easy to follow",5,Ivy Johnson,CSV010,2026-06-10

@@ -1,5 +1,5 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -20,16 +20,26 @@ export default function Footer() {
           </div>
 
           <div className="flex items-center gap-8 text-[15px] font-medium text-blue-100">
-            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-            <Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link>
+            <Link
+              href="/privacy"
+              className="hover:text-white transition-colors"
+            >
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-white transition-colors">
+              Terms of Service
+            </Link>
+            <Link
+              href="/contact"
+              className="hover:text-white transition-colors"
+            >
+              Contact Us
+            </Link>
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 text-sm font-medium text-blue-200/80">
-          <p>
-            © {new Date().getFullYear()} Scalo Inc. All rights reserved.
-          </p>
+          <p>© {new Date().getFullYear()} Scalo Inc. All rights reserved.</p>
           <p>The Creator Outreach CRM</p>
         </div>
       </div>

@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
-import Image from "next/image";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-import { Eye, EyeOff } from "lucide-react";
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
+import Image from 'next/image';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Eye, EyeOff } from 'lucide-react';
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field";
+} from '@/components/ui/field';
 
 const loginSchema = z.object({
-  email: z.email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  email: z.email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -33,8 +33,8 @@ export default function LoginForm() {
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
@@ -46,12 +46,12 @@ export default function LoginForm() {
       },
       {
         onSuccess: () => {
-          router.push("/dashboard"); // redirect to dashboard
+          router.push('/dashboard');
         },
         onError: (ctx) => {
-          alert(ctx.error.message || "An error occurred during login.");
+          alert(ctx.error.message || 'An error occurred during login.');
         },
-      }
+      },
     );
   };
 
@@ -65,15 +65,21 @@ export default function LoginForm() {
         </h2>
       </div>
 
-      <a
+      <Link
         href="/api/auth/google"
         className="relative overflow-hidden flex items-center justify-center gap-2.5 w-full h-10 bg-canvas border border-ink/20 rounded-xl font-medium text-base text-ink cursor-pointer no-underline transition-all hover:bg-canvas-soft hover:border-ink/30"
       >
         <div className="absolute inset-y-0 left-0 w-12 bg-linear-to-r from-[#3a04ff]/15 to-transparent pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-12 bg-linear-to-l from-[#8b5cf6]/15 to-transparent pointer-events-none" />
-        <Image src="/google.svg" alt="Google" width={16} height={16} className="z-10" />
+        <Image
+          src="/google.svg"
+          alt="Google"
+          width={16}
+          height={16}
+          className="z-10"
+        />
         <span className="z-10">Continue with Google</span>
-      </a>
+      </Link>
 
       <div className="flex items-center gap-3 my-4">
         <div className="flex-1 border-t border-ink/20" />
@@ -129,7 +135,7 @@ export default function LoginForm() {
                 <div className="relative w-full">
                   <Input
                     id="login-password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Enter your password"
                     autoComplete="current-password"
                     className="h-10 pl-3 pr-10 bg-canvas text-sm"
@@ -142,9 +148,13 @@ export default function LoginForm() {
                     className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-ink/40 hover:text-ink/80 hover:bg-transparent"
                     onClick={() => setShowPassword((v) => !v)}
                   >
-                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    {showPassword ? (
+                      <EyeOff className="size-4" />
+                    ) : (
+                      <Eye className="size-4" />
+                    )}
                     <span className="sr-only">
-                      {showPassword ? "Hide password" : "Show password"}
+                      {showPassword ? 'Hide password' : 'Show password'}
                     </span>
                   </Button>
                 </div>
@@ -161,33 +171,24 @@ export default function LoginForm() {
           disabled={isPending}
           className="w-full h-10 mt-1 rounded-xl text-base font-semibold"
         >
-          {isPending ? "Signing in..." : "Sign in"}
+          {isPending ? 'Signing in...' : 'Sign in'}
         </Button>
       </form>
 
       <p className="mt-4 text-center text-sm font-normal text-ink/60">
-        New to Scalo?{" "}
-        <Link
-          href="/signup"
-          className="text-ink font-semibold hover:underline"
-        >
+        New to Scalo?{' '}
+        <Link href="/signup" className="text-ink font-semibold hover:underline">
           Create a free account
         </Link>
       </p>
 
       <p className="mt-4 max-w-[280px] mx-auto text-center text-xs font-normal text-ink/50 leading-normal">
-        By signing in you agree to our{" "}
-        <a
-          href="/terms"
-          className="text-ink/70 hover:underline"
-        >
+        By signing in you agree to our{' '}
+        <a href="/terms" className="text-ink/70 hover:underline">
           Terms of Service
-        </a>{" "}
-        and{" "}
-        <a
-          href="/privacy"
-          className="text-ink/70 hover:underline"
-        >
+        </a>{' '}
+        and{' '}
+        <a href="/privacy" className="text-ink/70 hover:underline">
           Privacy Policy
         </a>
         .

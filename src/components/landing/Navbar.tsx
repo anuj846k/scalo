@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { getUser } from "@/lib/auth-utils";
-import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import Link from 'next/link';
+import { getUser } from '@/lib/auth-utils';
+import Image from 'next/image';
+import { Menu, X } from 'lucide-react';
 
 export default async function Navbar() {
   const user = await getUser();
@@ -9,13 +9,24 @@ export default async function Navbar() {
   return (
     <nav className="fixed top-6 flex w-full items-center justify-center max-w-full z-50 px-4">
       <div className="relative flex w-full max-w-5xl items-center justify-between px-6 py-3 rounded-2xl border border-[#e4e4ff] bg-white backdrop-blur-md shadow-sm transition-all duration-300 md:w-[85%] lg:w-[70%] xl:w-[50%]">
-
         <Link href="/" className="flex items-center gap-3 cursor-pointer">
-          <Image src="/logos/logo.svg" alt="Scalo Logo" width={40} height={40} className="w-10 h-10" />
-          <span className="text-2xl font-bold tracking-tight text-gray-900">Scalo</span>
+          <Image
+            src="/logos/logo.svg"
+            alt="Scalo Logo"
+            width={40}
+            height={40}
+            className="w-10 h-10"
+          />
+          <span className="text-2xl font-bold tracking-tight text-gray-900">
+            Scalo
+          </span>
         </Link>
 
-        <input type="checkbox" id="mobile-menu-toggle" className="peer hidden" />
+        <input
+          type="checkbox"
+          id="mobile-menu-toggle"
+          className="peer hidden"
+        />
 
         <label
           htmlFor="mobile-menu-toggle"
@@ -32,13 +43,22 @@ export default async function Navbar() {
         </label>
 
         <div className="hidden md:flex gap-8">
-          <Link href="#product" className="font-medium text-gray-700 hover:text-gray-900 transition-colors">
+          <Link
+            href="#product"
+            className="font-medium text-gray-700 hover:text-gray-900 transition-colors"
+          >
             Product
           </Link>
-          <Link href="#features" className="font-medium text-gray-700 hover:text-gray-900 transition-colors">
+          <Link
+            href="#features"
+            className="font-medium text-gray-700 hover:text-gray-900 transition-colors"
+          >
             Features
           </Link>
-          <Link href="#pricing" className="font-medium text-gray-700 hover:text-gray-900 transition-colors">
+          <Link
+            href="#pricing"
+            className="font-medium text-gray-700 hover:text-gray-900 transition-colors"
+          >
             Pricing
           </Link>
         </div>
@@ -71,18 +91,26 @@ export default async function Navbar() {
 
         <div className="absolute top-[calc(100%+0.75rem)] left-0 right-0 hidden peer-checked:flex flex-col gap-5 p-6 rounded-2xl border border-[#e4e4ff] bg-white shadow-xl md:hidden z-40 transition-all duration-300">
           <div className="flex flex-col gap-4">
-            <Link href="#product" className="font-medium text-gray-700 hover:text-gray-900 transition-colors text-lg">
+            <Link
+              href="#product"
+              className="font-medium text-gray-700 hover:text-gray-900 transition-colors text-lg"
+            >
               Product
             </Link>
-            <Link href="#features" className="font-medium text-gray-700 hover:text-gray-900 transition-colors text-lg">
+            <Link
+              href="#features"
+              className="font-medium text-gray-700 hover:text-gray-900 transition-colors text-lg"
+            >
               Features
             </Link>
-            <Link href="#pricing" className="font-medium text-gray-700 hover:text-gray-900 transition-colors text-lg">
+            <Link
+              href="#pricing"
+              className="font-medium text-gray-700 hover:text-gray-900 transition-colors text-lg"
+            >
               Pricing
             </Link>
           </div>
-          
-          
+
           <div className="flex flex-col gap-3">
             {user ? (
               <Link
@@ -109,7 +137,6 @@ export default async function Navbar() {
             )}
           </div>
         </div>
-
       </div>
     </nav>
   );
