@@ -1,8 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useRef } from "react";
-import { Popover, PopoverContent, PopoverAnchor } from "@/components/ui/popover";
-import { Mail, Plus, X } from "lucide-react";
+import { useState, useRef } from 'react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverAnchor,
+} from '@/components/ui/popover';
+import { Mail, Plus, X } from 'lucide-react';
 
 interface EmailInviteInputProps {
   emails: string[];
@@ -11,8 +15,11 @@ interface EmailInviteInputProps {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function EmailInviteInput({ emails, onEmailsChange }: EmailInviteInputProps) {
-  const [input, setInput] = useState("");
+export function EmailInviteInput({
+  emails,
+  onEmailsChange,
+}: EmailInviteInputProps) {
+  const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -23,13 +30,13 @@ export function EmailInviteInput({ emails, onEmailsChange }: EmailInviteInputPro
   const handleInputChange = (val: string) => {
     setInput(val);
     const trimmedVal = val.trim();
-    setOpen(trimmedVal.length > 0 && trimmedVal.includes("@"));
+    setOpen(trimmedVal.length > 0 && trimmedVal.includes('@'));
   };
 
   const addEmail = (email: string) => {
     if (!isDuplicate && isValidEmail) {
       onEmailsChange([...emails, email]);
-      setInput("");
+      setInput('');
       setOpen(false);
       inputRef.current?.focus();
     }
@@ -40,11 +47,11 @@ export function EmailInviteInput({ emails, onEmailsChange }: EmailInviteInputPro
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if ((e.key === "Enter" || e.key === ",") && isValidEmail && !isDuplicate) {
+    if ((e.key === 'Enter' || e.key === ',') && isValidEmail && !isDuplicate) {
       e.preventDefault();
       addEmail(trimmed);
     }
-    if (e.key === "Backspace" && !input && emails.length > 0) {
+    if (e.key === 'Backspace' && !input && emails.length > 0) {
       onEmailsChange(emails.slice(0, -1));
     }
   };
@@ -80,7 +87,7 @@ export function EmailInviteInput({ emails, onEmailsChange }: EmailInviteInputPro
             value={input}
             onChange={(e) => handleInputChange(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={emails.length === 0 ? "name@example.com" : ""}
+            placeholder={emails.length === 0 ? 'name@example.com' : ''}
             className="flex-1 min-w-[140px] bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
         </div>

@@ -1,14 +1,20 @@
-"use client";
+'use client';
 
-import { useState, useEffect, use } from "react";
-import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
+import { useState, useEffect, use } from 'react';
+import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
 
-export default function AcceptInvitationPage({ params }: { params: Promise<{ id: string }> }) {
+export default function AcceptInvitationPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = use(params);
   const router = useRouter();
   const { data: session } = authClient.useSession();
-  const [status, setStatus] = useState<"loading" | "accepting" | "accepted" | "error">("loading");
+  const [status, setStatus] = useState<
+    'loading' | 'accepting' | 'accepted' | 'error'
+  >('loading');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -16,24 +22,25 @@ export default function AcceptInvitationPage({ params }: { params: Promise<{ id:
       router.push(`/login?redirect=/invitations/accept/${id}`);
       return;
     }
-    setStatus("accepting");
+    setStatus('accepting');
   }, [session, id, router]);
 
   const handleAccept = async () => {
-    setStatus("accepting");
+    setStatus('accepting');
     setError(null);
-    const { error: acceptError } = await authClient.organization.acceptInvitation({
-      invitationId: id,
-    });
+    const { error: acceptError } =
+      await authClient.organization.acceptInvitation({
+        invitationId: id,
+      });
     if (acceptError) {
-      setError(acceptError.message || "Failed to accept invitation");
-      setStatus("error");
+      setError(acceptError.message || 'Failed to accept invitation');
+      setStatus('error');
       return;
     }
-    setStatus("accepted");
+    setStatus('accepted');
   };
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <p className="text-sm text-gray-500">Checking invitation...</p>
@@ -41,7 +48,7 @@ export default function AcceptInvitationPage({ params }: { params: Promise<{ id:
     );
   }
 
-  if (status === "accepting") {
+  if (status === 'accepting') {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
@@ -61,7 +68,7 @@ export default function AcceptInvitationPage({ params }: { params: Promise<{ id:
     );
   }
 
-  if (status === "accepted") {
+  if (status === 'accepted') {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
@@ -70,7 +77,7 @@ export default function AcceptInvitationPage({ params }: { params: Promise<{ id:
             You&apos;ve joined the workspace.
           </p>
           <button
-            onClick={() => router.push("/dashboard")}
+            onClick={() => router.push('/dashboard')}
             className="w-full rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/80"
           >
             Go to Dashboard

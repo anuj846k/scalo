@@ -1,0 +1,6 @@
+migrations
+pnpm-lock.yaml
+eslint.config.mjs
+postcss.config.mjs
+next.config.ts
+src/components/ui

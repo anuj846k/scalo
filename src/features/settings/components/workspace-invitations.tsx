@@ -1,25 +1,36 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
-import { Mail, Check, X, Building2, Loader2 } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
-import { IncomingInvitation } from "./workspace-dialog";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import {
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+  EmptyMedia,
+} from '@/components/ui/empty';
+import { Mail, Check, X, Building2, Loader2 } from 'lucide-react';
+import { authClient } from '@/lib/auth-client';
+import { IncomingInvitation } from './workspace-dialog';
 
 interface WorkspaceInvitationsProps {
   invitations: IncomingInvitation[];
   onActionComplete: () => void;
 }
 
-export function WorkspaceInvitations({ invitations, onActionComplete }: WorkspaceInvitationsProps) {
+export function WorkspaceInvitations({
+  invitations,
+  onActionComplete,
+}: WorkspaceInvitationsProps) {
   const [processingId, setProcessingId] = useState<string | null>(null);
 
   const handleAccept = async (invitationId: string) => {
     setProcessingId(`accept-${invitationId}`);
     try {
-      const { error } = await authClient.organization.acceptInvitation({ invitationId });
+      const { error } = await authClient.organization.acceptInvitation({
+        invitationId,
+      });
       if (!error) {
         onActionComplete();
       }
@@ -33,7 +44,9 @@ export function WorkspaceInvitations({ invitations, onActionComplete }: Workspac
   const handleReject = async (invitationId: string) => {
     setProcessingId(`reject-${invitationId}`);
     try {
-      const { error } = await authClient.organization.rejectInvitation({ invitationId });
+      const { error } = await authClient.organization.rejectInvitation({
+        invitationId,
+      });
       if (!error) {
         onActionComplete();
       }
@@ -81,10 +94,13 @@ export function WorkspaceInvitations({ invitations, onActionComplete }: Workspac
                   </div>
                   <div className="min-w-0 leading-tight">
                     <p className="text-sm font-semibold truncate text-foreground">
-                      {inv.organization?.name || "Workspace"}
+                      {inv.organization?.name || 'Workspace'}
                     </p>
                     <p className="text-[11px] text-muted-foreground truncate mt-0.5">
-                      Invited by: <span className="font-medium text-foreground/80">{inv.inviter?.name || inv.inviter?.email || "Unknown"}</span>
+                      Invited by:{' '}
+                      <span className="font-medium text-foreground/80">
+                        {inv.inviter?.name || inv.inviter?.email || 'Unknown'}
+                      </span>
                     </p>
                   </div>
                 </div>

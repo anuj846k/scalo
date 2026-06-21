@@ -45,7 +45,10 @@ export function parseCsv(content: string): ParseResult {
     if (row.rating !== undefined && row.rating !== '') {
       const parsed = parseInt(row.rating, 10);
       if (isNaN(parsed) || parsed < 1 || parsed > 5) {
-        results.errors.push({ row: i + 1, message: 'rating must be a number between 1 and 5' });
+        results.errors.push({
+          row: i + 1,
+          message: 'rating must be a number between 1 and 5',
+        });
         continue;
       }
       rating = parsed;
@@ -57,7 +60,10 @@ export function parseCsv(content: string): ParseResult {
       if (!isNaN(parsed.getTime())) {
         createdAt = parsed;
       } else {
-        results.errors.push({ row: i + 1, message: `invalid date: "${row.created_at}"` });
+        results.errors.push({
+          row: i + 1,
+          message: `invalid date: "${row.created_at}"`,
+        });
         continue;
       }
     }

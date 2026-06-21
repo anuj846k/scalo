@@ -14,14 +14,20 @@ export async function POST(req: NextRequest) {
 
   const organizationId = session.session.activeOrganizationId;
   if (!organizationId) {
-    return NextResponse.json({ error: 'No active organization' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'No active organization' },
+      { status: 400 },
+    );
   }
 
   const formData = await req.formData();
   const file = formData.get('file');
 
   if (!file || !(file instanceof File)) {
-    return NextResponse.json({ error: 'No CSV file provided' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'No CSV file provided' },
+      { status: 400 },
+    );
   }
 
   const content = await file.text();
@@ -66,6 +72,9 @@ export async function POST(req: NextRequest) {
     });
   } catch (e) {
     const message = e instanceof Error ? e.message : 'Unknown error';
-    return NextResponse.json({ inserted: 0, errors: [{ row: -1, message }] }, { status: 500 });
+    return NextResponse.json(
+      { inserted: 0, errors: [{ row: -1, message }] },
+      { status: 500 },
+    );
   }
 }

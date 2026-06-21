@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Settings, Users, Mail } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { authClient } from "@/lib/auth-client";
-import { WorkspaceGeneral } from "./workspace-general";
-import { WorkspaceMembers } from "./workspace-members";
-import { WorkspaceInvitations } from "./workspace-invitations";
+import { useState, useEffect, useCallback } from 'react';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { Settings, Users, Mail } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { authClient } from '@/lib/auth-client';
+import { WorkspaceGeneral } from './workspace-general';
+import { WorkspaceMembers } from './workspace-members';
+import { WorkspaceInvitations } from './workspace-invitations';
 
 const navItems = [
-  { id: "general", label: "General", icon: Settings },
-  { id: "members", label: "Members", icon: Users },
-  { id: "invitations", label: "Invites", icon: Mail },
+  { id: 'general', label: 'General', icon: Settings },
+  { id: 'members', label: 'Members', icon: Users },
+  { id: 'invitations', label: 'Invites', icon: Mail },
 ] as const;
 
-type NavId = (typeof navItems)[number]["id"];
+type NavId = (typeof navItems)[number]['id'];
 
 export interface OrganizationUser {
   id: string;
@@ -27,7 +27,7 @@ export interface OrganizationUser {
 export interface OrganizationMember {
   id: string;
   userId: string;
-  role: "owner" | "admin" | "member";
+  role: 'owner' | 'admin' | 'member';
   createdAt: Date | string;
   user: OrganizationUser;
 }
@@ -35,8 +35,8 @@ export interface OrganizationMember {
 export interface OrganizationInvitation {
   id: string;
   email: string;
-  role: "admin" | "member";
-  status: "pending" | "accepted" | "rejected";
+  role: 'admin' | 'member';
+  status: 'pending' | 'accepted' | 'rejected';
   expiresAt: Date | string;
 }
 
@@ -63,8 +63,8 @@ export interface OrganizationBrief {
 export interface IncomingInvitation {
   id: string;
   email: string;
-  role: "admin" | "member";
-  status: "pending" | "accepted" | "rejected";
+  role: 'admin' | 'member';
+  status: 'pending' | 'accepted' | 'rejected';
   expiresAt: Date | string | null;
   createdAt: Date | string;
   organizationId: string;
@@ -84,11 +84,17 @@ interface WorkspaceDialogProps {
   userId: string;
 }
 
-export function WorkspaceDialog({ open, onOpenChange, userId }: WorkspaceDialogProps) {
-  const [activeNav, setActiveNav] = useState<NavId>("general");
+export function WorkspaceDialog({
+  open,
+  onOpenChange,
+  userId,
+}: WorkspaceDialogProps) {
+  const [activeNav, setActiveNav] = useState<NavId>('general');
   const [org, setOrg] = useState<FullOrganization | null>(null);
   const [orgs, setOrgs] = useState<OrganizationBrief[]>([]);
-  const [incomingInvites, setIncomingInvites] = useState<IncomingInvitation[]>([]);
+  const [incomingInvites, setIncomingInvites] = useState<IncomingInvitation[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
 
   const fetchOrgs = useCallback(async () => {
@@ -96,12 +102,14 @@ export function WorkspaceDialog({ open, onOpenChange, userId }: WorkspaceDialogP
       const [listRes, fullRes, invitesRes] = await Promise.all([
         authClient.organization.list({}),
         authClient.organization.getFullOrganization(),
-        fetch("/api/invitations/pending").then((r) => r.json()),
+        fetch('/api/invitations/pending').then((r) => r.json()),
       ]);
 
       const orgList = (listRes.data || []) as OrganizationBrief[];
       setOrgs(orgList);
-      setIncomingInvites((invitesRes.invitations || []) as IncomingInvitation[]);
+      setIncomingInvites(
+        (invitesRes.invitations || []) as IncomingInvitation[],
+      );
 
       let activeOrg: FullOrganization | null = null;
       if (fullRes.data) {
@@ -113,12 +121,14 @@ export function WorkspaceDialog({ open, onOpenChange, userId }: WorkspaceDialogP
         });
         if (detailRes.data) {
           activeOrg = detailRes.data as FullOrganization;
-          await authClient.organization.setActive({ organizationId: firstOrg.id });
+          await authClient.organization.setActive({
+            organizationId: firstOrg.id,
+          });
         }
       }
       setOrg(activeOrg);
     } catch (e) {
-      console.error("Failed to load org data", e);
+      console.error('Failed to load org data', e);
     }
     setLoading(false);
   }, []);
@@ -155,16 +165,17 @@ export function WorkspaceDialog({ open, onOpenChange, userId }: WorkspaceDialogP
             <nav className="space-y-0.5">
               {navItems.map((item) => {
                 const isActive = activeNav === item.id;
-                const showBadge = item.id === "invitations" && incomingInvites.length > 0;
+                const showBadge =
+                  item.id === 'invitations' && incomingInvites.length > 0;
                 return (
                   <button
                     key={item.id}
                     onClick={() => setActiveNav(item.id)}
                     className={cn(
-                      "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 cursor-pointer",
+                      'flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 cursor-pointer',
                       isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-muted-foreground hover:bg-muted hover:text-foreground',
                     )}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
@@ -191,7 +202,7 @@ export function WorkspaceDialog({ open, onOpenChange, userId }: WorkspaceDialogP
               </div>
             ) : (
               <>
-                {activeNav === "general" && (
+                {activeNav === 'general' && (
                   <WorkspaceGeneral
                     org={org}
                     orgs={orgs}
@@ -200,10 +211,10 @@ export function WorkspaceDialog({ open, onOpenChange, userId }: WorkspaceDialogP
                     onSwitch={handleSwitch}
                   />
                 )}
-                {activeNav === "members" && (
+                {activeNav === 'members' && (
                   <WorkspaceMembers org={org} onOrgUpdate={fetchOrgs} />
                 )}
-                {activeNav === "invitations" && (
+                {activeNav === 'invitations' && (
                   <WorkspaceInvitations
                     invitations={incomingInvites}
                     onActionComplete={fetchOrgs}

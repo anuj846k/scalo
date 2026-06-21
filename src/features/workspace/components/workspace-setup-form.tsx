@@ -1,16 +1,22 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 export default function WorkspaceSetupForm() {
   const router = useRouter();
-  const [name, setName] = useState("My Workspace");
+  const [name, setName] = useState('My Workspace');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +25,10 @@ export default function WorkspaceSetupForm() {
     setLoading(true);
     setError(null);
 
-    const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    const slug = name
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
 
     const { data, error: orgError } = await authClient.organization.create({
       name,
@@ -27,20 +36,20 @@ export default function WorkspaceSetupForm() {
     });
 
     if (orgError) {
-      setError(orgError.message || "Failed to create workspace");
+      setError(orgError.message || 'Failed to create workspace');
       setLoading(false);
       return;
     }
 
     if (!data?.id) {
-      setError("Organization created but no ID returned");
+      setError('Organization created but no ID returned');
       setLoading(false);
       return;
     }
 
     await authClient.organization.setActive({ organizationId: data.id });
 
-    router.push("/dashboard");
+    router.push('/dashboard');
   };
 
   return (
@@ -67,7 +76,7 @@ export default function WorkspaceSetupForm() {
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Continue"}
+              {loading ? 'Creating...' : 'Continue'}
             </Button>
           </form>
         </CardContent>

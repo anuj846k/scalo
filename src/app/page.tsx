@@ -1,10 +1,10 @@
-import Navbar from "@/components/landing/Navbar";
-import Hero from "@/components/landing/Hero";
-import ProblemSection from "@/components/landing/ProblemSection";
-import HowItWorks from "@/components/landing/HowItWorks";
-import FeaturesSection from "@/components/landing/FeaturesSection";
-import CtaSection from "@/components/landing/CtaSection";
-import Footer from "@/components/landing/Footer";
+import Navbar from '@/components/landing/Navbar';
+import Hero from '@/components/landing/Hero';
+import ProblemSection from '@/components/landing/ProblemSection';
+import HowItWorks from '@/components/landing/HowItWorks';
+import FeaturesSection from '@/components/landing/FeaturesSection';
+import CtaSection from '@/components/landing/CtaSection';
+import Footer from '@/components/landing/Footer';
 
 export default function Home() {
   return (

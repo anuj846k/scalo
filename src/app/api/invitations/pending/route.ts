@@ -26,10 +26,12 @@ export async function GET() {
       inviterEmail: user.email,
     })
     .from(invitation)
-    .where(and(
-      eq(invitation.email, session.user.email),
-      eq(invitation.status, 'pending'),
-    ))
+    .where(
+      and(
+        eq(invitation.email, session.user.email),
+        eq(invitation.status, 'pending'),
+      ),
+    )
     .leftJoin(organization, eq(invitation.organizationId, organization.id))
     .leftJoin(user, eq(invitation.inviterId, user.id));
 
@@ -40,8 +42,12 @@ export async function GET() {
     status: inv.status,
     expiresAt: inv.expiresAt,
     createdAt: inv.createdAt,
-    organization: inv.organizationName ? { name: inv.organizationName, id: inv.organizationId } : null,
-    inviter: inv.inviterName ? { name: inv.inviterName, email: inv.inviterEmail } : null,
+    organization: inv.organizationName
+      ? { name: inv.organizationName, id: inv.organizationId }
+      : null,
+    inviter: inv.inviterName
+      ? { name: inv.inviterName, email: inv.inviterEmail }
+      : null,
   }));
 
   return NextResponse.json({ invitations: result });
