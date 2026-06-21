@@ -289,249 +289,316 @@ components:
 
 # Overview
 
-Scalo is an AI-powered creator outreach platform built for influencer agencies, UGC agencies, talent managers, and brands that run creator partnerships at scale.
+Murmur is a Customer Intelligence Layer for AI. Connect support tickets, reviews, surveys, and conversations once. Ask questions anywhere — ChatGPT, Claude, Cursor, Slack, or Murmur. Get evidence-backed answers about what customers actually want.
 
-Today, most creator outreach is managed through spreadsheets, Notion boards, Airtable databases, and manual DMs. Teams struggle to track who was contacted, who replied, who requires follow-up, and which creators converted into partnerships.
+The visual language is inspired by modern editorial software rather than traditional dashboards. Large display typography creates confidence, generous spacing improves readability, and soft green accents highlight evidence and insights.
 
-Scalo centralizes the entire workflow.
-
-Teams can import creators, organize campaigns, generate personalized outreach with AI, classify responses, manage follow-ups, and track campaign performance from a single dashboard.
-
-The visual language is inspired by modern editorial software rather than traditional CRMs. Large display typography creates confidence, generous spacing improves readability, and soft green accents highlight actions and opportunities.
-
-The platform should feel operational, modern, and focused on helping teams scale creator relationships.
+The platform should feel like a thinking partner — precise, transparent, and focused on surfacing what customers actually need.
 
 ## Key Characteristics
 
-- AI-powered creator outreach workflow
-- Centralized creator CRM
-- Campaign-first experience
-- Clear outreach pipeline management
-- Personalized messaging at scale
-- Analytics and performance visibility
+- Multi-source feedback ingestion (CSV, reviews, tickets, surveys)
+- Normalized schema with embeddings for semantic retrieval
+- AI-powered chat with evidence-backed citations
+- Theme clustering, sentiment aggregation, trend detection
+- Source transparency — every answer links back to original feedback
 - Bold editorial typography
 - Large rounded surfaces
-- Soft green accents for actions and success states
-- High information density without visual clutter
+- Soft green accents for evidence and insights
 
 ---
 
 # Product Positioning
 
-## What Scalo Is
+## What Murmur Is
 
-Scalo is a Creator Outreach CRM that helps teams:
+Murmur is a Customer Intelligence Platform that helps teams:
 
-- Manage creators
-- Run outreach campaigns
-- Generate personalized messages
-- Track responses
-- Manage follow-ups
-- Measure campaign performance
+- Connect feedback sources in one place
+- Ask natural-language questions about customer needs
+- Get evidence-backed answers with citations
+- Discover trends and themes automatically
+- Share insights across tools (Slack, ChatGPT, etc.)
 
-## What Scalo Is Not
+## What Murmur Is Not
 
-- Not an influencer marketplace
-- Not a creator discovery platform
-- Not a talent management platform
-- Not a social media scheduling tool
+- Not a helpdesk or ticketing system
+- Not a survey tool
+- Not a CRM
+- Not a social media scheduler
 
 ---
 
 # Core Problems Solved
 
-## No Creator CRM
+## Fragmented Customer Feedback
 
-Most teams use:
+Teams use:
 
-- Google Sheets
-- Notion
-- Airtable
+- Zendesk/Intercom for tickets
+- Google Play/App Store reviews
+- Survey tools (Typeform, SurveyMonkey)
+- Social comments (Instagram, Twitter)
+- Sales call transcripts
 
-Scalo provides:
-
-- Creator database
-- Outreach history
-- Campaign assignments
-- Relationship tracking
+Murmur connects everything into one searchable brain.
 
 ---
 
-## Personalization At Scale
+## No Semantic Retrieval
 
 Instead of:
 
-"Hey, loved your content"
+"Search by ticket ID or keyword"
 
-Scalo generates personalized outreach using:
+Murmur lets you ask:
 
-- Creator bio
-- Creator niche
-- Campaign context
-- Custom prompts
-
----
-
-## Follow-Up Management
-
-Scalo helps teams track:
-
-- Contacted creators
-- Pending responses
-- Follow-up schedules
-- High-intent creators
+- "What are customers complaining about most?"
+- "What feature requests increased this month?"
+- "Why are users mentioning onboarding?"
 
 ---
 
-## Reporting
+## Evidence-Backed Answers
 
-Agencies can instantly see:
+Every answer includes:
 
-- Reply rates
-- Campaign performance
-- Interested creators
-- Conversion metrics
+- Source attribution (which ticket, review, comment)
+- Direct quotes
+- Date and trend context
+- Confidence indicators
+
+---
+
+## No Manual Analysis
+
+Instead of:
+
+- Reading 100s of tickets
+- Building spreadsheets
+- Writing weekly summary reports
+
+Murmur generates:
+
+- Theme clusters
+- Sentiment trends
+- Weekly summaries
+
+---
+
+# Architecture
+
+## Stack
+
+- **Frontend / API:** Next.js on Vercel
+- **AI Layer:** Vercel AI SDK with tool calling (generateText / streamText)
+- **Storage:** Supabase/Postgres with pgvector
+- **Connectors:** Tools pattern — each integration is a tool with Zod schema + execute function
+
+## Connectors (Tools)
+
+```ts
+googleReviewsTool — fetches reviews via DataForSEO Google Reviews API
+instagramCommentsTool — fetches comments via HikerAPI
+csvIngestTool — parses uploaded CSV and normalizes into schema
+zendeskTool — pulls tickets via Zendesk API
+analyzeFeedbackTool — runs clustering/sentiment on stored feedback
+```
+
+## Pipeline
+
+1. **Ingest** — Pull feedback from connectors or CSV upload
+2. **Normalize** — Map into `feedback_items` schema (source, text, rating, etc.)
+3. **Embed** — Generate vector embedding per item via AI SDK (`embed`)
+4. **Store** — Save in Postgres with pgvector
+5. **Retrieve** — User question → embed query → vector similarity search
+6. **Generate** — Feed retrieved context into LLM → answer with citations
+
+## Schema
+
+```sql
+feedback_items
+- id
+- tenant_id
+- source               -- csv | google_reviews | instagram_comments | zendesk
+- source_item_id
+- text
+- rating
+- author_name
+- created_at
+- metadata_json
+
+feedback_embeddings
+- id
+- feedback_item_id
+- embedding vector(...)
+- created_at
+```
+
+---
+
+# Phases
+
+## Phase 1 (Days 1-15) — The Customer-Feedback Brain
+
+- Multi-tenant architecture
+- Auth
+- CSV uploads
+- One connector (Zendesk or Intercom)
+- Normalized schema
+- Embeddings
+- Semantic retrieval
+
+**Goal:** Ask a question and retrieve relevant feedback.
+
+---
+
+## Phase 2 (Days 16-25) — Chat Experience
+
+Question → Retrieve evidence → Generate answer → Show citations
+
+Examples:
+
+- "What are customers complaining about most?"
+- "What feature requests increased this month?"
+- "Why are users mentioning onboarding?"
+
+**Goal:** PM can get answers without opening tickets.
+
+---
+
+## Phase 3 (Days 26-35) — Insight Layer
+
+- Theme clustering
+- Sentiment aggregation
+- Trend detection
+- Weekly summaries
+
+Murmur becomes **Customer Intelligence** instead of Semantic Search.
+
+---
+
+## Phase 4 (Days 36-40) — Design Partner Testing
+
+- Get 2–3 companies
+- Watch them use it
+- Record every question they ask
+
+This feedback is more valuable than another connector.
 
 ---
 
 # Dashboard
 
-The dashboard is the operational center of the platform.
+The dashboard is the command center for customer intelligence.
 
 ## KPI Cards
 
-- Total Creators
-- Active Campaigns
-- Reply Rate
-- Interested Creators
+- Total Feedback Items
+- Sources Connected
+- Positive / Negative Sentiment Ratio
+- Emerging Themes
 
-## Performance Section
+## Insight Section
 
-- Campaign Analytics
-- Outreach Trends
-- Response Activity
+- Recent Questions
+- Trending Topics
+- Sentiment Over Time
 
 ## Activity Section
 
-- Recent Creator Activity
-- Follow-Up Queue
-- Recent Replies
+- Latest Ingestion Activity
+- Theme Changes
+- Weekly Summary
 
 ---
 
-# Creator CRM
+# Chat Interface
 
-Every creator profile contains:
+The chat is the primary interaction model.
 
-## Creator Information
+## Input
 
-- Username
-- Platform
-- Followers
-- Engagement Rate
-- Bio
+- Natural language question
+- Optional source / date filters
 
-## Internal Information
+## Output
 
-- Notes
-- Tags
-- Campaign Assignment
+- AI-generated answer
+- Cited evidence (direct quotes with source links)
+- Related feedback items
+- Follow-up suggestions
 
-## Outreach Information
+## Example Questions
 
-- Current Status
-- Message History
-- AI Summary
-- Last Activity
-
----
-
-# Campaigns
-
-Campaigns are the core operational unit.
-
-Each campaign contains:
-
-- Campaign Details
-- Creator List
-- Templates
-- Analytics
-- Pipeline
-
-Metrics include:
-
-- Creators Added
-- Outreach Sent
-- Replies Received
-- Interested Creators
-- Conversion Rate
-
----
-
-# Outreach Pipeline
-
-Stages:
-
-1. NOT_CONTACTED
-2. CONTACTED
-3. REPLIED
-4. INTERESTED
-5. NEGOTIATING
-6. CLOSED
-
-The pipeline should be visible throughout the product.
+- "What features are users requesting for the mobile app?"
+- "How did sentiment change after the last release?"
+- "Show me all complaints about the checkout flow in the last 30 days."
 
 ---
 
 # AI Features
 
-## Message Personalization
+## Semantic Retrieval
 
-Inputs:
-
-- Creator Bio
-- Niche
-- Campaign Context
-
-Output:
-
-Personalized outreach message.
+User question → embedding → vector similarity search → top-k feedback items.
 
 ---
 
-## Reply Classification
+## Evidence-Backed Answers
 
-Categories:
-
-- Interested
-- Not Interested
-- Follow-Up Needed
-- Pricing Discussion
+LLM generates answer from retrieved context. Every claim links to the original feedback source.
 
 ---
 
-## Conversation Summary
+## Theme Clustering
 
-Generate concise summaries of creator conversations.
-
-Example:
-
-"Creator is interested and quoted ₹20,000 per post. Awaiting approval."
+Unsupervised clustering on feedback text to surface recurring topics.
 
 ---
 
-# Analytics
+## Sentiment Aggregation
 
-Key Metrics:
+Track positive / negative / neutral sentiment across sources over time.
 
-- Total Creators
-- Active Campaigns
-- Outreach Volume
-- Reply Rate
-- Interested Rate
-- Conversion Rate
-- Top Campaigns
-- Top Templates
+---
+
+## Trend Detection
+
+Identify which themes are rising or falling week-over-week.
+
+---
+
+## Weekly Summaries
+
+Auto-generated summaries of top themes, sentiment shifts, and notable feedback.
+
+---
+
+# Connectors (Phase 2+)
+
+## Google Reviews
+
+Pull business reviews via DataForSEO API. Fields: text, rating, author, date.
+
+## Instagram Comments
+
+Pull comments on business posts via HikerAPI. Fields: text, author, post link, date.
+
+## CSV Upload
+
+User uploads a CSV with columns: text, rating, author, date, source. File is parsed, validated, and ingested.
+
+## Zendesk / Intercom
+
+Pull tickets via API. Fields: subject, description, status, tags, date.
+
+## Future
+
+- App Store / Play Store reviews
+- Survey tools (Typeform, SurveyMonkey)
+- Slack threads
+- Sales call transcripts
 
 ---
 
@@ -539,31 +606,31 @@ Key Metrics:
 
 ## Do
 
-- Prioritize clarity
-- Highlight actions with primary green
-- Make metrics visible
-- Reduce operational friction
-- Keep workflows simple
+- Prioritize evidence — every answer needs a source
+- Make citations visible and clickable
+- Show trend context (is this improving or getting worse?)
+- Keep the chat interface clean and fast
+- Surface insights without requiring setup
 
 ## Don't
 
-- Add unnecessary complexity
-- Hide important metrics
-- Overload screens with charts
-- Introduce extra accent colors
-- Make workflows feel like spreadsheets
+- Show answers without citations
+- Hide which sources the answer came from
+- Overload the chat with unnecessary UI
+- Make users dig for evidence
+- Require SQL or query languages
 
 ---
 
 # Brand Personality
 
-Scalo should feel:
+Murmur should feel:
 
-- Modern
-- Operational
-- Data-driven
-- AI-native
-- Efficient
-- Professional
+- Intelligent
+- Precise
+- Transparent
+- Insightful
+- Calm
+- Trustworthy
 
-The experience should feel like a premium creator operations platform rather than a traditional CRM.
+The experience should feel like having a customer research analyst on your team — one who has read every ticket, review, and comment and can answer any question with receipts.
