@@ -67,18 +67,18 @@ export function WorkspaceGeneral({
   const activeRole = getRole(org);
 
   return (
-    <div className='p-6'>
-      <h2 className='text-lg font-semibold mb-5'>General</h2>
+    <div className="p-6">
+      <h2 className="text-lg font-semibold mb-5">General</h2>
 
       <Separator />
-      <div className='py-5'>
-        <div className='flex items-center justify-between'>
-          <div className='flex items-center gap-3'>
-            <div className='flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 border border-primary/15'>
-              <Building2 className='h-5 w-5 text-primary' />
+      <div className="py-5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 border border-primary/15">
+              <Building2 className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <p className='text-sm font-semibold'>{org?.name}</p>
+              <p className="text-sm font-semibold">{org?.name}</p>
               {activeRole && (
                 <Badge
                   variant={
@@ -88,7 +88,7 @@ export function WorkspaceGeneral({
                         ? 'secondary'
                         : 'outline'
                   }
-                  className='capitalize text-[10px] mt-1'
+                  className="capitalize text-[10px] mt-1"
                 >
                   {activeRole}
                 </Badge>
@@ -96,9 +96,9 @@ export function WorkspaceGeneral({
             </div>
           </div>
           <Button
-            variant='outline'
-            size='sm'
-            type='button'
+            variant="outline"
+            size="sm"
+            type="button"
             onClick={() => {
               const el = document.getElementById('workspace-name');
               el?.focus();
@@ -110,28 +110,28 @@ export function WorkspaceGeneral({
       </div>
 
       <Separator />
-      <form onSubmit={handleSaveName} className='py-5 space-y-4'>
-        <div className='space-y-2'>
-          <Label htmlFor='workspace-name' className='text-xs font-medium'>
+      <form onSubmit={handleSaveName} className="py-5 space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="workspace-name" className="text-xs font-medium">
             Workspace name
           </Label>
           <Input
-            id='workspace-name'
-            type='text'
+            id="workspace-name"
+            type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder='My Workspace'
-            className='h-9 max-w-xs'
+            placeholder="My Workspace"
+            className="h-9 max-w-xs"
             required
           />
         </div>
-        <div className='flex items-center gap-3'>
-          <Button type='submit' disabled={saving} size='sm'>
+        <div className="flex items-center gap-3">
+          <Button type="submit" disabled={saving} size="sm">
             {saving ? 'Saving...' : 'Save'}
           </Button>
-          {error && <p className='text-xs text-destructive'>{error}</p>}
+          {error && <p className="text-xs text-destructive">{error}</p>}
           {saved && (
-            <p className='text-xs text-emerald-600 flex items-center gap-1.5'>
+            <p className="text-xs text-emerald-600 flex items-center gap-1.5">
               ✓ Updated
             </p>
           )}
@@ -141,42 +141,41 @@ export function WorkspaceGeneral({
       {orgs.length > 1 && (
         <>
           <Separator />
-          <div className='py-5'>
-            <h3 className='text-sm font-semibold mb-1'>Switch workspace</h3>
-            <p className='text-xs text-muted-foreground mb-4'>
+          <div className="py-5">
+            <h3 className="text-sm font-semibold mb-1">Switch workspace</h3>
+            <p className="text-xs text-muted-foreground mb-4">
               Toggle to switch your active workspace.
             </p>
 
-            <div className='space-y-2'>
-              <div className='flex items-center justify-between rounded-lg border border-primary/20 bg-primary/[0.03] px-4 py-3'>
-                <div className='flex items-center gap-3 min-w-0'>
-                  <Building2 className='h-4 w-4 text-primary shrink-0' />
-                  <span className='text-sm font-medium truncate'>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/[0.03] px-4 py-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <Building2 className="h-4 w-4 text-primary shrink-0" />
+                  <span className="text-sm font-medium truncate">
                     {org?.name}
                   </span>
                 </div>
-                <Switch checked disabled size='sm' />
+                <Switch checked disabled size="sm" />
               </div>
 
-              {/* Other orgs */}
               {otherOrgs.map((o: OrganizationBrief) => (
                 <button
                   key={o.id}
                   onClick={() => handleSwitch(o.id)}
                   disabled={switching === o.id}
-                  className='flex w-full items-center justify-between rounded-lg border border-transparent hover:border-border px-4 py-3 text-left transition-colors hover:bg-muted/40 disabled:opacity-60 cursor-pointer'
+                  className="flex w-full items-center justify-between rounded-lg border border-transparent hover:border-border px-4 py-3 text-left transition-colors hover:bg-muted/40 disabled:opacity-60 cursor-pointer"
                 >
-                  <div className='flex items-center gap-3 min-w-0'>
-                    <Building2 className='h-4 w-4 text-muted-foreground shrink-0' />
-                    <span className='text-sm font-medium truncate'>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Building2 className="h-4 w-4 text-muted-foreground shrink-0" />
+                    <span className="text-sm font-medium truncate">
                       {o.name}
                     </span>
                   </div>
                   <Switch
                     checked={false}
-                    size='sm'
+                    size="sm"
                     tabIndex={-1}
-                    className='pointer-events-none'
+                    className="pointer-events-none"
                   />
                 </button>
               ))}

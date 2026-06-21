@@ -64,27 +64,27 @@ export function AppSidebar({ user }: AppSidebarProps) {
 
   return (
     <>
-      <Sidebar collapsible='icon' className='border-r border-sidebar-border'>
-        <SidebarHeader className='pb-2 pt-3'>
+      <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+        <SidebarHeader className="pb-2 pt-3">
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
-                size='lg'
+                size="lg"
                 asChild
-                className='hover:bg-transparent data-active:bg-transparent group/logo'
+                className="hover:bg-transparent data-active:bg-transparent group/logo"
               >
-                <Link href='/dashboard' className='flex items-center gap-3'>
-                  <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/15 shadow-2xs group-hover/logo:scale-105 transition-all duration-300'>
+                <Link href="/dashboard" className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/15 shadow-2xs group-hover/logo:scale-105 transition-all duration-300">
                     <Image
-                      src='/logos/logo.svg'
-                      alt='Murmur'
-                      className='h-5 w-5 transition-transform duration-500 group-hover/logo:rotate-6'
+                      src="/logos/logo.svg"
+                      alt="Murmur"
+                      className="h-5 w-5 transition-transform duration-500 group-hover/logo:rotate-6"
                       height={40}
                       width={40}
                     />
                   </div>
-                  <div className='flex flex-col gap-0.5'>
-                    <span className='font-bold text-sm tracking-tight text-sidebar-foreground'>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="font-bold text-sm tracking-tight text-sidebar-foreground">
                       Murmur
                     </span>
                   </div>
@@ -96,13 +96,13 @@ export function AppSidebar({ user }: AppSidebarProps) {
 
         <SidebarSeparator />
 
-        <SidebarContent className='py-2'>
+        <SidebarContent className="py-2">
           <SidebarGroup>
-            <SidebarGroupLabel className='text-[10px] font-bold uppercase tracking-wider text-sidebar-foreground/40 px-3 pb-1'>
+            <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-sidebar-foreground/40 px-3 pb-1">
               Menu
             </SidebarGroupLabel>
-            <SidebarGroupContent className='px-1'>
-              <SidebarMenu className='gap-1'>
+            <SidebarGroupContent className="px-1">
+              <SidebarMenu className="gap-1">
                 {navItems.map((item) => {
                   const isActive =
                     item.url === '/dashboard'
@@ -125,10 +125,10 @@ export function AppSidebar({ user }: AppSidebarProps) {
                       >
                         <Link
                           href={item.url}
-                          className='flex items-center gap-3 w-full'
+                          className="flex items-center gap-3 w-full"
                         >
                           {isActive && (
-                            <span className='absolute left-0 top-[20%] h-[60%] w-1 rounded-r-full bg-sidebar-primary transition-all duration-200' />
+                            <span className="absolute left-0 top-[20%] h-[60%] w-1 rounded-r-full bg-sidebar-primary transition-all duration-200" />
                           )}
                           <item.icon
                             className={cn(
@@ -138,7 +138,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                 : 'text-sidebar-foreground/45 group-hover/btn:text-sidebar-foreground',
                             )}
                           />
-                          <span className='transition-transform duration-200 group-hover/btn:translate-x-0.5'>
+                          <span className="transition-transform duration-200 group-hover/btn:translate-x-0.5">
                             {item.title}
                           </span>
                         </Link>
@@ -153,89 +153,89 @@ export function AppSidebar({ user }: AppSidebarProps) {
 
         <SidebarSeparator />
 
-        <SidebarFooter className='p-3'>
+        <SidebarFooter className="p-3">
           <SidebarMenu>
             <SidebarMenuItem>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton
-                    size='lg'
-                    className='w-full cursor-pointer hover:bg-sidebar-accent/65 active:bg-sidebar-accent/80 transition-all duration-200 border border-transparent hover:border-sidebar-border/30 rounded-xl px-2'
+                    size="lg"
+                    className="w-full cursor-pointer hover:bg-sidebar-accent/65 active:bg-sidebar-accent/80 transition-all duration-200 border border-transparent hover:border-sidebar-border/30 rounded-xl px-2"
                   >
-                    <Avatar className='h-8 w-8 border border-primary/20 shadow-2xs shrink-0'>
+                    <Avatar className="h-8 w-8 border border-primary/20 shadow-2xs shrink-0">
                       <AvatarImage
                         src={user?.image || ''}
                         alt={user?.name || ''}
                       />
-                      <AvatarFallback className=' bg-gradient-to-tr from-primary/20 to-primary/5 text-primary font-bold text-xs'>
+                      <AvatarFallback className=" bg-gradient-to-tr from-primary/20 to-primary/5 text-primary font-bold text-xs">
                         {user?.name?.slice(0, 2).toUpperCase() || 'US'}
                       </AvatarFallback>
                     </Avatar>
-                    <div className='flex flex-col flex-1 text-left min-w-0 leading-tight gap-0.5'>
-                      <span className='truncate font-semibold text-xs text-sidebar-foreground'>
+                    <div className="flex flex-col flex-1 text-left min-w-0 leading-tight gap-0.5">
+                      <span className="truncate font-semibold text-xs text-sidebar-foreground">
                         {user.email?.split('@')[0] || 'User'}
                       </span>
-                      <span className='truncate text-[10px] text-sidebar-foreground/50 font-medium'>
+                      <span className="truncate text-[10px] text-sidebar-foreground/50 font-medium">
                         {user?.email || 'user@example.com'}
                       </span>
                     </div>
                     {incomingInvitesCount > 0 && (
-                      <span className='h-2 w-2 rounded-full bg-primary shrink-0 mr-1 animate-pulse' />
+                      <span className="h-2 w-2 rounded-full bg-primary shrink-0 mr-1 animate-pulse" />
                     )}
-                    <ChevronsUpDown className='ml-auto h-3.5 w-3.5 text-sidebar-foreground/40' />
+                    <ChevronsUpDown className="ml-auto h-3.5 w-3.5 text-sidebar-foreground/40" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  side='top'
-                  className='w-(--radix-dropdown-menu-trigger-width) min-w-64 rounded-xl p-1.5 shadow-lg border border-sidebar-border/50 bg-sidebar backdrop-blur-md'
-                  align='start'
+                  side="top"
+                  className="w-(--radix-dropdown-menu-trigger-width) min-w-64 rounded-xl p-1.5 shadow-lg border border-sidebar-border/50 bg-sidebar backdrop-blur-md"
+                  align="start"
                 >
-                  <div className='flex items-center gap-2.5 p-2 rounded-lg bg-sidebar-accent/40 mb-1 border border-sidebar-border/20'>
-                    <Avatar className='h-9 w-9  border border-primary/20'>
+                  <div className="flex items-center gap-2.5 p-2 rounded-lg bg-sidebar-accent/40 mb-1 border border-sidebar-border/20">
+                    <Avatar className="h-9 w-9  border border-primary/20">
                       <AvatarImage
                         src={user?.image || ''}
                         alt={user?.name || ''}
                       />
-                      <AvatarFallback className=' bg-primary/10 text-primary font-bold text-sm'>
+                      <AvatarFallback className=" bg-primary/10 text-primary font-bold text-sm">
                         {user?.name?.slice(0, 2).toUpperCase() || 'US'}
                       </AvatarFallback>
                     </Avatar>
-                    <div className='flex flex-col text-left min-w-0 leading-tight gap-0.5'>
-                      <span className='truncate font-semibold text-xs text-sidebar-foreground'>
+                    <div className="flex flex-col text-left min-w-0 leading-tight gap-0.5">
+                      <span className="truncate font-semibold text-xs text-sidebar-foreground">
                         {user.email?.split('@')[0] || 'User'}
                       </span>
-                      <span className='truncate text-[10px] text-sidebar-foreground/50'>
+                      <span className="truncate text-[10px] text-sidebar-foreground/50">
                         {user?.email || 'user@example.com'}
                       </span>
                     </div>
                   </div>
-                  <DropdownMenuSeparator className='bg-sidebar-border/50 my-1' />
+                  <DropdownMenuSeparator className="bg-sidebar-border/50 my-1" />
 
                   <DropdownMenuItem
-                    className='gap-2.5 cursor-pointer rounded-lg text-xs py-2 px-2.5 text-sidebar-foreground hover:bg-sidebar-accent transition-colors duration-150 justify-between'
+                    className="gap-2.5 cursor-pointer rounded-lg text-xs py-2 px-2.5 text-sidebar-foreground hover:bg-sidebar-accent transition-colors duration-150 justify-between"
                     onSelect={() => setWorkspaceOpen(true)}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <Building2 className='h-4 w-4 shrink-0' />
+                      <Building2 className="h-4 w-4 shrink-0" />
                       <span>Workspaces</span>
                     </div>
                     {incomingInvitesCount > 0 && (
-                      <span className='inline-flex items-center justify-center rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-bold leading-none text-primary-foreground shrink-0'>
+                      <span className="inline-flex items-center justify-center rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-bold leading-none text-primary-foreground shrink-0">
                         {incomingInvitesCount}
                       </span>
                     )}
                   </DropdownMenuItem>
 
-                  <DropdownMenuSeparator className='bg-sidebar-border/50 my-1' />
+                  <DropdownMenuSeparator className="bg-sidebar-border/50 my-1" />
 
                   <DropdownMenuItem
-                    className='gap-2.5 cursor-pointer rounded-lg text-xs py-2 px-2.5 text-destructive hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors duration-150'
+                    className="gap-2.5 cursor-pointer rounded-lg text-xs py-2 px-2.5 text-destructive hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors duration-150"
                     onClick={async () => {
                       await authClient.signOut();
                       router.push('/login');
                     }}
                   >
-                    <LogOut className='h-4 w-4' />
+                    <LogOut className="h-4 w-4" />
                     <span>Sign out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -247,8 +247,11 @@ export function AppSidebar({ user }: AppSidebarProps) {
         <SidebarRail />
       </Sidebar>
 
-      {/* Workspace dialog — rendered outside the sidebar/dropdown */}
-      <WorkspaceDialog open={workspaceOpen} onOpenChange={setWorkspaceOpen} userId={user.id} />
+      <WorkspaceDialog
+        open={workspaceOpen}
+        onOpenChange={setWorkspaceOpen}
+        userId={user.id}
+      />
     </>
   );
 }

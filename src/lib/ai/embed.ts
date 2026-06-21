@@ -8,7 +8,9 @@ export async function generateEmbedding(text: string): Promise<number[]> {
     model: embeddingModel,
     value: text,
     providerOptions: {
-      google: { outputDimensionality: 768 } satisfies GoogleEmbeddingModelOptions,
+      google: {
+        outputDimensionality: 768,
+      } satisfies GoogleEmbeddingModelOptions,
     },
   });
   return embedding;
@@ -19,7 +21,9 @@ export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
     model: embeddingModel,
     values: texts,
     providerOptions: {
-      google: { outputDimensionality: 768 } satisfies GoogleEmbeddingModelOptions,
+      google: {
+        outputDimensionality: 768,
+      } satisfies GoogleEmbeddingModelOptions,
     },
   });
   return embeddings;

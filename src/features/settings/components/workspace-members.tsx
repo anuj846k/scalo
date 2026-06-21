@@ -1,23 +1,27 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Search, UserPlus } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { authClient } from "@/lib/auth-client";
-import { EmailInviteInput } from "./email-invite-input";
-import { FullOrganization, OrganizationMember, OrganizationInvitation } from "./workspace-dialog";
+} from '@/components/ui/select';
+import { Search, UserPlus } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { authClient } from '@/lib/auth-client';
+import { EmailInviteInput } from './email-invite-input';
+import {
+  FullOrganization,
+  OrganizationMember,
+  OrganizationInvitation,
+} from './workspace-dialog';
 
 interface WorkspaceMembersProps {
   org: FullOrganization | null;
@@ -25,17 +29,19 @@ interface WorkspaceMembersProps {
 }
 
 export function WorkspaceMembers({ org, onOrgUpdate }: WorkspaceMembersProps) {
-  const [subTab, setSubTab] = useState<"members" | "invitations">("members");
-  const [search, setSearch] = useState("");
+  const [subTab, setSubTab] = useState<'members' | 'invitations'>('members');
+  const [search, setSearch] = useState('');
   const [showInvite, setShowInvite] = useState(false);
   const [emails, setEmails] = useState<string[]>([]);
-  const [role, setRole] = useState("member");
+  const [role, setRole] = useState('member');
   const [inviting, setInviting] = useState(false);
   const [inviteError, setInviteError] = useState<string | null>(null);
 
   const members = org?.members || [];
   const invitations = org?.invitations || [];
-  const pendingInvitations = invitations.filter((i: OrganizationInvitation) => i.status === "pending");
+  const pendingInvitations = invitations.filter(
+    (i: OrganizationInvitation) => i.status === 'pending',
+  );
   const filteredMembers = members.filter((m: OrganizationMember) => {
     if (!search) return true;
     const q = search.toLowerCase();
@@ -55,17 +61,20 @@ export function WorkspaceMembers({ org, onOrgUpdate }: WorkspaceMembersProps) {
         authClient.organization.inviteMember({
           organizationId: org.id,
           email,
-          role: role as "member" | "admin",
+          role: role as 'member' | 'admin',
         }),
       ),
     );
 
     const failed = results.filter(
-      (r) => r.status === "rejected" || (r.status === "fulfilled" && r.value.error),
+      (r) =>
+        r.status === 'rejected' || (r.status === 'fulfilled' && r.value.error),
     );
 
     if (failed.length > 0) {
-      setInviteError(`Failed to invite ${failed.length} of ${emails.length} email(s)`);
+      setInviteError(
+        `Failed to invite ${failed.length} of ${emails.length} email(s)`,
+      );
       setInviting(false);
       return;
     }
@@ -80,15 +89,14 @@ export function WorkspaceMembers({ org, onOrgUpdate }: WorkspaceMembersProps) {
     <div className="p-6">
       <h2 className="text-lg font-semibold mb-4">Members</h2>
 
-      {/* Sub-tabs */}
       <div className="flex items-center gap-4 mb-5">
         <button
-          onClick={() => setSubTab("members")}
+          onClick={() => setSubTab('members')}
           className={cn(
-            "text-sm font-medium pb-1.5 border-b-2 transition-colors cursor-pointer",
-            subTab === "members"
-              ? "border-foreground text-foreground"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+            'text-sm font-medium pb-1.5 border-b-2 transition-colors cursor-pointer',
+            subTab === 'members'
+              ? 'border-foreground text-foreground'
+              : 'border-transparent text-muted-foreground hover:text-foreground',
           )}
         >
           Members
@@ -97,12 +105,12 @@ export function WorkspaceMembers({ org, onOrgUpdate }: WorkspaceMembersProps) {
           </Badge>
         </button>
         <button
-          onClick={() => setSubTab("invitations")}
+          onClick={() => setSubTab('invitations')}
           className={cn(
-            "text-sm font-medium pb-1.5 border-b-2 transition-colors cursor-pointer",
-            subTab === "invitations"
-              ? "border-foreground text-foreground"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+            'text-sm font-medium pb-1.5 border-b-2 transition-colors cursor-pointer',
+            subTab === 'invitations'
+              ? 'border-foreground text-foreground'
+              : 'border-transparent text-muted-foreground hover:text-foreground',
           )}
         >
           Invitations
@@ -112,9 +120,8 @@ export function WorkspaceMembers({ org, onOrgUpdate }: WorkspaceMembersProps) {
         </button>
       </div>
 
-      {subTab === "members" && (
+      {subTab === 'members' && (
         <div className="space-y-4">
-          {/* Search + Invite */}
           <div className="flex items-center gap-3">
             <div className="relative flex-1 max-w-[220px]">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
@@ -166,7 +173,10 @@ export function WorkspaceMembers({ org, onOrgUpdate }: WorkspaceMembersProps) {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => { setShowInvite(false); setEmails([]); }}
+                    onClick={() => {
+                      setShowInvite(false);
+                      setEmails([]);
+                    }}
                   >
                     Skip
                   </Button>
@@ -175,26 +185,24 @@ export function WorkspaceMembers({ org, onOrgUpdate }: WorkspaceMembersProps) {
                     onClick={handleSendInvites}
                     disabled={inviting || emails.length === 0}
                   >
-                    {inviting ? "Sending..." : "Send invitations"}
+                    {inviting ? 'Sending...' : 'Send invitations'}
                   </Button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Members table */}
           <MembersTable members={filteredMembers} />
         </div>
       )}
 
-      {subTab === "invitations" && (
+      {subTab === 'invitations' && (
         <InvitationsTable invitations={pendingInvitations} />
       )}
     </div>
   );
 }
 
-/* ── Members table ── */
 function MembersTable({ members }: { members: OrganizationMember[] }) {
   return (
     <div className="rounded-lg border overflow-hidden">
@@ -214,14 +222,19 @@ function MembersTable({ members }: { members: OrganizationMember[] }) {
             <div className="grid grid-cols-[1fr_100px_80px] gap-4 px-4 py-3 items-center hover:bg-muted/20 transition-colors">
               <div className="flex items-center gap-2.5 min-w-0">
                 <Avatar size="sm">
-                  <AvatarImage src={m.user?.image || ""} alt={m.user?.name || ""} />
+                  <AvatarImage
+                    src={m.user?.image || ''}
+                    alt={m.user?.name || ''}
+                  />
                   <AvatarFallback className="text-[10px] font-semibold bg-primary/10 text-primary">
-                    {(m.user?.name || m.user?.email || "?").slice(0, 2).toUpperCase()}
+                    {(m.user?.name || m.user?.email || '?')
+                      .slice(0, 2)
+                      .toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="min-w-0">
                   <p className="text-sm font-medium truncate leading-tight">
-                    {m.user?.name || "Unknown"}
+                    {m.user?.name || 'Unknown'}
                   </p>
                   <p className="text-[11px] text-muted-foreground truncate">
                     {m.user?.email}
@@ -230,11 +243,20 @@ function MembersTable({ members }: { members: OrganizationMember[] }) {
               </div>
               <span className="text-xs text-muted-foreground">
                 {m.createdAt
-                  ? new Date(m.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })
-                  : "—"}
+                  ? new Date(m.createdAt).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })
+                  : '—'}
               </span>
               <Badge
-                variant={m.role === "owner" ? "default" : m.role === "admin" ? "secondary" : "outline"}
+                variant={
+                  m.role === 'owner'
+                    ? 'default'
+                    : m.role === 'admin'
+                      ? 'secondary'
+                      : 'outline'
+                }
                 className="capitalize text-[10px] w-fit"
               >
                 {m.role}
@@ -247,8 +269,11 @@ function MembersTable({ members }: { members: OrganizationMember[] }) {
   );
 }
 
-/* ── Invitations table ── */
-function InvitationsTable({ invitations }: { invitations: OrganizationInvitation[] }) {
+function InvitationsTable({
+  invitations,
+}: {
+  invitations: OrganizationInvitation[];
+}) {
   return (
     <div className="rounded-lg border">
       <div className="grid grid-cols-4 gap-4 px-4 py-2.5 text-xs font-medium text-muted-foreground border-b bg-muted/30">
@@ -267,14 +292,22 @@ function InvitationsTable({ invitations }: { invitations: OrganizationInvitation
             {i > 0 && <Separator />}
             <div className="grid grid-cols-4 gap-4 px-4 py-3 items-center hover:bg-muted/20 transition-colors">
               <span className="text-sm truncate">{inv.email}</span>
-              <Badge variant={inv.role === "admin" ? "secondary" : "outline"} className="capitalize text-[10px] w-fit">
-                {inv.role || "member"}
+              <Badge
+                variant={inv.role === 'admin' ? 'secondary' : 'outline'}
+                className="capitalize text-[10px] w-fit"
+              >
+                {inv.role || 'member'}
               </Badge>
-              <Badge variant="secondary" className="capitalize text-[10px] w-fit">
+              <Badge
+                variant="secondary"
+                className="capitalize text-[10px] w-fit"
+              >
                 {inv.status}
               </Badge>
               <span className="text-xs text-muted-foreground">
-                {inv.expiresAt ? new Date(inv.expiresAt).toLocaleDateString() : "—"}
+                {inv.expiresAt
+                  ? new Date(inv.expiresAt).toLocaleDateString()
+                  : '—'}
               </span>
             </div>
           </div>
