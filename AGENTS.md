@@ -113,6 +113,7 @@ When operating on this project, the AI should follow these rules:
 ## Coding Preferences
 
 - Write examples in TypeScript by default.
+- Take inspiration from ai-sdk docs or chatbot folder in the directly
 - Prefer server-side examples for AI calls.
 - Use clean, production-leaning folder structures.
 - Keep dependencies minimal for MVP.
