@@ -1,5 +1,10 @@
-import { convertToModelMessages, smoothStream, streamText } from 'ai';
-import { google } from '@ai-sdk/google';
+import {
+  convertToModelMessages,
+  createUIMessageStream,
+  createUIMessageStreamResponse,
+  streamText,
+} from 'ai';
+import { google, type GoogleLanguageModelOptions } from '@ai-sdk/google';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import {
@@ -9,7 +14,11 @@ import {
   getMessages,
   saveMessage,
   updateChatTitle,
+  updateMessage,
 } from '@/lib/db/chat-queries';
+import { searchFeedback } from '@/lib/ai/tools/search-feedback';
+import { systemPrompt } from '@/lib/ai/prompts';
+import { generateTitleFromUserMessage } from '@/app/actions';
 
 export async function POST(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -29,66 +38,107 @@ export async function POST(req: Request) {
     return new Response('Chat ID is required', { status: 400 });
   }
 
-  const lastMessage = body.messages?.[body.messages.length - 1];
-  const userText = lastMessage?.parts?.find(
-    (p: { type: string }) => p.type === 'text',
-  )?.text;
+  const isToolContinuation = Boolean(body.messages) && !body.message;
 
-  let existingChat = await getChatById(chatId);
-  if (!existingChat) {
+  let chat = await getChatById(chatId);
+  let titlePromise: Promise<string> | null = null;
+
+  if (chat) {
+    if (chat.userId !== session.user.id) {
+      return new Response('Forbidden', { status: 403 });
+    }
+  } else if (body.message?.role === 'user') {
     await createChat({
       id: chatId,
-      title: userText?.slice(0, 80) || 'New chat',
+      title: 'New chat',
       userId: session.user.id,
       organizationId,
     });
-    existingChat = await getChatById(chatId);
+    chat = await getChatById(chatId);
+    titlePromise = generateTitleFromUserMessage({ message: body.message });
   }
 
-  if (!existingChat || existingChat.userId !== session.user.id) {
-    return new Response('Forbidden', { status: 403 });
-  }
-
-  if (userText) {
+  if (body.message?.role === 'user') {
     await saveMessage({
-      id: crypto.randomUUID(),
+      id: body.message.id,
       chatId,
       role: 'user',
-      parts: [{ type: 'text', text: userText }],
+      parts: body.message.parts,
     });
   }
 
-  const dbMessages = await getMessages(chatId);
-  const modelMessages = dbMessages.map((m) => ({
-    id: m.id,
-    role: m.role as 'user' | 'assistant',
-    parts: m.parts as Array<{ type: string; text?: string }>,
-  }));
+  let uiMessages: any[];
 
-  const result = streamText({
-    model: google('gemini-2.5-flash'),
-    messages: await convertToModelMessages(modelMessages as any),
-    experimental_transform: smoothStream({
-      delayInMs: 30,
-      chunking: 'word',
-    }),
-    onFinish: async ({ text }) => {
-      await saveMessage({
-        id: crypto.randomUUID(),
-        chatId,
-        role: 'assistant',
-        parts: [{ type: 'text', text }],
+  if (isToolContinuation && body.messages) {
+    uiMessages = body.messages;
+  } else {
+    const dbMessages = await getMessages(chatId);
+    const dbUiMessages = dbMessages.map((m) => ({
+      id: m.id,
+      role: m.role,
+      parts: m.parts,
+    }));
+    uiMessages = [...dbUiMessages, body.message];
+  }
+
+  const modelMessages = await convertToModelMessages(uiMessages as any);
+
+  const stream = createUIMessageStream({
+    originalMessages: isToolContinuation ? uiMessages : undefined,
+    execute: async ({ writer: dataStream }) => {
+      const result = streamText({
+        model: google('gemini-2.5-flash'),
+        system: systemPrompt,
+        messages: modelMessages,
+        providerOptions: {
+          google: {
+            thinkingConfig: {
+              thinkingBudget: 8192,
+              includeThoughts: true,
+            },
+          } satisfies GoogleLanguageModelOptions,
+        },
+        tools: {
+          searchFeedback,
+        },
       });
 
-      const dbMsgs = await getMessages(chatId);
-      if (dbMsgs.length <= 2) {
-        const title = text.slice(0, 80);
-        await updateChatTitle(chatId, title);
+      dataStream.merge(
+        result.toUIMessageStream({
+          sendReasoning: true,
+        }),
+      );
+
+      if (titlePromise) {
+        try {
+          const title = await titlePromise;
+          dataStream.write({ type: 'data-chat-title', data: title });
+          updateChatTitle(chatId, title);
+        } catch (_) {
+          /* non-fatal */
+        }
+      }
+    },
+    onFinish: async ({ messages: finishedMessages }) => {
+      for (const finishedMsg of finishedMessages) {
+        const existingMsg = uiMessages.find((m) => m.id === finishedMsg.id);
+        if (existingMsg) {
+          await updateMessage(finishedMsg.id, finishedMsg.parts);
+        } else {
+          await saveMessage({
+            id: finishedMsg.id,
+            chatId,
+            role: finishedMsg.role,
+            parts: finishedMsg.parts,
+          });
+        }
       }
     },
   });
 
-  return result.toUIMessageStreamResponse();
+  return createUIMessageStreamResponse({
+    stream,
+  });
 }
 
 export async function DELETE(req: Request) {

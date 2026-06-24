@@ -63,6 +63,10 @@ export async function saveMessage({
   await db.insert(messages).values({ id, chatId, role, parts });
 }
 
+export async function updateMessage(id: string, parts: unknown) {
+  await db.update(messages).set({ parts }).where(eq(messages.id, id));
+}
+
 export async function getMessages(chatId: string) {
   return db
     .select()
