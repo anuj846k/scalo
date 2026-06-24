@@ -6,6 +6,7 @@ interface CsvInputRow {
   author_name?: string;
   source_item_id?: string;
   created_at?: string;
+  [key: string]: string | undefined;
 }
 
 export interface NormalizedFeedback {
@@ -21,7 +22,74 @@ export interface ParseResult {
   errors: { row: number; message: string }[];
 }
 
-export function parseCsv(content: string): ParseResult {
+const SCHEMA_FIELDS = [
+  'text',
+  'rating',
+  'author_name',
+  'source_item_id',
+  'created_at',
+] as const;
+
+export function detectColumnMap(headers: string[]): Record<string, string> {
+  const hints: Record<string, string[]> = {
+    text: [
+      'text',
+      'review',
+      'comment',
+      'feedback',
+      'message',
+      'body',
+      'content',
+    ],
+    rating: ['rating', 'score', 'stars', 'rate', 'rank'],
+    author_name: [
+      'author',
+      'name',
+      'user',
+      'customer',
+      'reviewer',
+      'author_name',
+      'author name',
+    ],
+    source_item_id: [
+      'id',
+      'source_id',
+      'item_id',
+      'external_id',
+      'source_item_id',
+      'source item id',
+    ],
+    created_at: [
+      'date',
+      'created',
+      'timestamp',
+      'created_at',
+      'created at',
+      'datetime',
+    ],
+  };
+
+  const map: Record<string, string> = {};
+  const lowerHeaders = headers.map((h) => h.toLowerCase().trim());
+
+  for (const field of SCHEMA_FIELDS) {
+    const idx = lowerHeaders.findIndex(
+      (h) =>
+        hints[field].includes(h) ||
+        hints[field].some((hint) => h.includes(hint)),
+    );
+    if (idx !== -1) {
+      map[field] = headers[idx];
+    }
+  }
+
+  return map;
+}
+
+export function parseCsv(
+  content: string,
+  columnMap?: Record<string, string>,
+): ParseResult {
   const { data, errors: parseErrors } = Papa.parse<CsvInputRow>(content, {
     header: true,
     skipEmptyLines: true,
@@ -34,7 +102,16 @@ export function parseCsv(content: string): ParseResult {
   }
 
   for (let i = 0; i < data.length; i++) {
-    const row = data[i];
+    const raw = data[i];
+
+    const row: CsvInputRow = {};
+    if (columnMap) {
+      for (const [schemaField, csvCol] of Object.entries(columnMap)) {
+        row[schemaField] = raw[csvCol];
+      }
+    } else {
+      Object.assign(row, raw);
+    }
 
     if (!row.text || row.text.trim().length === 0) {
       results.errors.push({ row: i + 1, message: 'text is required' });

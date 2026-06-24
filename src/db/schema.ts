@@ -9,6 +9,7 @@ import {
   index,
   uniqueIndex,
   vector,
+  primaryKey,
 } from 'drizzle-orm/pg-core';
 
 export const user = pgTable('user', {
@@ -241,4 +242,68 @@ export const feedbackEmbeddingsRelations = relations(
       references: [feedbackItems.id],
     }),
   }),
+);
+
+export const chats = pgTable(
+  'chats',
+  {
+    id: text('id').primaryKey(),
+    title: text('title').notNull(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    organizationId: text('organization_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [
+    index('chats_userId_idx').on(table.userId),
+    index('chats_organizationId_idx').on(table.organizationId),
+  ],
+);
+
+export const messages = pgTable(
+  'messages',
+  {
+    id: text('id').primaryKey(),
+    chatId: text('chat_id')
+      .notNull()
+      .references(() => chats.id, { onDelete: 'cascade' }),
+    role: text('role').notNull(),
+    parts: jsonb('parts').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [index('messages_chatId_idx').on(table.chatId)],
+);
+
+export const chatsRelations = relations(chats, ({ one, many }) => ({
+  user: one(user, {
+    fields: [chats.userId],
+    references: [user.id],
+  }),
+  organization: one(organization, {
+    fields: [chats.organizationId],
+    references: [organization.id],
+  }),
+  messages: many(messages),
+}));
+
+export const messagesRelations = relations(messages, ({ one }) => ({
+  chat: one(chats, {
+    fields: [messages.chatId],
+    references: [chats.id],
+  }),
+}));
+
+export const votes = pgTable(
+  'votes',
+  {
+    chatId: text('chat_id')
+      .notNull()
+      .references(() => chats.id, { onDelete: 'cascade' }),
+    messageId: text('message_id').notNull(),
+    isUpvoted: boolean('is_upvoted').notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.chatId, table.messageId] })],
 );
