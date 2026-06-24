@@ -31,7 +31,13 @@ export async function POST(req: NextRequest) {
   }
 
   const content = await file.text();
-  const parsed = parseCsv(content);
+
+  const columnMapRaw = formData.get('columnMap');
+  const columnMap: Record<string, string> | undefined = columnMapRaw
+    ? JSON.parse(columnMapRaw as string)
+    : undefined;
+
+  const parsed = parseCsv(content, columnMap);
 
   if (parsed.rows.length === 0) {
     return NextResponse.json({ inserted: 0, errors: parsed.errors });

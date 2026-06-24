@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+@import 'streamdown/styles.css';
+
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -193,3 +196,48 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hover {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+  .scrollbar-hover:hover {
+    scrollbar-color: hsl(var(--border) / 0.4) transparent;
+  }
+  .scrollbar-hover::-webkit-scrollbar {
+    width: 5px;
+  }
+  .scrollbar-hover::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-hover::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 10px;
+  }
+  .scrollbar-hover:hover::-webkit-scrollbar-thumb {
+    background: hsl(var(--border) / 0.4);
+    border-radius: 10px;
+  }
+}
+
+/* Markdown rendered by Streamdown — styles provided by @tailwindcss/typography (prose class) */

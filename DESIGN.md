@@ -4,28 +4,19 @@ name: Wise-design-analysis
 description: An inspired interpretation of Wise's design language — a global money-transfer brand whose surface combines an unusually heavy near-black display sans (weight 900 at 64–126 px) with a vivid lime-green brand accent, sage-tinted surface neutrals, and rounded white cards on a pale green-tinted canvas; the whole system reads more like a Scandinavian fintech magazine than a bank.
 
 colors:
-  primary: '#9fe870'
-  on-primary: '#0e0f0c'
-  primary-active: '#cdffad'
-  primary-neutral: '#c5edab'
-  primary-pale: '#e2f6d5'
-  ink: '#0e0f0c'
-  ink-deep: '#163300'
-  body: '#454745'
-  mute: '#868685'
-  canvas: '#ffffff'
-  canvas-soft: '#e8ebe6'
-  positive: '#2ead4b'
-  positive-deep: '#054d28'
-  warning: '#ffd11a'
-  warning-deep: '#b86700'
-  warning-content: '#4a3b1c'
-  negative: '#d03238'
-  negative-deep: '#a72027'
-  negative-darkest: '#a7000d'
-  negative-bg: '#320707'
-  accent-orange: '#ffc091'
-  accent-cyan: '#38c8ff'
+  primary: '#0025f5'
+  primary-foreground: '#ffffff'
+  brand-50: '#e8f3ff'
+  brand-100: '#d5e8ff'
+  brand-200: '#b3d3ff'
+  brand-300: '#85b6ff'
+  brand-400: '#568cff'
+  brand-500: '#2f62ff'
+  brand-600: '#0c35ff'
+  brand-700: '#0025f5'
+  brand-800: '#0627cd'
+  brand-900: '#102b9f'
+  brand-950: '#0a175c'
 
 typography:
   display-mega:
@@ -304,7 +295,7 @@ The platform should feel like a thinking partner — precise, transparent, and f
 - Source transparency — every answer links back to original feedback
 - Bold editorial typography
 - Large rounded surfaces
-- Soft green accents for evidence and insights
+- Soft violet accents for evidence and insights
 
 ---
 
