@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import useSWRInfinite from 'swr/infinite';
 
 interface Chat {
@@ -20,23 +21,25 @@ export function getChatHistoryPaginationKey(
   return `/api/history?limit=20&before=${lastChat.createdAt}`;
 }
 
-function fetcher(url: string) {
+async function fetcher(url: string) {
   return fetch(url).then((r) => r.json());
 }
 
 export function useChatHistory() {
-  const { data, size, setSize, mutate, isLoading, error } = useSWRInfinite(
-    getChatHistoryPaginationKey,
-    fetcher,
-    {
+  const { data, setSize, mutate, isLoading, error, isValidating } =
+    useSWRInfinite(getChatHistoryPaginationKey, fetcher, {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-    },
-  );
+      revalidateFirstPage: false,
+    });
 
   const chats: Chat[] = data ? data.flatMap((page) => page.chats) : [];
   const hasMore = data ? (data[data.length - 1]?.hasMore ?? false) : false;
-  const loadMore = () => setSize(size + 1);
+  const loadMore = useCallback(() => {
+    if (!isValidating) {
+      setSize((s) => s + 1);
+    }
+  }, [setSize, isValidating]);
 
   return { chats, hasMore, loadMore, mutate, isLoading, error };
 }

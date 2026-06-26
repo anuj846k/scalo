@@ -11,11 +11,11 @@ export default async function DashboardRootLayout({
   const user = await requireAuth();
 
   return (
-    <SidebarProvider>
+    <SidebarProvider className="h-svh overflow-hidden">
       <AppSidebar user={user} />
-      <SidebarInset>
+      <SidebarInset className="min-h-0 overflow-hidden">
         <DashboardHeader />
-        <main className="flex-1 p-6">{children}</main>
+        <main className="min-h-0 flex-1 overflow-hidden p-6">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

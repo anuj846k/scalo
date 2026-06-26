@@ -4,6 +4,7 @@ import type { ChatMessage } from '@/lib/types';
 import { ArrowDown, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PreviewMessage, ThinkingMessage } from './message';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type MessagesProps = {
   chatId: string;
@@ -14,6 +15,8 @@ type MessagesProps = {
   isAtBottom: boolean;
   scrollToBottom: (behavior?: ScrollBehavior) => void;
   hasMessages: boolean;
+  isHistoryLoading: boolean;
+  isNewChatPage: boolean;
 };
 
 export const Messages = ({
@@ -25,12 +28,14 @@ export const Messages = ({
   isAtBottom,
   scrollToBottom,
   hasMessages,
+  isHistoryLoading,
+  isNewChatPage,
 }: MessagesProps) => {
   const isLoading = status === 'streaming' || status === 'submitted';
 
   return (
     <div className="relative flex-1">
-      {!hasMessages && !isLoading && (
+      {isNewChatPage && !hasMessages && !isLoading && (
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="text-center space-y-3">
             <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-muted/60 ring-1 ring-border/50">
@@ -49,7 +54,7 @@ export const Messages = ({
       <div
         ref={containerRef}
         className={cn(
-          'absolute inset-0 touch-pan-y overflow-y-auto',
+          'scrollbar-hover absolute inset-0 touch-pan-y overflow-y-auto',
           hasMessages ? 'bg-background' : 'bg-transparent',
         )}
       >

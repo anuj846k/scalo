@@ -152,7 +152,9 @@ export function ChatSidebar({ chatId }: { chatId?: string }) {
     if (!el) return;
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore) loadMore();
+        if (entries[0].isIntersecting && hasMore) {
+          loadMore();
+        }
       },
       { threshold: 0.1 },
     );

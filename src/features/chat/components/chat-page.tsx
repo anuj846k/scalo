@@ -12,11 +12,12 @@ import {
   Send,
   Square,
   AlertCircle,
-  Sparkles,
   PanelRightIcon,
   PanelRightOpenIcon,
   PenSquareIcon,
 } from 'lucide-react';
+import { SiGooglegemini } from 'react-icons/si';
+
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ChatSidebar } from './chat-sidebar';
@@ -35,6 +36,7 @@ export default function ChatPage() {
   const pathname = usePathname();
   const chatId = params?.id as string | undefined;
   const isNewChat = !chatId;
+  const isNewChatPage = pathname === '/dashboard/chat';
   const [generatedId, setGeneratedId] = useState(() => crypto.randomUUID());
   const prevPathnameRef = useRef(pathname);
 
@@ -50,7 +52,7 @@ export default function ChatPage() {
 
   const { mutate } = useSWRConfig();
 
-  const { data: chatData } = useSWR(
+  const { data: chatData, isLoading: isHistoryLoading } = useSWR(
     isNewChat ? null : `/api/messages?chatId=${chatId}`,
     fetcher,
     { revalidateOnFocus: false },
@@ -90,12 +92,7 @@ export default function ChatPage() {
         };
       },
     }),
-    onFinish: () => {
-      mutate(unstable_serialize(getChatHistoryPaginationKey));
-      if (isNewChat) {
-        router.replace(`/dashboard/chat/${currentChatId}`);
-      }
-    },
+    onFinish: () => {},
   });
 
   const [input, setInput] = useState('');
@@ -145,8 +142,12 @@ export default function ChatPage() {
   const handleSend = useCallback(() => {
     if (!input.trim() || status !== 'ready') return;
     sendMessage({ text: input });
+    if (isNewChat) {
+      router.replace(`/dashboard/chat/${currentChatId}`);
+      mutate(unstable_serialize(getChatHistoryPaginationKey));
+    }
     setInput('');
-  }, [input, status, sendMessage]);
+  }, [input, status, sendMessage, isNewChat, currentChatId, router, mutate]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -164,7 +165,7 @@ export default function ChatPage() {
     <div className="h-full flex w-full flex-row overflow-hidden">
       <div
         className={cn(
-          'flex min-w-0 flex-col bg-sidebar transition-[width] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
+          'flex min-w-0 min-h-0 overflow-hidden flex-col bg-sidebar transition-[width] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ',
           sidebarCollapsed ? 'flex-1' : 'flex-1',
         )}
       >
@@ -193,6 +194,8 @@ export default function ChatPage() {
             isAtBottom={isAtBottom}
             scrollToBottom={scrollToBottom}
             hasMessages={hasMessages}
+            isHistoryLoading={isHistoryLoading}
+            isNewChatPage={isNewChatPage}
           />
 
           {error && (
@@ -224,7 +227,7 @@ export default function ChatPage() {
                 <div className="flex items-center justify-between px-3 pb-3">
                   <div className="flex items-center gap-1">
                     <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
-                      <Sparkles className="size-3" />
+                      <SiGooglegemini className="size-3" />
                       Gemini 2.5 Flash
                     </span>
                   </div>
@@ -235,15 +238,15 @@ export default function ChatPage() {
                       className="h-7 w-7 rounded-lg cursor-pointer"
                       onClick={() => stop()}
                     >
-                      <Square className="h-3.5 w-3.5" />
+                      <Square className="h-3.5 w-3.5 bg-destructive/10 text-destructive hover:bg-destructive/15" />
                     </Button>
                   ) : (
                     <Button
                       size="icon"
                       className={cn(
-                        'h-7 w-7 rounded-lg cursor-pointer transition-colors',
+                        'h-10 w-10 rounded-full cursor-pointer transition-colors',
                         input.trim()
-                          ? 'bg-foreground text-background hover:bg-foreground/90'
+                          ? 'bg-primary text-background hover:bg-foreground/90'
                           : 'bg-muted text-muted-foreground/25',
                       )}
                       onClick={handleSend}
@@ -261,11 +264,11 @@ export default function ChatPage() {
 
       <div
         className={cn(
-          'shrink-0 border-l border-sidebar-border bg-sidebar transition-[width] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] overflow-hidden',
+          'h-full shrink-0 border-l border-sidebar-border bg-sidebar transition-[width] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] overflow-hidden',
           sidebarCollapsed ? 'w-0 border-l-0' : 'w-60',
         )}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full min-h-0">
           <div className="flex items-center justify-between px-3 py-3">
             <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-sidebar-foreground/70">
               History
@@ -290,7 +293,7 @@ export default function ChatPage() {
             </Link>
           </div>
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
             <ChatSidebar chatId={currentChatId} />
           </div>
         </div>
