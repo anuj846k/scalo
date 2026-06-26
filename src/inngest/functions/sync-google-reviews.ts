@@ -66,7 +66,7 @@ async function syncConfig(
 
   let locationCode = config.locationCode;
 
-  if (locationCode == null) {
+  if (locationCode == null && config.locationCoordinate == null) {
     try {
       const code = await client.getLocationCode();
       if (code) {
@@ -82,7 +82,7 @@ async function syncConfig(
     }
   }
 
-  if (locationCode == null) return;
+  if (locationCode == null && config.locationCoordinate == null) return;
 
   const depth = config.lastSyncedAt == null ? 4490 : 20;
   const sortBy = config.lastSyncedAt == null ? 'relevant' : 'newest';
@@ -92,6 +92,7 @@ async function syncConfig(
     taskId = await client.taskPost({
       placeId: config.placeId,
       locationCode,
+      locationCoordinate: config.locationCoordinate,
       depth,
       sortBy,
     });

@@ -7,6 +7,7 @@ interface CreateConnectorConfigParams {
   connectorType: string;
   placeId: string;
   locationCode?: number;
+  locationCoordinate?: string;
 }
 
 interface ConnectorConfig {
@@ -35,6 +36,7 @@ export async function createConnectorConfig(
       connectorType: params.connectorType,
       placeId: params.placeId,
       locationCode: params.locationCode ?? null,
+      locationCoordinate: params.locationCoordinate ?? null,
       status: 'active',
       createdAt: now,
       updatedAt: now,

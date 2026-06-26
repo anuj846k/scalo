@@ -205,6 +205,7 @@ export const connectorConfigs = pgTable(
     connectorType: text('connector_type').notNull(),
     placeId: text('place_id').notNull(),
     locationCode: integer('location_code'),
+    locationCoordinate: text('location_coordinate'),
     lastSyncedAt: timestamp('last_synced_at'),
     status: text('status').notNull().default('active'),
     createdAt: timestamp('created_at').defaultNow().notNull(),

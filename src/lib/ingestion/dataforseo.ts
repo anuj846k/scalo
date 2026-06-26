@@ -37,7 +37,8 @@ interface TaskGetResponse {
 export interface DataForSEOClient {
   taskPost(params: {
     placeId: string;
-    locationCode: number;
+    locationCode: number | null;
+    locationCoordinate: string | null;
     depth: number;
     sortBy: string;
   }): Promise<string>;
@@ -84,15 +85,28 @@ export function createDataForSEOClient(
   }
 
   return {
-    async taskPost({ placeId, locationCode, depth, sortBy }) {
+    async taskPost({
+      placeId,
+      locationCode,
+      locationCoordinate,
+      depth,
+      sortBy,
+    }) {
       const task: Record<string, unknown> = {
-        location_code: locationCode,
         language_code: 'en',
         depth,
         sort_by: sortBy,
       };
 
-      if (placeId.startsWith('cid:') || placeId.startsWith('ftid:')) {
+      if (locationCoordinate) {
+        task.location_coordinate = locationCoordinate;
+      } else if (locationCode) {
+        task.location_code = locationCode;
+      }
+
+      if (placeId.startsWith('name:')) {
+        task.keyword = placeId.slice(5);
+      } else if (placeId.startsWith('cid:') || placeId.startsWith('ftid:')) {
         task.keyword = placeId;
       } else {
         task.place_id = placeId;
