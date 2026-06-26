@@ -195,11 +195,48 @@ export const feedbackEmbeddings = pgTable(
   (table) => [index('embedding_feedbackItemId_idx').on(table.feedbackItemId)],
 );
 
+export const connectorConfigs = pgTable(
+  'connector_configs',
+  {
+    id: text('id').primaryKey(),
+    organizationId: text('organization_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    connectorType: text('connector_type').notNull(),
+    placeId: text('place_id').notNull(),
+    locationCode: integer('location_code'),
+    lastSyncedAt: timestamp('last_synced_at'),
+    status: text('status').notNull().default('active'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => [
+    index('connector_configs_org_idx').on(table.organizationId),
+    index('connector_configs_type_idx').on(table.connectorType),
+    uniqueIndex('connector_configs_unique_idx').on(
+      table.organizationId,
+      table.connectorType,
+      table.placeId,
+    ),
+  ],
+);
+
 export const organizationRelations = relations(organization, ({ many }) => ({
   members: many(member),
   invitations: many(invitation),
   feedbackItems: many(feedbackItems),
+  connectorConfigs: many(connectorConfigs),
 }));
+
+export const connectorConfigRelations = relations(
+  connectorConfigs,
+  ({ one }) => ({
+    organization: one(organization, {
+      fields: [connectorConfigs.organizationId],
+      references: [organization.id],
+    }),
+  }),
+);
 
 export const memberRelations = relations(member, ({ one }) => ({
   organization: one(organization, {
