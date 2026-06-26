@@ -1,19 +1,45 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Star, ArrowLeft, Loader2, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 export default function GoogleReviewsPage() {
   const [placeId, setPlaceId] = useState('');
   const [fetching, setFetching] = useState(false);
+  const router = useRouter();
 
   const handleFetch = async () => {
     if (!placeId.trim()) return;
     setFetching(true);
-    setFetching(false);
+
+    try {
+      const res = await fetch('/api/connectors/google-reviews/connect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ placeIdOrUrl: placeId.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error || 'Something went wrong. Please try again.');
+        return;
+      }
+
+      toast.success('Reviews are being synced. This may take a moment.');
+      setTimeout(() => {
+        router.push('/dashboard/connectors');
+      }, 1500);
+    } catch {
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setFetching(false);
+    }
   };
 
   return (
@@ -68,7 +94,7 @@ export default function GoogleReviewsPage() {
             type="text"
             value={placeId}
             onChange={(e) => setPlaceId(e.target.value)}
-            placeholder="ChIJN1t_tDeuEmsRUsoyG83frY4"
+            placeholder="Paste a Google Maps URL or Place ID"
             className="flex-1 rounded-xl border border-border/40 bg-muted/30 px-3 py-2 text-[13px] placeholder:text-muted-foreground/30 focus:outline-none focus:border-brand-500/40"
           />
           <Button
