@@ -85,15 +85,22 @@ export function createDataForSEOClient(
 
   return {
     async taskPost({ placeId, locationCode, depth, sortBy }) {
-      const body = [
-        {
-          place_id: placeId,
-          location_code: locationCode,
-          language_code: 'en',
-          depth,
-          sort_by: sortBy,
-        },
-      ];
+      const task: Record<string, unknown> = {
+        location_code: locationCode,
+        language_code: 'en',
+        depth,
+        sort_by: sortBy,
+      };
+
+      if (placeId.startsWith('cid:')) {
+        task.cid = placeId.slice(4);
+      } else if (placeId.startsWith('ftid:')) {
+        task.keyword = placeId.slice(5);
+      } else {
+        task.place_id = placeId;
+      }
+
+      const body = [task];
 
       const res = await request<TaskPostResponse>(
         '/v3/business_data/google/reviews/task_post',
