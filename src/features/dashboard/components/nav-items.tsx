@@ -1,4 +1,4 @@
-import { LayoutDashboard, Upload, MessageSquareText } from 'lucide-react';
+import { LayoutDashboard, Blocks, MessageSquareText } from 'lucide-react';
 
 export const navItems = [
   {
@@ -7,9 +7,9 @@ export const navItems = [
     icon: LayoutDashboard,
   },
   {
-    title: 'Upload CSV',
-    url: '/dashboard/upload',
-    icon: Upload,
+    title: 'Connectors',
+    url: '/dashboard/connectors',
+    icon: Blocks,
   },
   {
     title: 'Chat',

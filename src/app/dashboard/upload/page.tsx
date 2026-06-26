@@ -1,5 +1,5 @@
-import UploadPage from '@/features/upload/components/upload-page';
+import { redirect } from 'next/navigation';
 
-export default function Upload() {
-  return <UploadPage />;
+export default function UploadRedirect() {
+  redirect('/dashboard/connectors/upload');
 }
