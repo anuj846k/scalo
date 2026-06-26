@@ -15,12 +15,6 @@ export function extractPlaceId(input: string): string | null {
       if (/^[A-Za-z0-9_-]{27,}$/.test(slug) && !slug.includes('+')) return slug;
     }
 
-    const ftidMatch = url.pathname.match(/16s(%2F|%2f|\/)([^!?&]+)/);
-    if (ftidMatch?.[2]) {
-      const ftid = decodeURIComponent(ftidMatch[2]);
-      return `ftid:${ftid}`;
-    }
-
     const cidMatch = url.pathname.match(/!1s(0x[0-9a-fA-F]+:0x[0-9a-fA-F]+)/);
     if (cidMatch?.[1]) return `cid:${cidMatch[1]}`;
 
@@ -28,6 +22,12 @@ export function extractPlaceId(input: string): string | null {
       /!1s(0x[0-9a-fA-F]+:0x[0-9a-fA-F]+)/,
     );
     if (fragmentCidMatch?.[1]) return `cid:${fragmentCidMatch[1]}`;
+
+    const ftidMatch = url.pathname.match(/16s(%2F|%2f|\/)([^!?&]+)/);
+    if (ftidMatch?.[2]) {
+      const ftid = decodeURIComponent(ftidMatch[2]);
+      return `ftid:${ftid}`;
+    }
 
     const fragmentMatch = url.hash.match(/placeid:([^&]+)/);
     if (fragmentMatch?.[1]) return fragmentMatch[1];

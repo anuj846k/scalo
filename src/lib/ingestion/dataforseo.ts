@@ -92,10 +92,8 @@ export function createDataForSEOClient(
         sort_by: sortBy,
       };
 
-      if (placeId.startsWith('cid:')) {
-        task.cid = placeId.slice(4);
-      } else if (placeId.startsWith('ftid:')) {
-        task.keyword = placeId.slice(5);
+      if (placeId.startsWith('cid:') || placeId.startsWith('ftid:')) {
+        task.keyword = placeId;
       } else {
         task.place_id = placeId;
       }
