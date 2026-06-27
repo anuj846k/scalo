@@ -15,7 +15,10 @@ interface ConnectorConfig {
   organizationId: string;
   connectorType: string;
   placeId: string;
+  title: string | null;
+  subTitle: string | null;
   locationCode: number | null;
+  locationCoordinate: string | null;
   lastSyncedAt: Date | null;
   status: string;
   createdAt: Date;

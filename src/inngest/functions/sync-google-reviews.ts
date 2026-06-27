@@ -13,194 +13,223 @@ import {
 } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+// TODO: set to 4490 and 100 once ready for production
+const isDev = process.env.NODE_ENV === 'development';
+const INITIAL_SYNC_DEPTH = isDev ? 20 : 4490;
+const INCREMENTAL_SYNC_DEPTH = isDev ? 20 : 100;
+const PINGBACK_TIMEOUT = '2h';
 
 export const syncGoogleReviews = inngest.createFunction(
   {
     id: 'sync-google-reviews',
     name: 'Sync Google Reviews',
-    triggers: [{ event: 'google-reviews.sync' }, { cron: '0 0 * * *' }],
+    triggers: [{ event: 'google-reviews.sync' }],
+    retries: 3,
   },
-  async ({ event }) => {
+  async ({ event, step }) => {
+    const { configId } = event.data as { configId?: string };
+    if (!configId) return;
+
     const client = createDataForSEOClient();
-    const isEvent = event.name === 'google-reviews.sync';
 
-    if (!isEvent) {
-      const configs = await db
+    // Step 1: Load connector config
+    const config = await step.run('load-config', async () => {
+      const rows = await db
         .select()
         .from(connectorConfigs)
-        .where(
-          and(
-            eq(connectorConfigs.connectorType, 'google_reviews'),
-            eq(connectorConfigs.status, 'active'),
-          ),
-        );
-
-      for (const config of configs) {
-        await syncConfig(client, config);
-      }
-    } else {
-      const data = event.data as { configId?: string };
-      if (!data.configId) return;
-
-      const configs = await db
-        .select()
-        .from(connectorConfigs)
-        .where(eq(connectorConfigs.id, data.configId))
+        .where(eq(connectorConfigs.id, configId))
         .limit(1);
+      return rows[0] ?? null;
+    });
 
-      if (configs[0]) {
-        await syncConfig(client, configs[0]);
+    if (!config || config.status !== 'active') return;
+
+    // Step 2: Resolve location code if missing
+    const locationCode = await step.run('resolve-location', async () => {
+      if (config.locationCode != null || config.locationCoordinate != null) {
+        return config.locationCode ?? null;
       }
-    }
-  },
-);
-
-async function syncConfig(
-  client: ReturnType<typeof createDataForSEOClient>,
-  config: typeof connectorConfigs.$inferSelect,
-) {
-  if (config.status !== 'active') return;
-
-  let locationCode = config.locationCode;
-
-  if (locationCode == null && config.locationCoordinate == null) {
-    try {
       const code = await client.getLocationCode();
       if (code) {
-        locationCode = code;
         await db
           .update(connectorConfigs)
           .set({ locationCode: code, updatedAt: new Date() })
           .where(eq(connectorConfigs.id, config.id));
       }
-    } catch (e) {
-      console.error(`Failed to get location code for config ${config.id}:`, e);
+      return code;
+    });
+
+    if (locationCode == null && config.locationCoordinate == null) return;
+
+    // Step 3: Create DataForSEO task
+    const isFirstSync = config.lastSyncedAt == null;
+    const depth = isFirstSync ? INITIAL_SYNC_DEPTH : INCREMENTAL_SYNC_DEPTH;
+
+    const baseUrl =
+      process.env.APP_BASE_URL ??
+      (process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : 'http://localhost:3000');
+
+    const taskId = await step.run('create-task', async () => {
+      const pingbackUrl = `${baseUrl}/api/connectors/google-reviews/pingback?id=$id`;
+      return client.taskPost({
+        placeId: config.placeId,
+        locationCode,
+        locationCoordinate: config.locationCoordinate,
+        depth,
+        sortBy: 'newest',
+        pingbackUrl,
+      });
+    });
+
+    // Step 4: Wait for DataForSEO to finish (zero compute — function suspends)
+    // DataForSEO calls our pingback URL when done, which sends an Inngest event.
+    const taskCompleted = await step.waitForEvent('wait-for-dataforseo', {
+      event: 'dataforseo.task-completed',
+      timeout: PINGBACK_TIMEOUT,
+      if: `async.data.taskId == "${taskId}"`,
+    });
+
+    if (!taskCompleted) {
+      // Timed out — DataForSEO didn't respond in 2h, something is very wrong
+      await step.run('mark-sync-failed', async () => {
+        await db
+          .update(connectorConfigs)
+          .set({ updatedAt: new Date() })
+          .where(eq(connectorConfigs.id, config.id));
+      });
       return;
     }
-  }
 
-  if (locationCode == null && config.locationCoordinate == null) return;
-
-  const depth = config.lastSyncedAt == null ? 4490 : 20;
-  const sortBy = config.lastSyncedAt == null ? 'relevant' : 'newest';
-
-  let taskId: string;
-  try {
-    taskId = await client.taskPost({
-      placeId: config.placeId,
-      locationCode,
-      locationCoordinate: config.locationCoordinate,
-      depth,
-      sortBy,
-    });
-  } catch (e) {
-    console.error(
-      `Failed to create DataForSEO task for config ${config.id}:`,
-      e,
-    );
-    return;
-  }
-
-  let items: Awaited<ReturnType<typeof client.taskGet>>['items'] = [];
-
-  for (let i = 0; i < 40; i++) {
-    await delay(3000);
-
-    try {
-      const readyIds = await client.tasksReady();
-      if (readyIds.includes(taskId)) {
+    // Step 5: Fetch results (guaranteed ready — pingback confirms completion)
+    const { items, resolvedPlaceId, resolvedTitle, resolvedSubTitle } =
+      await step.run('fetch-results', async () => {
         const result = await client.taskGet(taskId);
-        items = result.items;
-        break;
+        return {
+          items: result.items,
+          resolvedPlaceId: result.placeId,
+          resolvedTitle: result.title,
+          resolvedSubTitle: result.subTitle,
+        };
+      });
+
+    if (items.length === 0) {
+      await step.run('update-sync-timestamp-empty', async () => {
+        await db
+          .update(connectorConfigs)
+          .set({ lastSyncedAt: new Date(), updatedAt: new Date() })
+          .where(eq(connectorConfigs.id, config.id));
+      });
+      return;
+    }
+
+    // Step 6: Update placeId and business info if DataForSEO resolved it
+    if (resolvedPlaceId && config.placeId.startsWith('name:')) {
+      await step.run('update-resolved-place-id', async () => {
+        await db
+          .update(connectorConfigs)
+          .set({
+            placeId: resolvedPlaceId,
+            title: resolvedTitle ?? null,
+            subTitle: resolvedSubTitle ?? null,
+            locationCoordinate: null,
+            updatedAt: new Date(),
+          })
+          .where(eq(connectorConfigs.id, config.id));
+      });
+    } else if (resolvedTitle && !config.title) {
+      // First sync: save title/subTitle if not yet set
+      await step.run('update-business-info', async () => {
+        await db
+          .update(connectorConfigs)
+          .set({
+            title: resolvedTitle,
+            subTitle: resolvedSubTitle ?? null,
+            updatedAt: new Date(),
+          })
+          .where(eq(connectorConfigs.id, config.id));
+      });
+    }
+
+    // Step 7: Upsert reviews into feedback_items (dedup via sourceItemId)
+    const newItems = await step.run('upsert-reviews', async () => {
+      const inserted: Array<{ id: string; text: string }> = [];
+
+      for (const item of items) {
+        const normalized = normalizeGoogleReview(item);
+        if (!normalized.text.trim() || !normalized.sourceItemId) continue;
+
+        const metadataJson = buildReviewMetadata(item);
+
+        const existing = await db
+          .select({ id: feedbackItems.id })
+          .from(feedbackItems)
+          .where(
+            and(
+              eq(feedbackItems.sourceItemId, normalized.sourceItemId),
+              eq(feedbackItems.source, 'google_reviews'),
+            ),
+          )
+          .limit(1);
+
+        if (existing.length > 0) {
+          await db
+            .update(feedbackItems)
+            .set({
+              text: normalized.text,
+              rating: normalized.rating,
+              authorName: normalized.authorName,
+              metadataJson: metadataJson as any,
+            })
+            .where(eq(feedbackItems.id, existing[0].id));
+        } else {
+          const id = crypto.randomUUID();
+          await db.insert(feedbackItems).values({
+            id,
+            organizationId: config.organizationId,
+            connectorConfigId: config.id,
+            source: 'google_reviews',
+            sourceItemId: normalized.sourceItemId,
+            text: normalized.text,
+            rating: normalized.rating,
+            authorName: normalized.authorName,
+            createdAt: normalized.createdAt,
+            metadataJson: metadataJson as any,
+          });
+
+          inserted.push({ id, text: normalized.text });
+        }
       }
-    } catch (e) {
-      console.error(`Poll error for task ${taskId}:`, e);
+
+      return inserted;
+    });
+
+    // Step 8: Generate embeddings for new items only
+    if (newItems.length > 0) {
+      const embeddings = await step.run('generate-embeddings', async () => {
+        const texts = newItems.map((i) => i.text);
+        return generateEmbeddings(texts);
+      });
+
+      await step.run('store-embeddings', async () => {
+        const embeddingRows = newItems.map((item, idx) => ({
+          id: crypto.randomUUID(),
+          feedbackItemId: item.id,
+          embedding: embeddings[idx] as any,
+          modelName: 'gemini-embedding-001',
+          createdAt: new Date(),
+        }));
+        await db.insert(feedbackEmbeddings).values(embeddingRows);
+      });
     }
-  }
 
-  if (items.length === 0) {
-    await db
-      .update(connectorConfigs)
-      .set({ lastSyncedAt: new Date(), updatedAt: new Date() })
-      .where(eq(connectorConfigs.id, config.id));
-    return;
-  }
-
-  const newItems: Array<{
-    id: string;
-    organizationId: string;
-    text: string;
-  }> = [];
-
-  for (const item of items) {
-    const normalized = normalizeGoogleReview(item);
-    if (!normalized.text.trim() || !normalized.sourceItemId) continue;
-
-    const metadataJson = buildReviewMetadata(item);
-
-    const existing = await db
-      .select({ id: feedbackItems.id })
-      .from(feedbackItems)
-      .where(
-        and(
-          eq(feedbackItems.sourceItemId, normalized.sourceItemId),
-          eq(feedbackItems.source, 'google_reviews'),
-        ),
-      )
-      .limit(1);
-
-    if (existing.length > 0) {
+    // Step 9: Mark sync as complete
+    await step.run('update-sync-timestamp', async () => {
       await db
-        .update(feedbackItems)
-        .set({
-          text: normalized.text,
-          rating: normalized.rating,
-          authorName: normalized.authorName,
-          metadataJson: metadataJson as any,
-        })
-        .where(eq(feedbackItems.id, existing[0].id));
-    } else {
-      const id = crypto.randomUUID();
-      await db.insert(feedbackItems).values({
-        id,
-        organizationId: config.organizationId,
-        source: 'google_reviews',
-        sourceItemId: normalized.sourceItemId,
-        text: normalized.text,
-        rating: normalized.rating,
-        authorName: normalized.authorName,
-        createdAt: normalized.createdAt,
-        metadataJson: metadataJson as any,
-      });
-
-      newItems.push({
-        id,
-        organizationId: config.organizationId,
-        text: normalized.text,
-      });
-    }
-  }
-
-  if (newItems.length > 0) {
-    const texts = newItems.map((i) => i.text);
-    const embeddings = await generateEmbeddings(texts);
-
-    const embeddingRows = newItems.map((item, idx) => ({
-      id: crypto.randomUUID(),
-      feedbackItemId: item.id,
-      embedding: embeddings[idx] as any,
-      modelName: 'gemini-embedding-001',
-      createdAt: new Date(),
-    }));
-
-    await db.insert(feedbackEmbeddings).values(embeddingRows);
-  }
-
-  await db
-    .update(connectorConfigs)
-    .set({ lastSyncedAt: new Date(), updatedAt: new Date() })
-    .where(eq(connectorConfigs.id, config.id));
-}
+        .update(connectorConfigs)
+        .set({ lastSyncedAt: new Date(), updatedAt: new Date() })
+        .where(eq(connectorConfigs.id, config.id));
+    });
+  },
+);

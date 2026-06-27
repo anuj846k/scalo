@@ -30,6 +30,9 @@ interface TaskGetResponse {
     result?: Array<{
       items?: DataForSEOReviewItem[];
       location_code?: number;
+      place_id?: string;
+      title?: string;
+      sub_title?: string;
     }>;
   }>;
 }
@@ -41,11 +44,15 @@ export interface DataForSEOClient {
     locationCoordinate: string | null;
     depth: number;
     sortBy: string;
+    pingbackUrl?: string;
   }): Promise<string>;
 
   taskGet(taskId: string): Promise<{
     items: DataForSEOReviewItem[];
     locationCode?: number;
+    placeId?: string;
+    title?: string;
+    subTitle?: string;
   }>;
 
   tasksReady(): Promise<string[]>;
@@ -91,6 +98,7 @@ export function createDataForSEOClient(
       locationCoordinate,
       depth,
       sortBy,
+      pingbackUrl,
     }) {
       const task: Record<string, unknown> = {
         language_code: 'en',
@@ -104,10 +112,12 @@ export function createDataForSEOClient(
         task.location_code = locationCode;
       }
 
+      if (pingbackUrl) {
+        task.pingback_url = pingbackUrl;
+      }
+
       if (placeId.startsWith('name:')) {
         task.keyword = placeId.slice(5);
-      } else if (placeId.startsWith('cid:') || placeId.startsWith('ftid:')) {
-        task.keyword = placeId;
       } else {
         task.place_id = placeId;
       }
@@ -137,13 +147,16 @@ export function createDataForSEOClient(
       );
 
       if (res.status_code !== 20000) {
-        throw new Error(`Failed to get DataForSEO task: ${res.status_code}`);
+        return { items: [], locationCode: undefined, placeId: undefined };
       }
 
       const result = res.tasks?.[0]?.result?.[0];
       return {
         items: result?.items ?? [],
         locationCode: result?.location_code,
+        placeId: result?.place_id,
+        title: result?.title,
+        subTitle: result?.sub_title,
       };
     },
 

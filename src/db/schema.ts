@@ -167,6 +167,10 @@ export const feedbackItems = pgTable(
     organizationId: text('organization_id')
       .notNull()
       .references(() => organization.id, { onDelete: 'cascade' }),
+    connectorConfigId: text('connector_config_id').references(
+      () => connectorConfigs.id,
+      { onDelete: 'set null' },
+    ),
     source: text('source').notNull().default('csv'),
     sourceItemId: text('source_item_id'),
     text: text('text').notNull(),
@@ -178,6 +182,7 @@ export const feedbackItems = pgTable(
   (table) => [
     index('feedback_organizationId_idx').on(table.organizationId),
     index('feedback_source_idx').on(table.source),
+    index('feedback_connector_config_idx').on(table.connectorConfigId),
   ],
 );
 
@@ -204,6 +209,8 @@ export const connectorConfigs = pgTable(
       .references(() => organization.id, { onDelete: 'cascade' }),
     connectorType: text('connector_type').notNull(),
     placeId: text('place_id').notNull(),
+    title: text('title'),
+    subTitle: text('sub_title'),
     locationCode: integer('location_code'),
     locationCoordinate: text('location_coordinate'),
     lastSyncedAt: timestamp('last_synced_at'),

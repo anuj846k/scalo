@@ -1,18 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSWR from 'swr';
-import {
-  ArrowRight,
-  Trash2,
-  CheckCircle2,
-  Clock,
-  AlertCircle,
-} from 'lucide-react';
+import { ArrowRight, CheckCircle2, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -20,6 +12,8 @@ interface ConnectorConfig {
   id: string;
   connectorType: string;
   placeId: string;
+  title: string | null;
+  subTitle: string | null;
   locationCode: number | null;
   lastSyncedAt: string | null;
   status: string;
@@ -43,30 +37,13 @@ function relativeTime(dateStr: string | null): string {
 }
 
 export default function ConnectorsHub() {
-  const { data, mutate } = useSWR('/api/connectors', fetcher);
-  const [deleting, setDeleting] = useState<string | null>(null);
+  const { data } = useSWR('/api/connectors', fetcher);
 
   const liveConfigs: ConnectorConfig[] = data?.configs ?? [];
-  const googleConfig = liveConfigs.find(
+  const googleConfigs = liveConfigs.filter(
     (c) => c.connectorType === 'google_reviews',
   );
-
-  const handleDisconnect = async (id: string) => {
-    setDeleting(id);
-    try {
-      const res = await fetch(`/api/connectors/${id}`, { method: 'DELETE' });
-      if (!res.ok) {
-        toast.error('Failed to disconnect');
-        return;
-      }
-      toast.success('Disconnected');
-      mutate();
-    } catch {
-      toast.error('Something went wrong');
-    } finally {
-      setDeleting(null);
-    }
-  };
+  const googleCount = googleConfigs.length;
 
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-8 md:px-8">
@@ -124,21 +101,17 @@ export default function ConnectorsHub() {
               />
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold">Google Reviews</h3>
-                {googleConfig && (
+                {googleCount > 0 && (
                   <span
                     className={cn(
                       'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium',
-                      googleConfig.status === 'active'
+                      googleConfigs.some((c) => c.status === 'active')
                         ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400'
                         : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-400',
                     )}
                   >
-                    {googleConfig.status === 'active' ? (
-                      <CheckCircle2 className="size-3" />
-                    ) : (
-                      <AlertCircle className="size-3" />
-                    )}
-                    {googleConfig.status === 'active' ? 'Active' : 'Error'}
+                    <CheckCircle2 className="size-3" />
+                    {googleCount} connected
                   </span>
                 )}
               </div>
@@ -150,19 +123,18 @@ export default function ConnectorsHub() {
           <div className="border-t border-border/40 px-5 py-3 flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground/60">
               <Clock className="size-3" />
-              <span>{relativeTime(googleConfig?.lastSyncedAt ?? null)}</span>
+              <span>
+                {relativeTime(
+                  googleConfigs.reduce<string | null>((latest, c) => {
+                    if (!c.lastSyncedAt) return latest;
+                    if (!latest || new Date(c.lastSyncedAt) > new Date(latest))
+                      return c.lastSyncedAt;
+                    return latest;
+                  }, null),
+                )}
+              </span>
             </div>
             <div className="flex items-center gap-2">
-              {googleConfig && (
-                <button
-                  onClick={() => handleDisconnect(googleConfig.id)}
-                  disabled={deleting === googleConfig.id}
-                  className="inline-flex items-center gap-1 text-xs text-muted-foreground/50 hover:text-destructive transition-colors"
-                >
-                  <Trash2 className="size-3" />
-                  {deleting === googleConfig.id ? '...' : 'Disconnect'}
-                </button>
-              )}
               <Link
                 href="/dashboard/connectors/google-reviews"
                 className="inline-flex items-center gap-1 text-sm font-medium text-brand-500 hover:text-brand-600 transition-colors"

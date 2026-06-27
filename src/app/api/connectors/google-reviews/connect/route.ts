@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
-import { extractPlaceId } from '@/lib/ingestion/place-id';
+import { extractGoogleMapsId } from '@/lib/ingestion/google-maps';
 import {
   createConnectorConfig,
   getConfigByPlaceId,
@@ -66,12 +66,12 @@ export async function POST(req: NextRequest) {
     input = await resolveShortUrl(input);
   }
 
-  const placeId = extractPlaceId(input);
-  if (!placeId) {
+  const googleMapsId = extractGoogleMapsId(input);
+  if (!googleMapsId) {
     return NextResponse.json(
       {
         error:
-          'Could not extract a valid Place ID from the input. Paste a Google Maps URL or Place ID.',
+          'Could not extract a valid identifier from the input. Paste a Google Maps URL or Place ID.',
       },
       { status: 400 },
     );
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
   const existing = await getConfigByPlaceId(
     organizationId,
     'google_reviews',
-    placeId,
+    googleMapsId,
   );
   if (existing) {
     return NextResponse.json(
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
   const config = await createConnectorConfig({
     organizationId,
     connectorType: 'google_reviews',
-    placeId,
+    placeId: googleMapsId,
     locationCoordinate: coordinate ?? undefined,
   });
 
