@@ -22,7 +22,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
-import { useChatHistory } from '@/hooks/use-chat-history';
+import { useChatHistory } from '@/features/chat/hooks/use-chat-history';
 import { isToday, isYesterday, subWeeks, subMonths } from 'date-fns';
 
 interface Chat {

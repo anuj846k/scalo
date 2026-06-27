@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'scontent.cdninstagram.com' },
       { protocol: 'https', hostname: 'video.cdninstagram.com' },
       { protocol: 'https', hostname: '**.fbcdn.net' },
+      { protocol: 'https', hostname: 'maps.googleapis.com' },
     ],
   },
 };

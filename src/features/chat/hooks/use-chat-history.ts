@@ -30,7 +30,7 @@ export function useChatHistory() {
     useSWRInfinite(getChatHistoryPaginationKey, fetcher, {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      revalidateFirstPage: false,
+      revalidateFirstPage: true,
     });
 
   const chats: Chat[] = data ? data.flatMap((page) => page.chats) : [];

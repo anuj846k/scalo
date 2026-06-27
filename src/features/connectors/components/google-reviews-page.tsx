@@ -8,9 +8,7 @@ import {
   Loader2,
   ExternalLink,
   Trash2,
-  CheckCircle2,
   Clock,
-  AlertCircle,
 } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -27,9 +25,16 @@ interface ConnectorConfig {
   title: string | null;
   subTitle: string | null;
   locationCode: number | null;
+  locationCoordinate: string | null;
   lastSyncedAt: string | null;
   status: string;
   createdAt: string;
+}
+
+function getMapEmbedUrl(placeId: string): string | null {
+  const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  if (!key) return null;
+  return `https://www.google.com/maps/embed/v1/place?key=${key}&q=place_id:${placeId}&zoom=15`;
 }
 
 function relativeTime(dateStr: string | null): string {
@@ -104,7 +109,7 @@ export default function GoogleReviewsPage() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6 px-4 py-8">
+    <div className="mx-auto max-w-4xl space-y-6 px-4 py-8">
       <div className="flex items-center gap-3">
         <Link
           href="/dashboard/connectors"
@@ -126,53 +131,60 @@ export default function GoogleReviewsPage() {
           <h2 className="text-sm font-medium text-muted-foreground">
             Connected locations ({configs.length})
           </h2>
-          {configs.map((config) => (
-            <Card key={config.id} className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-1 min-w-0">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {configs.map((config) => {
+              const mapUrl = getMapEmbedUrl(config.placeId);
+              return (
+                <Card key={config.id} className="flex flex-col overflow-hidden">
+                  {mapUrl && (
+                    <iframe
+                      src={mapUrl}
+                      title={`Map of ${config.title ?? 'location'}`}
+                      className="h-56 w-full border-0"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  )}
+                  <div className="flex flex-col flex-1 p-4">
+                    <div className="flex items-start gap-3 min-w-0">
                       <span
                         className={cn(
-                          'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium',
+                          'mt-1 block size-2 shrink-0 rounded-full',
                           config.status === 'active'
-                            ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400'
-                            : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-400',
+                            ? 'bg-emerald-500'
+                            : 'bg-red-500',
                         )}
-                      >
-                        {config.status === 'active' ? (
-                          <CheckCircle2 className="size-3" />
-                        ) : (
-                          <AlertCircle className="size-3" />
+                      />
+                      <div className="min-w-0 flex-1 space-y-0.5">
+                        <h3 className="truncate text-sm font-medium">
+                          {config.title ?? config.placeId}
+                        </h3>
+                        {config.subTitle && (
+                          <p className="truncate text-[12px] text-muted-foreground/60">
+                            {config.subTitle}
+                          </p>
                         )}
-                        {config.status === 'active' ? 'Active' : 'Error'}
-                      </span>
-                      <span className="truncate text-sm font-medium">
-                        {config.title ?? config.placeId}
-                      </span>
+                      </div>
                     </div>
-                    {config.subTitle && (
-                      <p className="text-[12px] text-muted-foreground/60 truncate">
-                        {config.subTitle}
-                      </p>
-                    )}
+                    <div className="mt-auto flex items-center justify-between pt-4">
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground/60">
+                        <Clock className="size-3" />
+                        <span>{relativeTime(config.lastSyncedAt)}</span>
+                      </div>
+                      <button
+                        onClick={() => handleDisconnect(config.id)}
+                        disabled={deleting === config.id}
+                        className="inline-flex items-center gap-1 text-xs text-muted-foreground/50 hover:text-destructive transition-colors"
+                      >
+                        <Trash2 className="size-3" />
+                        {deleting === config.id ? '...' : 'Disconnect'}
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground/60">
-                    <Clock className="size-3" />
-                    <span>Last synced {relativeTime(config.lastSyncedAt)}</span>
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleDisconnect(config.id)}
-                  disabled={deleting === config.id}
-                  className="shrink-0 inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-muted-foreground/50 hover:text-destructive hover:bg-destructive/5 transition-colors"
-                >
-                  <Trash2 className="size-3" />
-                  {deleting === config.id ? '...' : 'Disconnect'}
-                </button>
-              </div>
-            </Card>
-          ))}
+                </Card>
+              );
+            })}
+          </div>
         </div>
       )}
 
