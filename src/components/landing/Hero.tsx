@@ -122,7 +122,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
       <div className="absolute bottom-8 sm:bottom-12 md:bottom-16 lg:bottom-10 2xl:bottom-20 flex flex-col items-center justify-center px-4 w-full max-w-4xl z-20">
         <p className="text-xl  lg:text-3xl font-semibold mb-2 text-center selection:bg-[#3a04ff] selection:text-white tracking-tight">
           Every customer voice,
