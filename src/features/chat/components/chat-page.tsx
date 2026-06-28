@@ -26,6 +26,7 @@ import { useScrollToBottom } from '@/hooks/use-scroll-to-bottom';
 import { useChatHistory } from '@/features/chat/hooks/use-chat-history';
 import useSWR from 'swr';
 import Link from 'next/link';
+import { authClient } from '@/lib/auth-client';
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -51,7 +52,10 @@ export default function ChatPage() {
   const currentChatId = chatId ?? generatedId;
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  const { mutate: mutateChatHistory } = useChatHistory();
+  const { data: sessionData } = authClient.useSession();
+  const organizationId =
+    sessionData?.session?.activeOrganizationId ?? undefined;
+  const { mutate: mutateChatHistory } = useChatHistory(organizationId);
 
   const { data: chatData, isLoading: isHistoryLoading } = useSWR(
     isNewChat ? null : `/api/messages?chatId=${chatId}`,

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import useSWR from 'swr';
-import { ArrowRight, CheckCircle2, Clock } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Clock, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
@@ -44,6 +44,10 @@ export default function ConnectorsHub() {
     (c) => c.connectorType === 'google_reviews',
   );
   const googleCount = googleConfigs.length;
+  const trustpilotConfigs = liveConfigs.filter(
+    (c) => c.connectorType === 'trustpilot',
+  );
+  const trustpilotCount = trustpilotConfigs.length;
 
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-8 md:px-8">
@@ -137,6 +141,63 @@ export default function ConnectorsHub() {
             <div className="flex items-center gap-2">
               <Link
                 href="/dashboard/connectors/google-reviews"
+                className="inline-flex items-center gap-1 text-sm font-medium text-brand-500 hover:text-brand-600 transition-colors"
+              >
+                Configure
+                <ArrowRight className="size-3.5" />
+              </Link>
+            </div>
+          </div>
+        </li>
+
+        <li className="rounded-xl border border-border/40 bg-card transition-shadow hover:shadow-sm">
+          <div className="flex items-start justify-between p-5">
+            <div className="space-y-3">
+              <Image
+                src="/logos/trustpilot.png"
+                alt="Trustpilot"
+                width={40}
+                height={40}
+                className="size-10 rounded-xl"
+              />
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold">Trustpilot</h3>
+                {trustpilotCount > 0 && (
+                  <span
+                    className={cn(
+                      'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium',
+                      trustpilotConfigs.some((c) => c.status === 'active')
+                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400'
+                        : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-400',
+                    )}
+                  >
+                    <CheckCircle2 className="size-3" />
+                    {trustpilotCount} connected
+                  </span>
+                )}
+              </div>
+              <p className="text-sm text-muted-foreground/70">
+                Pull reviews from any Trustpilot business profile.
+              </p>
+            </div>
+          </div>
+          <div className="border-t border-border/40 px-5 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground/60">
+              <Clock className="size-3" />
+              <span>
+                {relativeTime(
+                  trustpilotConfigs.reduce<string | null>((latest, c) => {
+                    if (!c.lastSyncedAt) return latest;
+                    if (!latest || new Date(c.lastSyncedAt) > new Date(latest))
+                      return c.lastSyncedAt;
+                    return latest;
+                  }, null),
+                )}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Link
+                href="/dashboard/connectors/trustpilot"
                 className="inline-flex items-center gap-1 text-sm font-medium text-brand-500 hover:text-brand-600 transition-colors"
               >
                 Configure

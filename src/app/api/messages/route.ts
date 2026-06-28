@@ -8,6 +8,11 @@ export async function GET(req: Request) {
     return new Response('Unauthorized', { status: 401 });
   }
 
+  const organizationId = session.session.activeOrganizationId;
+  if (!organizationId) {
+    return new Response('No active organization', { status: 400 });
+  }
+
   const url = new URL(req.url);
   const chatId = url.searchParams.get('chatId');
 
@@ -15,7 +20,7 @@ export async function GET(req: Request) {
     return new Response('chatId is required', { status: 400 });
   }
 
-  const chat = await getChatById(chatId);
+  const chat = await getChatById(chatId, organizationId);
   if (!chat) {
     return Response.json({ messages: [] });
   }

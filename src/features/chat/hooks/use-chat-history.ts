@@ -9,25 +9,30 @@ interface Chat {
   createdAt: string;
 }
 
-export function getChatHistoryPaginationKey(
-  pageIndex: number,
-  previousPageData: { chats: Chat[]; hasMore: boolean } | null,
-) {
-  if (previousPageData && !previousPageData.hasMore) return null;
-  if (pageIndex === 0) return '/api/history?limit=20';
+function getChatHistoryPaginationKey(organizationId: string | undefined) {
+  return function key(
+    pageIndex: number,
+    previousPageData: { chats: Chat[]; hasMore: boolean } | null,
+  ) {
+    const base = '/api/history?limit=20';
+    const orgParam = organizationId ? `&org=${organizationId}` : '';
+    if (previousPageData && !previousPageData.hasMore) return null;
+    if (pageIndex === 0) return `${base}${orgParam}`;
 
-  const lastChat = previousPageData?.chats?.[previousPageData.chats.length - 1];
-  if (!lastChat) return null;
-  return `/api/history?limit=20&before=${lastChat.createdAt}`;
+    const lastChat =
+      previousPageData?.chats?.[previousPageData.chats.length - 1];
+    if (!lastChat) return null;
+    return `${base}&before=${lastChat.createdAt}${orgParam}`;
+  };
 }
 
 async function fetcher(url: string) {
   return fetch(url).then((r) => r.json());
 }
 
-export function useChatHistory() {
+export function useChatHistory(organizationId?: string) {
   const { data, setSize, mutate, isLoading, error, isValidating } =
-    useSWRInfinite(getChatHistoryPaginationKey, fetcher, {
+    useSWRInfinite(getChatHistoryPaginationKey(organizationId), fetcher, {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       revalidateFirstPage: true,

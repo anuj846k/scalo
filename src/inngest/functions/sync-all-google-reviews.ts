@@ -1,7 +1,7 @@
 import { inngest } from '../client';
 import { db } from '@/db/drizzle';
 import { connectorConfigs } from '@/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, or } from 'drizzle-orm';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -14,14 +14,16 @@ export const syncAllGoogleReviews = inngest.createFunction(
       : [{ cron: '0 0 * * *' }],
   },
   async ({ step }) => {
-    // Fetch all active Google Reviews configs
     const configs = await step.run('fetch-active-configs', async () => {
       return db
         .select()
         .from(connectorConfigs)
         .where(
           and(
-            eq(connectorConfigs.connectorType, 'google_reviews'),
+            or(
+              eq(connectorConfigs.connectorType, 'google_reviews'),
+              eq(connectorConfigs.connectorType, 'trustpilot'),
+            ),
             eq(connectorConfigs.status, 'active'),
           ),
         );
@@ -29,11 +31,13 @@ export const syncAllGoogleReviews = inngest.createFunction(
 
     if (configs.length === 0) return;
 
-    // Fan out: send individual events so each config syncs independently
     await step.sendEvent(
       'fan-out-sync-events',
       configs.map((config) => ({
-        name: 'google-reviews.sync' as const,
+        name:
+          config.connectorType === 'trustpilot'
+            ? ('trustpilot.sync' as const)
+            : ('google-reviews.sync' as const),
         data: { configId: config.id },
       })),
     );

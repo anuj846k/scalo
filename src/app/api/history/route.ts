@@ -8,12 +8,18 @@ export async function GET(req: Request) {
     return new Response('Unauthorized', { status: 401 });
   }
 
+  const organizationId = session.session.activeOrganizationId;
+  if (!organizationId) {
+    return new Response('No active organization', { status: 400 });
+  }
+
   const url = new URL(req.url);
   const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 50);
   const before = url.searchParams.get('before') || undefined;
 
   const result = await getChatsByUser({
     userId: session.user.id,
+    organizationId,
     limit,
     before,
   });
@@ -27,6 +33,11 @@ export async function DELETE() {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  const count = await deleteAllChats(session.user.id);
+  const organizationId = session.session.activeOrganizationId;
+  if (!organizationId) {
+    return new Response('No active organization', { status: 400 });
+  }
+
+  const count = await deleteAllChats(session.user.id, organizationId);
   return Response.json({ deletedCount: count });
 }
