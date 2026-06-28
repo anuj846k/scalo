@@ -2,13 +2,13 @@
 
 ## Project
 
-**Name:** Murmur  
+**Name:** Scalo  
 **Type:** Next.js web application  
 **Purpose:** Ingest customer feedback from sources like Google Reviews, Instagram comments, CSV uploads, and other channels; extract themes and sentiment; generate semantic embeddings; and power a chat interface over the feedback corpus.
 
 ## Product Goal
 
-Murmur helps businesses understand what customers are saying at scale. The system should:
+Scalo helps businesses understand what customers are saying at scale. The system should:
 
 - collect feedback from multiple sources,
 - normalize it into a common schema,

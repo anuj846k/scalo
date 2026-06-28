@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 
 export default function WorkspaceSetupForm() {
   const router = useRouter();
-  const [name, setName] = useState('My Organisation');
+  const [name, setName] = useState('My Workspace');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -58,7 +58,7 @@ export default function WorkspaceSetupForm() {
         <CardHeader>
           <CardTitle>Name your workspace</CardTitle>
           <CardDescription>
-            This is your team&apos;s workspace on Murmur.
+            This is your team&apos;s workspace on Scalo.
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -239,7 +239,6 @@ export function WorkspaceDialog({
               <>
                 {activeNav === 'general' && (
                   <WorkspaceGeneral
-                    key={org?.id ?? 'none'}
                     org={org}
                     orgs={orgs}
                     userId={userId}

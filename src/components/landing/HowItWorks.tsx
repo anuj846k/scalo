@@ -1,25 +1,24 @@
 'use client';
 
-import Image from 'next/image';
 import { useState } from 'react';
 
 export default function HowItWorks() {
   const steps = [
     {
-      title: 'Import & Organize',
-      desc: 'Build your creator database. Tag, categorize, and assign creators to specific campaigns.',
+      title: 'Connect your sources',
+      desc: 'Plug in Google Reviews, Zendesk, Instagram, or upload a CSV. New sources become available as connectors — no schema work required.',
     },
     {
-      title: 'AI Personalized Outreach',
-      desc: "Scalo reads the creator's bio and niche to draft highly relevant DMs and emails automatically.",
+      title: 'Normalize and embed',
+      desc: 'Scalo maps every item to a single feedback schema and generates vector embeddings, so semantically similar feedback groups together automatically.',
     },
     {
-      title: 'Automated Classification',
-      desc: "Incoming replies are instantly read by AI and tagged as 'Interested', 'Follow-Up Needed', or 'Not Interested'.",
+      title: 'Ask in plain language',
+      desc: '"What features are users requesting for the mobile app?" — Scalo retrieves the most relevant feedback across every connected source.',
     },
     {
-      title: 'Close the Partnership',
-      desc: "Manage deliverables, track pricing discussions, and move creators to 'Closed' without losing context.",
+      title: 'Get evidence, not vibes',
+      desc: 'Every answer ships with citations: the exact ticket, review, or comment it came from, plus date and trend context.',
     },
   ];
 
@@ -50,11 +49,11 @@ export default function HowItWorks() {
       <div className="relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900">
-            The Outreach Pipeline.
+            From feedback to answer.
           </h2>
           <p className="mt-2 text-lg font-normal text-gray-600 max-w-3xl mx-auto">
-            From first touch to signed partnership, managed seamlessly in one
-            place.
+            Connect once, ask forever. Scalo handles ingestion, normalization,
+            retrieval, and citation end-to-end.
           </p>
         </div>
 

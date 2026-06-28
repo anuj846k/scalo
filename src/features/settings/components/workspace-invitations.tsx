@@ -94,7 +94,7 @@ export function WorkspaceInvitations({
                   </div>
                   <div className="min-w-0 leading-tight">
                     <p className="text-sm font-semibold truncate text-foreground">
-                      {inv.organization?.name || 'Organisation'}
+                      {inv.organization?.name || 'Workspace'}
                     </p>
                     <p className="text-[11px] text-muted-foreground truncate mt-0.5">
                       Invited by:{' '}

@@ -6,13 +6,13 @@ export default function ProblemSection() {
       <div className="mx-auto max-w-5xl relative z-10">
         <div className="text-center mb-20">
           <h2 className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900">
-            Creator outreach is{' '}
-            <span className="text-[#3a04ff] italic">chaos.</span>
+            Customer feedback is{' '}
+            <span className="text-[#3a04ff] italic">scattered.</span>
           </h2>
           <p className="mt-2 text-lg font-normal text-gray-600 max-w-3xl mx-auto">
-            Spreadsheets, Notion boards, and manual DMs don't scale. Managing
-            creator partnerships is currently a disorganized mess of forgotten
-            follow-ups and unread messages.
+            Tickets in Zendesk, reviews on Google, comments on Instagram,
+            spreadsheets for the rest. No one has the full picture, and no one
+            can search across all of it.
           </p>
         </div>
 
@@ -20,12 +20,12 @@ export default function ProblemSection() {
           <div className="lg:col-span-3 relative bg-gray-50/50 rounded-3xl overflow-hidden flex flex-col border border-gray-200 h-[450px]">
             <div className="p-8 sm:p-10 relative z-10 w-full sm:w-[90%]">
               <h3 className="text-xl font-semibold text-gray-900 tracking-tight">
-                No Creator CRM
+                No semantic search
               </h3>
               <p className="mt-4 text-[15px] font-normal leading-relaxed text-gray-500">
-                Most teams use Google Sheets, Notion, or Airtable. Scalo
-                replaces them with a dedicated creator database, outreach
-                history, campaign assignments, and relationship tracking.
+                Filters by keyword miss the point. Scalo indexes meaning, so
+                asking &ldquo;why are users churning?&rdquo; surfaces the actual
+                reasons — not just matches for the word &ldquo;churn&rdquo;.
               </p>
             </div>
 
@@ -34,7 +34,7 @@ export default function ProblemSection() {
                 src="/landing/excel.png"
                 width={500}
                 height={500}
-                alt="excel"
+                alt="scattered feedback"
                 className="w-full h-auto object-cover object-top-left"
               />
             </div>
@@ -43,12 +43,12 @@ export default function ProblemSection() {
           <div className="lg:col-span-3 relative bg-blue-50/50 rounded-3xl overflow-hidden flex flex-col border border-blue-100 transition-all h-[450px]">
             <div className="p-8 sm:p-10 relative z-10 w-full sm:w-[90%]">
               <h3 className="text-xl font-semibold text-gray-900 tracking-tight">
-                Spammy DMs
+                No cited evidence
               </h3>
               <p className="mt-4 text-[15px] font-normal leading-relaxed text-gray-500">
-                Creators ignore generic, copy-pasted outreach. Scalo's AI
-                analyzes creator content to write hyper-personalized messages
-                that actually get replies, at scale.
+                Generic AI summaries invent context. Every Scalo answer links
+                back to the exact ticket, review, or comment it came from — so
+                you can trust the conclusion and act on it.
               </p>
             </div>
 
@@ -57,29 +57,29 @@ export default function ProblemSection() {
                 <div className="absolute w-[55%] sm:w-[55%] rounded-tl-2xl border-t border-l border-gray-200 bg-white overflow-hidden flex gap-2 rounded-2xl border p-1 opacity-60 text-sm">
                   <Image
                     src="/logos/logo.svg"
-                    alt="spam"
+                    alt="scalo"
                     width="20"
                     height="20"
                   />
-                  Drafted message for Alex Tech.
+                  Why are users churning?
                 </div>
                 <div className="absolute bottom-35 right-10 w-[55%] sm:w-[55%] rounded-tl-2xl border-t border-l border-gray-200 bg-white overflow-hidden flex gap-2 rounded-2xl border p-1 opacity-60 text-sm">
                   <Image
                     src="/logos/logo.svg"
-                    alt="spam"
+                    alt="scalo"
                     width="20"
                     height="20"
                   />
-                  Why is Alex a good fit?
+                  Top reason: confusing onboarding.
                 </div>
                 <div className="absolute bottom-20 w-[60%] sm:w-[60%] rounded-tl-2xl border-t border-l border-gray-200 bg-white overflow-hidden flex gap-2 rounded-2xl border p-1 opacity-60 text-sm">
                   <Image
                     src="/logos/logo.svg"
-                    alt="spam"
+                    alt="scalo"
                     width="20"
                     height="20"
                   />
-                  His travel content matches engagement goals.
+                  31 tickets cite step 3 of setup.
                 </div>
 
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[85%] bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-200/60 p-1.5 flex items-center gap-3 z-10">
@@ -99,7 +99,7 @@ export default function ProblemSection() {
                     </svg>
                   </div>
                   <div className="flex-1 text-[13px] text-gray-400 font-medium whitespace-nowrap overflow-hidden text-ellipsis">
-                    Ask Scalo AI
+                    Ask Scalo anything
                   </div>
                   <div className="w-8 h-8 rounded-full bg-[#3a04ff] flex items-center justify-center text-white shadow-md hover:bg-[#3a04ff]/90 transition-colors cursor-pointer shrink-0">
                     <svg
@@ -133,11 +133,12 @@ export default function ProblemSection() {
             </div>
             <div className="p-8 sm:p-10 relative z-10 w-full sm:w-[90%] mt-auto">
               <h3 className="text-xl font-semibold text-gray-900 tracking-tight">
-                Follow-Up Management
+                No theme clustering
               </h3>
               <p className="mt-4 text-[15px] font-normal leading-relaxed text-gray-500">
-                Never drop a conversation again. Scalo automatically tracks
-                contacted creators, pending responses, and follow-up schedules.
+                Reading 100s of tickets doesn&apos;t scale. Scalo clusters
+                recurring topics automatically so the patterns surface
+                themselves.
               </p>
             </div>
           </div>
@@ -157,12 +158,12 @@ export default function ProblemSection() {
           <div className="lg:col-span-2 relative bg-[#2f62ff] rounded-3xl overflow-hidden flex flex-col h-[450px]">
             <div className="p-8 sm:p-10 relative z-10 w-full sm:w-[90%]">
               <h3 className="text-xl font-semibold text-white tracking-tight">
-                Instant Reporting
+                Instant answers, not reports
               </h3>
               <p className="mt-4 text-[15px] font-normal leading-relaxed text-white/70">
-                Agencies can instantly see reply rates, campaign performance,
-                interested creators, and conversion metrics without manual data
-                entry.
+                Skip the weekly summary write-up. Ask a question in plain
+                English, get an evidence-backed answer in seconds — across every
+                connected source.
               </p>
             </div>
 
@@ -179,10 +180,10 @@ export default function ProblemSection() {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-gray-900 text-lg font-bold tracking-tight leading-none mb-1">
-                    12%
+                    84%
                   </span>
                   <span className="text-gray-500 text-[9px] font-bold uppercase leading-none">
-                    Reply Rate
+                    Cited
                   </span>
                 </div>
               </div>
@@ -199,10 +200,10 @@ export default function ProblemSection() {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-gray-900 text-lg font-bold tracking-tight leading-none mb-1">
-                    24
+                    12k
                   </span>
                   <span className="text-gray-500 text-[9px] font-bold uppercase leading-none">
-                    Interested
+                    Indexed
                   </span>
                 </div>
               </div>
@@ -219,10 +220,10 @@ export default function ProblemSection() {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-gray-900 text-lg font-bold tracking-tight leading-none mb-1">
-                    1.2k
+                    5
                   </span>
                   <span className="text-gray-500 text-[9px] font-bold uppercase leading-none">
-                    Link Clicks
+                    Sources
                   </span>
                 </div>
               </div>

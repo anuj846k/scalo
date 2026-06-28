@@ -95,6 +95,19 @@ export function WorkspaceGeneral({
               )}
             </div>
           </div>
+          {activeRole === 'owner' && (
+            <Button
+              variant="outline"
+              size="sm"
+              type="button"
+              onClick={() => {
+                const el = document.getElementById('organisation-name');
+                el?.focus();
+              }}
+            >
+              Update profile
+            </Button>
+          )}
         </div>
       </div>
 

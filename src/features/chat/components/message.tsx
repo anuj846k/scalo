@@ -156,7 +156,7 @@ const PurePreviewMessage = ({
             <div className="flex size-7 items-center justify-center rounded-lg bg-brand-50 ring-1 ring-brand-200 dark:bg-brand-950 dark:ring-brand-800">
               <Image
                 src="/logos/logo.svg"
-                alt="Murmur"
+                alt="Scalo"
                 width={16}
                 height={16}
                 className="size-4"
@@ -186,7 +186,7 @@ export const ThinkingMessage = () => {
           <div className="flex size-7 items-center justify-center rounded-lg bg-brand-50 ring-1 ring-brand-200 dark:bg-brand-950 dark:ring-brand-800">
             <Image
               src="/logos/logo.svg"
-              alt="Murmur"
+              alt="Scalo"
               width={16}
               height={16}
               className="size-4"

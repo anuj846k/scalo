@@ -91,7 +91,7 @@ export default function UploadPage() {
           <div>
             <h1 className="text-2xl font-bold">Upload Feedback CSV</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Upload a CSV file. Map your columns to Murmur&apos;s schema.
+              Upload a CSV file. Map your columns to Scalo&apos;s schema.
             </p>
           </div>
           <Button variant="outline" size="sm" asChild>

@@ -209,7 +209,7 @@ export function ChatSidebar({ chatId }: { chatId?: string }) {
     <>
       <div className="flex flex-col gap-4 p-2">
         <button
-          onClick={() => setDeleteAllOpen(true)}
+          onClick={handleDeleteAll}
           className="flex h-8 w-full items-center gap-2 rounded-lg px-2 text-[13px] text-sidebar-foreground/40 transition-colors duration-150 hover:bg-destructive/10 hover:text-destructive cursor-pointer"
         >
           <Trash2 className="size-4" />

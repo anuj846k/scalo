@@ -42,7 +42,7 @@ export const Messages = ({
             <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-muted/60 ring-1 ring-border/50">
               <Image
                 src="/logos/logo.svg"
-                alt="Murmur"
+                alt="Scalo"
                 className="h-5 w-5 transition-transform duration-500 group-hover/logo:rotate-6"
                 height={40}
                 width={40}

@@ -74,7 +74,7 @@ export default function AcceptInvitationPage({
         <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
           <h1 className="mb-4 text-xl font-bold">Invitation Accepted!</h1>
           <p className="mb-6 text-sm text-gray-500">
-            You&apos;ve joined the organisation.
+            You&apos;ve joined the workspace.
           </p>
           <button
             onClick={() => router.push('/dashboard')}

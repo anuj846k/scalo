@@ -44,8 +44,8 @@ export function ColumnMapper({
     <div className="space-y-3">
       <p className="text-sm font-semibold">Column Mapping</p>
       <p className="text-xs text-muted-foreground -mt-2">
-        Map your CSV columns to Murmur schema fields. Required fields marked
-        with *.
+        Map your CSV columns to Scalo schema fields. Required fields marked with
+        *.
       </p>
       <div className="rounded-lg border divide-y">
         {SCHEMA_FIELDS.map(({ field, label, required }) => (

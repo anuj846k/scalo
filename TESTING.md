@@ -1,4 +1,4 @@
-# Murmur MVP Testing Checklist
+# Scalo MVP Testing Checklist
 
 ## Pre-flight Setup
 

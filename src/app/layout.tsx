@@ -6,15 +6,15 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Murmur',
-    template: '%s · Murmur',
+    default: 'Scalo',
+    template: '%s · Scalo',
   },
-  description: 'Murmur — Unified AI feedback.',
-  keywords: ['AI', 'feedback', 'murmur', 'productivity', 'reviews'],
-  authors: [{ name: 'Murmur', url: 'https://example.com' }],
-  creator: 'Murmur',
+  description: 'Scalo — Unified AI feedback.',
+  keywords: ['AI', 'feedback', 'scalo', 'productivity', 'reviews'],
+  authors: [{ name: 'Scalo', url: 'https://example.com' }],
+  creator: 'Scalo',
   openGraph: {
-    title: 'Murmur',
+    title: 'Scalo',
     description: 'Unified AI feedback for teams and products.',
     type: 'website',
     url: 'https://example.com',

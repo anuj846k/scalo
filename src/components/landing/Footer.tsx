@@ -40,7 +40,7 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 text-sm font-medium text-blue-200/80">
           <p>© {new Date().getFullYear()} Scalo Inc. All rights reserved.</p>
-          <p>The Creator Outreach CRM</p>
+          <p>The Customer Intelligence Layer for AI</p>
         </div>
       </div>
     </footer>

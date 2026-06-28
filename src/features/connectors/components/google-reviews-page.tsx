@@ -245,35 +245,6 @@ export default function GoogleReviewsPage() {
           </Button>
         </div>
       </Card>
-
-      <AlertDialog
-        open={pendingDisconnect !== null}
-        onOpenChange={(open) => !open && setPendingDisconnect(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Disconnect this location?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will stop syncing reviews from this Google Business location.
-              Existing reviews will remain.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                if (pendingDisconnect) {
-                  handleDisconnect(pendingDisconnect);
-                  setPendingDisconnect(null);
-                }
-              }}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Disconnect
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

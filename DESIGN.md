@@ -280,7 +280,7 @@ components:
 
 # Overview
 
-Murmur is a Customer Intelligence Layer for AI. Connect support tickets, reviews, surveys, and conversations once. Ask questions anywhere — ChatGPT, Claude, Cursor, Slack, or Murmur. Get evidence-backed answers about what customers actually want.
+Scalo is a Customer Intelligence Layer for AI. Connect support tickets, reviews, surveys, and conversations once. Ask questions anywhere — ChatGPT, Claude, Cursor, Slack, or Scalo. Get evidence-backed answers about what customers actually want.
 
 The visual language is inspired by modern editorial software rather than traditional dashboards. Large display typography creates confidence, generous spacing improves readability, and soft green accents highlight evidence and insights.
 
@@ -301,9 +301,9 @@ The platform should feel like a thinking partner — precise, transparent, and f
 
 # Product Positioning
 
-## What Murmur Is
+## What Scalo Is
 
-Murmur is a Customer Intelligence Platform that helps teams:
+Scalo is a Customer Intelligence Platform that helps teams:
 
 - Connect feedback sources in one place
 - Ask natural-language questions about customer needs
@@ -332,7 +332,7 @@ Teams use:
 - Social comments (Instagram, Twitter)
 - Sales call transcripts
 
-Murmur connects everything into one searchable brain.
+Scalo connects everything into one searchable brain.
 
 ---
 
@@ -342,7 +342,7 @@ Instead of:
 
 "Search by ticket ID or keyword"
 
-Murmur lets you ask:
+Scalo lets you ask:
 
 - "What are customers complaining about most?"
 - "What feature requests increased this month?"
@@ -369,7 +369,7 @@ Instead of:
 - Building spreadsheets
 - Writing weekly summary reports
 
-Murmur generates:
+Scalo generates:
 
 - Theme clusters
 - Sentiment trends
@@ -465,7 +465,7 @@ Examples:
 - Trend detection
 - Weekly summaries
 
-Murmur becomes **Customer Intelligence** instead of Semantic Search.
+Scalo becomes **Customer Intelligence** instead of Semantic Search.
 
 ---
 
@@ -615,7 +615,7 @@ Pull tickets via API. Fields: subject, description, status, tags, date.
 
 # Brand Personality
 
-Murmur should feel:
+Scalo should feel:
 
 - Intelligent
 - Precise
