@@ -1,21 +1,56 @@
 import Navbar from '@/components/landing/Navbar';
 import Hero from '@/components/landing/Hero';
-import ProblemSection from '@/components/landing/ProblemSection';
+import Description from '@/components/landing/Description';
+import IntegrationsSection from '@/components/landing/IntegrationsSection';
+import Bento from '@/components/landing/Bento';
+import TrustedBy from '@/components/landing/TrustedBy';
 import HowItWorks from '@/components/landing/HowItWorks';
-import FeaturesSection from '@/components/landing/FeaturesSection';
-import CtaSection from '@/components/landing/CtaSection';
+import Pricing from '@/components/landing/Pricing';
+import CTA from '@/components/landing/CTA';
+import FAQ from '@/components/landing/FAQ';
 import Footer from '@/components/landing/Footer';
+import {
+  CornerBottomLeft,
+  CornerBottomRight,
+  CornerTopLeft,
+  CornerTopRight,
+} from '@/components/icons';
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col font-sans bg-[#f5f5f5]">
-      <Navbar />
-      <Hero />
-      <ProblemSection />
-      <HowItWorks />
-      <FeaturesSection />
-      <CtaSection />
-      <Footer />
+    <main className="min-h-screen bg-white p-2.5 font-sans">
+      <div className="relative overflow-hidden">
+        {/* Corner SVGs */}
+        <CornerTopLeft className="absolute top-0 left-0 z-40 text-white" />
+        <CornerTopRight className="absolute top-0 right-0 z-40 text-white" />
+        <CornerBottomLeft className="absolute bottom-0 left-0 z-40 text-white" />
+        <CornerBottomRight className="absolute bottom-0 right-0 z-40 text-white" />
+
+        <div
+          className="relative w-full"
+          style={{
+            backgroundImage: "url('/Assets/bg2.png')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          <Navbar />
+          <Hero />
+        </div>
+
+        <div className="w-full flex flex-col items-center">
+          <Description />
+          <IntegrationsSection />
+          <Bento />
+          <TrustedBy />
+          <HowItWorks />
+          <Pricing />
+          <CTA />
+          <FAQ />
+          <Footer />
+        </div>
+      </div>
     </main>
   );
 }

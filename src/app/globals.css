@@ -1,6 +1,14 @@
 @import 'tailwindcss';
 @import 'streamdown/styles.css';
 
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('/fonts/SF-Pro-Display-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
@@ -38,7 +46,7 @@
   --sidebar-accent-foreground: oklch(0.3729 0.0306 259.7328);
   --sidebar-border: oklch(0.8717 0.0093 258.3382);
   --sidebar-ring: #0025f5;
-  --font-sans: Inter, sans-serif;
+  --font-sans: 'SF Pro Display', Inter, sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: JetBrains Mono, monospace;
   --radius: 0.5rem;
@@ -98,7 +106,7 @@
   --sidebar-accent-foreground: oklch(0.8717 0.0093 258.3382);
   --sidebar-border: oklch(0.4461 0.0263 256.8018);
   --sidebar-ring: #568cff;
-  --font-sans: Inter, sans-serif;
+  --font-sans: 'SF Pro Display', Inter, sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: JetBrains Mono, monospace;
   --radius: 0.5rem;
@@ -206,6 +214,34 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
 }
 
 @layer utilities {
