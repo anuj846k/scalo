@@ -74,14 +74,14 @@ export function WorkspaceInvitations({
             </EmptyMedia>
             <EmptyTitle>No invitations found</EmptyTitle>
             <EmptyDescription>
-              You haven&apos;t received any workspace invitations.
+              You haven&apos;t received any organisation invitations.
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
         <div className="rounded-lg border overflow-hidden">
           <div className="grid grid-cols-[1fr_180px] gap-4 px-4 py-2.5 text-xs font-medium text-muted-foreground bg-muted/30 border-b">
-            <span>Workspace</span>
+            <span>Organisation</span>
             <span className="text-right">Actions</span>
           </div>
           {invitations.map((inv, i) => (
@@ -94,7 +94,7 @@ export function WorkspaceInvitations({
                   </div>
                   <div className="min-w-0 leading-tight">
                     <p className="text-sm font-semibold truncate text-foreground">
-                      {inv.organization?.name || 'Workspace'}
+                      {inv.organization?.name || 'Organisation'}
                     </p>
                     <p className="text-[11px] text-muted-foreground truncate mt-0.5">
                       Invited by:{' '}

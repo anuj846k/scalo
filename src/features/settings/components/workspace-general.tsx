@@ -7,8 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
-import { Building2 } from 'lucide-react';
+import { Building2, Loader2 } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
+import { cn } from '@/lib/utils';
 import { FullOrganization, OrganizationBrief } from './workspace-dialog';
 
 interface WorkspaceGeneralProps {
@@ -17,6 +18,7 @@ interface WorkspaceGeneralProps {
   userId: string;
   onOrgUpdate: () => void;
   onSwitch: (orgId: string) => Promise<void>;
+  isSwitching?: boolean;
 }
 
 export function WorkspaceGeneral({
@@ -25,12 +27,12 @@ export function WorkspaceGeneral({
   userId,
   onOrgUpdate,
   onSwitch,
+  isSwitching = false,
 }: WorkspaceGeneralProps) {
   const [name, setName] = useState(org?.name || '');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [switching, setSwitching] = useState<string | null>(null);
 
   const otherOrgs = orgs.filter((o: OrganizationBrief) => o.id !== org?.id);
 
@@ -49,7 +51,7 @@ export function WorkspaceGeneral({
     });
 
     if (err) {
-      setError(err.message || 'Failed to update workspace');
+      setError(err.message || 'Failed to update organisation');
     } else {
       setSaved(true);
       onOrgUpdate();
@@ -59,9 +61,7 @@ export function WorkspaceGeneral({
   };
 
   const handleSwitch = async (orgId: string) => {
-    setSwitching(orgId);
     await onSwitch(orgId);
-    setSwitching(null);
   };
 
   const activeRole = getRole(org);
@@ -95,60 +95,79 @@ export function WorkspaceGeneral({
               )}
             </div>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            type="button"
-            onClick={() => {
-              const el = document.getElementById('workspace-name');
-              el?.focus();
-            }}
-          >
-            Update profile
-          </Button>
         </div>
       </div>
 
-      <Separator />
-      <form onSubmit={handleSaveName} className="py-5 space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="workspace-name" className="text-xs font-medium">
-            Workspace name
-          </Label>
-          <Input
-            id="workspace-name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="My Workspace"
-            className="h-9 max-w-xs"
-            required
-          />
-        </div>
-        <div className="flex items-center gap-3">
-          <Button type="submit" disabled={saving} size="sm">
-            {saving ? 'Saving...' : 'Save'}
-          </Button>
-          {error && <p className="text-xs text-destructive">{error}</p>}
-          {saved && (
-            <p className="text-xs text-emerald-600 flex items-center gap-1.5">
-              ✓ Updated
-            </p>
-          )}
-        </div>
-      </form>
+      {activeRole === 'owner' && (
+        <>
+          <Separator />
+          <form onSubmit={handleSaveName} className="py-5 space-y-4">
+            <div className="space-y-2">
+              <Label
+                htmlFor="organisation-name"
+                className="text-xs font-medium"
+              >
+                Organisation name
+              </Label>
+              <Input
+                id="organisation-name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="My Organisation"
+                className="h-9 max-w-xs"
+                required
+              />
+            </div>
+            <div className="flex items-center gap-3">
+              <Button type="submit" disabled={saving} size="sm">
+                {saving ? 'Saving...' : 'Save'}
+              </Button>
+              {error && <p className="text-xs text-destructive">{error}</p>}
+              {saved && (
+                <p className="text-xs text-emerald-600 flex items-center gap-1.5">
+                  ✓ Updated
+                </p>
+              )}
+            </div>
+          </form>
+        </>
+      )}
 
       {orgs.length > 1 && (
         <>
           <Separator />
           <div className="py-5">
-            <h3 className="text-sm font-semibold mb-1">Switch workspace</h3>
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="text-sm font-semibold">Switch organisation</h3>
+              {isSwitching && (
+                <span
+                  role="status"
+                  aria-live="polite"
+                  className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"
+                >
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                  Switching organisation…
+                </span>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground mb-4">
-              Toggle to switch your active workspace.
+              Select an organisation to make it your active one.
             </p>
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/[0.03] px-4 py-3">
+            <div
+              aria-busy={isSwitching ? true : undefined}
+              className={cn(
+                'space-y-2 transition-opacity',
+                isSwitching && 'opacity-90',
+              )}
+            >
+              <div
+                className={cn(
+                  'flex items-center justify-between rounded-lg border border-primary/20 bg-primary/[0.03] px-4 py-3 transition-opacity',
+                  isSwitching && 'opacity-60',
+                )}
+              >
                 <div className="flex items-center gap-3 min-w-0">
                   <Building2 className="h-4 w-4 text-primary shrink-0" />
                   <span className="text-sm font-medium truncate">
@@ -158,27 +177,34 @@ export function WorkspaceGeneral({
                 <Switch checked disabled size="sm" />
               </div>
 
-              {otherOrgs.map((o: OrganizationBrief) => (
-                <button
-                  key={o.id}
-                  onClick={() => handleSwitch(o.id)}
-                  disabled={switching === o.id}
-                  className="flex w-full items-center justify-between rounded-lg border border-transparent hover:border-border px-4 py-3 text-left transition-colors hover:bg-muted/40 disabled:opacity-60 cursor-pointer"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <Building2 className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <span className="text-sm font-medium truncate">
-                      {o.name}
-                    </span>
-                  </div>
-                  <Switch
-                    checked={false}
-                    size="sm"
-                    tabIndex={-1}
-                    className="pointer-events-none"
-                  />
-                </button>
-              ))}
+              {otherOrgs.map((o: OrganizationBrief) => {
+                const isDisabled = isSwitching;
+                return (
+                  <button
+                    key={o.id}
+                    onClick={() => handleSwitch(o.id)}
+                    disabled={isDisabled}
+                    className={cn(
+                      'flex w-full items-center justify-between rounded-lg border border-transparent hover:border-border px-4 py-3 text-left transition-colors hover:bg-muted/40',
+                      isDisabled && 'cursor-not-allowed',
+                      !isDisabled && 'cursor-pointer',
+                    )}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <Building2 className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <span className="text-sm font-medium truncate">
+                        {o.name}
+                      </span>
+                    </div>
+                    <Switch
+                      checked={false}
+                      size="sm"
+                      tabIndex={-1}
+                      className="pointer-events-none"
+                    />
+                  </button>
+                );
+              })}
             </div>
           </div>
         </>

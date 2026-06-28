@@ -5,6 +5,7 @@ import { ArrowDown, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PreviewMessage, ThinkingMessage } from './message';
 import { Skeleton } from '@/components/ui/skeleton';
+import Image from 'next/image';
 
 type MessagesProps = {
   chatId: string;
@@ -39,7 +40,13 @@ export const Messages = ({
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="text-center space-y-3">
             <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-muted/60 ring-1 ring-border/50">
-              <Sparkles className="size-6 text-muted-foreground" />
+              <Image
+                src="/logos/logo.svg"
+                alt="Murmur"
+                className="h-5 w-5 transition-transform duration-500 group-hover/logo:rotate-6"
+                height={40}
+                width={40}
+              />{' '}
             </div>
             <div>
               <h2 className="text-lg font-semibold">Ask about your feedback</h2>

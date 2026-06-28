@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 
 export default function WorkspaceSetupForm() {
   const router = useRouter();
-  const [name, setName] = useState('My Workspace');
+  const [name, setName] = useState('My Organisation');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

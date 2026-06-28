@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Settings, Users, Mail } from 'lucide-react';
+import { Settings, Users, Mail, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { authClient } from '@/lib/auth-client';
 import { WorkspaceGeneral } from './workspace-general';
@@ -96,6 +96,8 @@ export function WorkspaceDialog({
     [],
   );
   const [loading, setLoading] = useState(true);
+  const [switchingToId, setSwitchingToId] = useState<string | null>(null);
+  const hasLoadedRef = useRef(false);
 
   const fetchOrgs = useCallback(async () => {
     try {
@@ -134,20 +136,53 @@ export function WorkspaceDialog({
   }, []);
 
   useEffect(() => {
-    if (open) {
+    if (!open) return;
+    if (!hasLoadedRef.current) {
+      hasLoadedRef.current = true;
       Promise.resolve().then(() => {
         setLoading(true);
         fetchOrgs();
+      });
+    } else {
+      Promise.resolve().then(() => {
+        setLoading(false);
       });
     }
   }, [open, fetchOrgs]);
 
   const handleSwitch = async (orgId: string) => {
-    await authClient.organization.setActive({ organizationId: orgId });
-    const detailRes = await authClient.organization.getFullOrganization({
-      query: { organizationId: orgId },
-    });
-    if (detailRes.data) setOrg(detailRes.data as FullOrganization);
+    if (switchingToId || loading) return;
+    setSwitchingToId(orgId);
+    try {
+      const detailRes = await authClient.organization.getFullOrganization({
+        query: { organizationId: orgId },
+      });
+      if (!detailRes.data) {
+        setSwitchingToId(null);
+        return;
+      }
+      await authClient.organization.setActive({ organizationId: orgId });
+      setOrg(detailRes.data as FullOrganization);
+      setOrgs((prev) => {
+        const exists = prev.some((o) => o.id === orgId);
+        if (exists) return prev;
+        return [
+          ...prev,
+          {
+            id: detailRes.data!.id,
+            name: detailRes.data!.name,
+            slug: detailRes.data!.slug,
+            logo: detailRes.data!.logo ?? null,
+            createdAt: detailRes.data!.createdAt,
+            metadata: detailRes.data!.metadata ?? null,
+          },
+        ];
+      });
+    } catch (e) {
+      console.error('Failed to switch organisation', e);
+    } finally {
+      setSwitchingToId(null);
+    }
   };
 
   return (
@@ -156,10 +191,10 @@ export function WorkspaceDialog({
         <div className="flex min-h-[520px]">
           <div className="w-52 shrink-0 border-r bg-muted/20 p-5 flex flex-col">
             <DialogTitle className="text-base font-bold tracking-tight mb-0.5">
-              Workspace
+              Organisation
             </DialogTitle>
             <p className="text-xs text-muted-foreground mb-5">
-              Manage your workspace
+              Manage your organisation
             </p>
 
             <nav className="space-y-0.5">
@@ -193,7 +228,7 @@ export function WorkspaceDialog({
             </nav>
           </div>
 
-          <div className="flex-1 overflow-y-auto min-w-0">
+          <div className="flex-1 overflow-y-auto min-w-0 relative">
             {loading ? (
               <div className="p-6 space-y-4">
                 <div className="h-6 w-24 rounded-md bg-muted animate-pulse" />
@@ -204,11 +239,13 @@ export function WorkspaceDialog({
               <>
                 {activeNav === 'general' && (
                   <WorkspaceGeneral
+                    key={org?.id ?? 'none'}
                     org={org}
                     orgs={orgs}
                     userId={userId}
                     onOrgUpdate={fetchOrgs}
                     onSwitch={handleSwitch}
+                    isSwitching={switchingToId !== null}
                   />
                 )}
                 {activeNav === 'members' && (
@@ -221,6 +258,39 @@ export function WorkspaceDialog({
                   />
                 )}
               </>
+            )}
+
+            {switchingToId && !loading && (
+              <div
+                role="status"
+                aria-live="polite"
+                aria-busy="true"
+                className="absolute inset-0 z-10 flex flex-col bg-background/60 backdrop-blur-sm"
+              >
+                <div className="p-6 space-y-5">
+                  <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    Switching organisation…
+                  </div>
+                  <div className="h-6 w-40 rounded-md bg-muted animate-pulse" />
+                  <div className="h-px bg-muted" />
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-lg bg-muted animate-pulse" />
+                    <div className="space-y-2 flex-1">
+                      <div className="h-4 w-32 rounded bg-muted animate-pulse" />
+                      <div className="h-3 w-16 rounded bg-muted animate-pulse" />
+                    </div>
+                  </div>
+                  <div className="h-px bg-muted" />
+                  <div className="space-y-2">
+                    <div className="h-3 w-24 rounded bg-muted animate-pulse" />
+                    <div className="h-9 w-72 max-w-full rounded-md bg-muted animate-pulse" />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-9 w-24 rounded-md bg-muted animate-pulse" />
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>

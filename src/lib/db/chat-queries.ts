@@ -26,14 +26,19 @@ export async function deleteChat(id: string) {
 
 export async function getChatsByUser({
   userId,
+  organizationId,
   limit = 20,
   before,
 }: {
   userId: string;
+  organizationId: string;
   limit?: number;
   before?: string;
 }) {
-  const conditions = [eq(chats.userId, userId)];
+  const conditions = [
+    eq(chats.userId, userId),
+    eq(chats.organizationId, organizationId),
+  ];
   if (before) {
     conditions.push(lt(chats.createdAt, new Date(before)));
   }
@@ -75,12 +80,20 @@ export async function getMessages(chatId: string) {
     .orderBy(asc(messages.createdAt));
 }
 
-export async function getChatById(id: string) {
-  const rows = await db.select().from(chats).where(eq(chats.id, id)).limit(1);
+export async function getChatById(id: string, organizationId: string) {
+  const rows = await db
+    .select()
+    .from(chats)
+    .where(and(eq(chats.id, id), eq(chats.organizationId, organizationId)))
+    .limit(1);
   return rows[0] || null;
 }
 
-export async function deleteAllChats(userId: string) {
-  const result = await db.delete(chats).where(eq(chats.userId, userId));
+export async function deleteAllChats(userId: string, organizationId: string) {
+  const result = await db
+    .delete(chats)
+    .where(
+      and(eq(chats.userId, userId), eq(chats.organizationId, organizationId)),
+    );
   return result.rowCount || 0;
 }

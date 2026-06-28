@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
   const isToolContinuation = Boolean(body.messages) && !body.message;
 
-  let chat = await getChatById(chatId);
+  let chat = await getChatById(chatId, organizationId);
   let titlePromise: Promise<string> | null = null;
 
   if (chat) {
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
       userId: session.user.id,
       organizationId,
     });
-    chat = await getChatById(chatId);
+    chat = await getChatById(chatId, organizationId);
     titlePromise = generateTitleFromUserMessage({ message: body.message });
   }
 
@@ -147,13 +147,18 @@ export async function DELETE(req: Request) {
     return new Response('Unauthorized', { status: 401 });
   }
 
+  const organizationId = session.session.activeOrganizationId;
+  if (!organizationId) {
+    return new Response('No active organization', { status: 400 });
+  }
+
   const url = new URL(req.url);
   const chatId = url.searchParams.get('id');
   if (!chatId) {
     return new Response('Chat ID is required', { status: 400 });
   }
 
-  const chat = await getChatById(chatId);
+  const chat = await getChatById(chatId, organizationId);
   if (!chat || chat.userId !== session.user.id) {
     return new Response('Forbidden', { status: 403 });
   }

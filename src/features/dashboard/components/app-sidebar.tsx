@@ -17,6 +17,8 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarSeparator,
+  SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { navItems } from './nav-items';
 import { cn } from '@/lib/utils';
@@ -44,6 +46,7 @@ interface AppSidebarProps {
 export function AppSidebar({ user }: AppSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { state } = useSidebar();
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [incomingInvitesCount, setIncomingInvitesCount] = useState(0);
 
@@ -66,32 +69,39 @@ export function AppSidebar({ user }: AppSidebarProps) {
     <>
       <Sidebar collapsible="icon" className="border-r border-sidebar-border">
         <SidebarHeader className="pb-2 pt-3">
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                size="lg"
-                asChild
-                className="hover:bg-transparent data-active:bg-transparent group/logo"
-              >
-                <Link href="/dashboard" className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/15 shadow-2xs group-hover/logo:scale-105 transition-all duration-300">
-                    <Image
-                      src="/logos/logo.svg"
-                      alt="Murmur"
-                      className="h-5 w-5 transition-transform duration-500 group-hover/logo:rotate-6"
-                      height={40}
-                      width={40}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="font-bold text-sm tracking-tight text-sidebar-foreground">
-                      Murmur
-                    </span>
-                  </div>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          {state === 'expanded' ? (
+            <SidebarMenu>
+              <SidebarMenuItem className="flex items-center justify-between">
+                <SidebarMenuButton
+                  size="lg"
+                  asChild
+                  className="hover:bg-transparent data-active:bg-transparent group/logo"
+                >
+                  <Link href="/dashboard" className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/15 shadow-2xs group-hover/logo:scale-105 transition-all duration-300">
+                      <Image
+                        src="/logos/logo.svg"
+                        alt="Murmur"
+                        className="h-5 w-5 transition-transform duration-500 group-hover/logo:rotate-6"
+                        height={40}
+                        width={40}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="font-bold text-sm tracking-tight text-sidebar-foreground">
+                        Murmur
+                      </span>
+                    </div>
+                  </Link>
+                </SidebarMenuButton>
+                <SidebarTrigger />
+              </SidebarMenuItem>
+            </SidebarMenu>
+          ) : (
+            <div className="flex items-center justify-center">
+              <SidebarTrigger />
+            </div>
+          )}
         </SidebarHeader>
 
         <SidebarSeparator />
@@ -217,7 +227,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <Building2 className="h-4 w-4 shrink-0" />
-                      <span>Workspaces</span>
+                      <span>Organisations</span>
                     </div>
                     {incomingInvitesCount > 0 && (
                       <span className="inline-flex items-center justify-center rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-bold leading-none text-primary-foreground shrink-0">

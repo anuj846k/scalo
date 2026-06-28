@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { MoreHorizontal, Trash2, Loader2, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { authClient } from '@/lib/auth-client';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -143,7 +144,11 @@ function ChatSidebarItem({
 
 export function ChatSidebar({ chatId }: { chatId?: string }) {
   const router = useRouter();
-  const { chats, hasMore, loadMore, mutate, isLoading } = useChatHistory();
+  const { data: sessionData } = authClient.useSession();
+  const organizationId =
+    sessionData?.session?.activeOrganizationId ?? undefined;
+  const { chats, hasMore, loadMore, mutate, isLoading } =
+    useChatHistory(organizationId);
   const [deleteAllOpen, setDeleteAllOpen] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
@@ -204,7 +209,7 @@ export function ChatSidebar({ chatId }: { chatId?: string }) {
     <>
       <div className="flex flex-col gap-4 p-2">
         <button
-          onClick={handleDeleteAll}
+          onClick={() => setDeleteAllOpen(true)}
           className="flex h-8 w-full items-center gap-2 rounded-lg px-2 text-[13px] text-sidebar-foreground/40 transition-colors duration-150 hover:bg-destructive/10 hover:text-destructive cursor-pointer"
         >
           <Trash2 className="size-4" />

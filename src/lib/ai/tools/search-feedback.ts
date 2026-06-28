@@ -18,6 +18,7 @@ export const searchFeedback = tool({
     'Results are paginated — page 1 returns the first 5 most relevant items. If you need more, ' +
     'call again with page: 2, 3, etc. Use hasMore to know if more pages exist. ' +
     'Optionally filter by ratingMin/ratingMax (1-5) to narrow by sentiment. ' +
+    'Optionally filter by source ("google_reviews", "trustpilot", "csv") when the user asks about reviews from a specific channel. ' +
     'When multiple businesses/locations are connected, each result includes placeId to identify the source. ' +
     'Use the placeId filter to search reviews from a specific business only.',
   inputSchema: z.object({
@@ -46,7 +47,13 @@ export const searchFeedback = tool({
       .string()
       .optional()
       .describe(
-        'Filter reviews from a specific business location by its Google Place ID.',
+        'Filter reviews from a specific business location by its Google Place ID or Trustpilot domain.',
+      ),
+    source: z
+      .string()
+      .optional()
+      .describe(
+        'Filter by feedback source. Use "google_reviews" for Google Reviews, "trustpilot" for Trustpilot, or "csv" for CSV uploads. Omit to search all sources.',
       ),
     page: z
       .number()
@@ -56,7 +63,14 @@ export const searchFeedback = tool({
         'Page number for pagination. Starts at 1. Each page returns up to 5 items.',
       ),
   }),
-  execute: async ({ query, ratingMin, ratingMax, placeId, page = 1 }) => {
+  execute: async ({
+    query,
+    ratingMin,
+    ratingMax,
+    placeId,
+    source,
+    page = 1,
+  }) => {
     const sql = neon(DATABASE_URL);
     const limit = 5;
     const offset = (page - 1) * limit;
@@ -80,56 +94,40 @@ export const searchFeedback = tool({
 
     if (isGenericQuery) {
       console.log(
-        `[searchFeedback] Executing GENERIC query. Bypass embeddings. Query: "${query}", ratingMin: ${minRating}, ratingMax: ${maxRating}, placeId: ${placeId || 'none'}, page: ${page}`,
+        `[searchFeedback] Executing GENERIC query. Query: "${query}", ratingMin: ${minRating}, ratingMax: ${maxRating}, placeId: ${placeId || 'none'}, source: ${source || 'all'}, page: ${page}`,
       );
       // Direct database query ordered by date (no embeddings needed)
-      rows = placeId
-        ? await sql`
+      rows = await sql`
             SELECT f.text, f.rating, f.author_name, f.created_at, f.source,
               f.metadata_json, c.place_id, c.title, c.sub_title,
               100 AS relevance
             FROM feedback_items f
             LEFT JOIN connector_configs c ON c.id = f.connector_config_id
             WHERE f.rating >= ${minRating} AND f.rating <= ${maxRating}
-              AND c.place_id = ${placeId}
-            ORDER BY f.created_at DESC
-            LIMIT ${limit + 1} OFFSET ${offset}
-          `
-        : await sql`
-            SELECT f.text, f.rating, f.author_name, f.created_at, f.source,
-              f.metadata_json, c.place_id, c.title, c.sub_title,
-              100 AS relevance
-            FROM feedback_items f
-            LEFT JOIN connector_configs c ON c.id = f.connector_config_id
-            WHERE f.rating >= ${minRating} AND f.rating <= ${maxRating}
+              ${placeId ? sql`AND c.place_id = ${placeId}` : sql``}
+              ${source ? sql`AND f.source = ${source}` : sql``}
             ORDER BY f.created_at DESC
             LIMIT ${limit + 1} OFFSET ${offset}
           `;
 
-      const countResult = placeId
-        ? await sql`
+      const countResult = await sql`
             SELECT COUNT(*) as total
             FROM feedback_items f
             LEFT JOIN connector_configs c ON c.id = f.connector_config_id
             WHERE f.rating >= ${minRating} AND f.rating <= ${maxRating}
-              AND c.place_id = ${placeId}
-          `
-        : await sql`
-            SELECT COUNT(*) as total
-            FROM feedback_items f
-            WHERE f.rating >= ${minRating} AND f.rating <= ${maxRating}
+              ${placeId ? sql`AND c.place_id = ${placeId}` : sql``}
+              ${source ? sql`AND f.source = ${source}` : sql``}
           `;
       total = Number(countResult[0]?.total ?? 0);
     } else {
       console.log(
-        `[searchFeedback] Executing SEMANTIC VECTOR query. Query: "${query}", ratingMin: ${minRating}, ratingMax: ${maxRating}, placeId: ${placeId || 'none'}, page: ${page}`,
+        `[searchFeedback] Executing SEMANTIC VECTOR query. Query: "${query}", ratingMin: ${minRating}, ratingMax: ${maxRating}, placeId: ${placeId || 'none'}, source: ${source || 'all'}, page: ${page}`,
       );
       // Vector semantic search
       const queryEmb = await generateEmbedding(query);
       const queryEmbStr = `[${queryEmb.join(',')}]`;
 
-      rows = placeId
-        ? await sql`
+      rows = await sql`
             SELECT f.text, f.rating, f.author_name, f.created_at, f.source,
               f.metadata_json, c.place_id, c.title, c.sub_title,
               ROUND((1 - (e.embedding <=> ${queryEmbStr}::vector)) * 100) AS relevance
@@ -137,36 +135,20 @@ export const searchFeedback = tool({
             JOIN feedback_items f ON f.id = e.feedback_item_id
             LEFT JOIN connector_configs c ON c.id = f.connector_config_id
             WHERE f.rating >= ${minRating} AND f.rating <= ${maxRating}
-              AND c.place_id = ${placeId}
-            ORDER BY e.embedding <=> ${queryEmbStr}::vector
-            LIMIT ${limit + 1} OFFSET ${offset}
-          `
-        : await sql`
-            SELECT f.text, f.rating, f.author_name, f.created_at, f.source,
-              f.metadata_json, c.place_id, c.title, c.sub_title,
-              ROUND((1 - (e.embedding <=> ${queryEmbStr}::vector)) * 100) AS relevance
-            FROM feedback_embeddings e
-            JOIN feedback_items f ON f.id = e.feedback_item_id
-            LEFT JOIN connector_configs c ON c.id = f.connector_config_id
-            WHERE f.rating >= ${minRating} AND f.rating <= ${maxRating}
+              ${placeId ? sql`AND c.place_id = ${placeId}` : sql``}
+              ${source ? sql`AND f.source = ${source}` : sql``}
             ORDER BY e.embedding <=> ${queryEmbStr}::vector
             LIMIT ${limit + 1} OFFSET ${offset}
           `;
 
-      const countResult = placeId
-        ? await sql`
+      const countResult = await sql`
             SELECT COUNT(*) as total
             FROM feedback_embeddings e
             JOIN feedback_items f ON f.id = e.feedback_item_id
             LEFT JOIN connector_configs c ON c.id = f.connector_config_id
             WHERE f.rating >= ${minRating} AND f.rating <= ${maxRating}
-              AND c.place_id = ${placeId}
-          `
-        : await sql`
-            SELECT COUNT(*) as total
-            FROM feedback_embeddings e
-            JOIN feedback_items f ON f.id = e.feedback_item_id
-            WHERE f.rating >= ${minRating} AND f.rating <= ${maxRating}
+              ${placeId ? sql`AND c.place_id = ${placeId}` : sql``}
+              ${source ? sql`AND f.source = ${source}` : sql``}
           `;
       total = Number(countResult[0]?.total ?? 0);
     }
@@ -181,7 +163,14 @@ export const searchFeedback = tool({
       sourceUrl:
         (r.metadata_json as Record<string, unknown>)?.review_url ?? null,
       profileImageUrl:
-        (r.metadata_json as Record<string, unknown>)?.profile_image_url ?? null,
+        (r.metadata_json as Record<string, unknown>)?.profile_image_url ??
+        (
+          (r.metadata_json as Record<string, unknown>)?.user_profile as Record<
+            string,
+            unknown
+          >
+        )?.image_url ??
+        null,
       placeId: r.place_id ?? null,
       businessTitle: r.title ?? null,
       businessAddress: r.sub_title ?? null,

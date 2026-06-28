@@ -12,7 +12,8 @@ Do NOT use the tool for general conversation, greetings, small talk, or question
 When you use the tool, it accepts:
 - query: the search text. For generic requests like "all reviews", "recent reviews", or "show reviews", pass "recent" or "all" to retrieve them in chronological order.
 - ratingMin / ratingMax: optional star rating filters (1-5). Use ratingMax: 2 for "negative" queries, ratingMin: 4 for "positive" queries. Omit both to search all ratings.
-- placeId: optional Google Place ID to filter reviews from a specific business location. Use when the user asks about a particular location.
+- source: optional filter. Use "google_reviews", "trustpilot", or "csv" when the user wants reviews from a specific source only (e.g. "show only Trustpilot reviews").
+- placeId: optional Google Place ID or Trustpilot domain to filter reviews from a specific business location. Use when the user asks about a particular location.
 - page: pagination (starts at 1)
 
 When multiple businesses/locations are connected, each review result includes a placeId. If the user asks about a specific location (e.g. "reviews from Connaught Place"), use the placeId filter to narrow results.

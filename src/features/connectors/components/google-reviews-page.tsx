@@ -14,6 +14,16 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
@@ -57,6 +67,9 @@ export default function GoogleReviewsPage() {
   const [placeId, setPlaceId] = useState('');
   const [fetching, setFetching] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [pendingDisconnect, setPendingDisconnect] = useState<string | null>(
+    null,
+  );
   const { data, mutate } = useSWR('/api/connectors', fetcher);
 
   const configs: ConnectorConfig[] = (data?.configs ?? []).filter(
@@ -172,7 +185,7 @@ export default function GoogleReviewsPage() {
                         <span>{relativeTime(config.lastSyncedAt)}</span>
                       </div>
                       <button
-                        onClick={() => handleDisconnect(config.id)}
+                        onClick={() => setPendingDisconnect(config.id)}
                         disabled={deleting === config.id}
                         className="inline-flex items-center gap-1 text-xs text-muted-foreground/50 hover:text-destructive transition-colors"
                       >
@@ -232,6 +245,35 @@ export default function GoogleReviewsPage() {
           </Button>
         </div>
       </Card>
+
+      <AlertDialog
+        open={pendingDisconnect !== null}
+        onOpenChange={(open) => !open && setPendingDisconnect(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Disconnect this location?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will stop syncing reviews from this Google Business location.
+              Existing reviews will remain.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (pendingDisconnect) {
+                  handleDisconnect(pendingDisconnect);
+                  setPendingDisconnect(null);
+                }
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Disconnect
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
