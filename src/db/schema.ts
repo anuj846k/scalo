@@ -94,6 +94,11 @@ export const organization = pgTable(
     logo: text('logo'),
     createdAt: timestamp('created_at').notNull(),
     metadata: text('metadata'),
+    subscriptionId: text('subscription_id'),
+    subscriptionStatus: text('subscription_status').default('inactive'),
+    subscriptionPlan: text('subscription_plan'),
+    subscriptionCurrentPeriodEnd: timestamp('subscription_current_period_end'),
+    dodoCustomerId: text('dodo_customer_id'),
   },
   (table) => [uniqueIndex('organization_slug_uidx').on(table.slug)],
 );

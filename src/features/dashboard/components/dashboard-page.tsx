@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 import { authClient } from '@/lib/auth-client';
 import { KPICards } from './kpi-cards';
@@ -12,7 +12,11 @@ import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+const fetcher = (url: string) =>
+  fetch(url).then((r) => {
+    if (!r.ok) throw new Error(r.statusText);
+    return r.json();
+  });
 
 function monthLabel(year: number, month: number): string {
   return new Date(year, month - 1).toLocaleDateString('en-US', {
@@ -41,10 +45,14 @@ export default function DashboardPage() {
     return `?from=${from}&to=${to}`;
   }, [selectedPeriod]);
 
-  const { data, isLoading } = useSWR('/api/dashboard' + queryParams, fetcher, {
-    refreshInterval: 30000,
-    revalidateOnFocus: false,
-  });
+  const { data, error, isLoading } = useSWR(
+    '/api/dashboard' + queryParams,
+    fetcher,
+    {
+      refreshInterval: 30000,
+      revalidateOnFocus: false,
+    },
+  );
 
   useEffect(() => {
     (async () => {
@@ -54,10 +62,16 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    if (data && !isLoading) {
+    if (data?.kpis && !isLoading) {
       setHasSources(data.kpis.totalReviews > 0);
     }
   }, [data, isLoading]);
+
+  useEffect(() => {
+    if (window.location.search.includes('subscription_id')) {
+      window.history.replaceState({}, '', '/dashboard');
+    }
+  }, []);
 
   // Build month options from available data
   const monthOptions = useMemo(() => {
@@ -78,6 +92,22 @@ export default function DashboardPage() {
     }
     return options;
   }, [data?.dailySentiment]);
+
+  if (error && !isLoading) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <Card>
+          <CardContent className="flex flex-col items-center gap-4 py-12">
+            <p className="text-sm text-muted-foreground">
+              Unable to load dashboard data. Please try again.
+            </p>
+            <Button onClick={() => window.location.reload()}>Retry</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (!isLoading && hasSources === false) {
     return (

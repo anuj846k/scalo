@@ -1,6 +1,8 @@
 import type { InferUITools, UIMessage, UIDataTypes } from 'ai';
-import type { searchFeedback } from '@/lib/ai/tools/search-feedback';
+import type { createSearchFeedbackTool } from '@/lib/ai/tools/search-feedback';
 
-export type ChatTools = InferUITools<{ searchFeedback: typeof searchFeedback }>;
+export type ChatTools = InferUITools<{
+  searchFeedback: ReturnType<typeof createSearchFeedbackTool>;
+}>;
 
 export type ChatMessage = UIMessage<never, UIDataTypes, ChatTools>;

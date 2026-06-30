@@ -224,7 +224,7 @@ export default function ConnectorsHub() {
                 </span>
               </div>
               <p className="text-sm text-muted-foreground/70">
-                Import comments from Instagram posts via HikerAPI.
+                Import comments from Instagram posts
               </p>
             </div>
           </div>
