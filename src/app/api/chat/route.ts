@@ -7,6 +7,9 @@ import {
 import { google, type GoogleLanguageModelOptions } from '@ai-sdk/google';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { eq } from 'drizzle-orm';
+import { db } from '@/db/drizzle';
+import { organization } from '@/db/schema';
 import {
   createChat,
   deleteChat,
@@ -16,7 +19,7 @@ import {
   updateChatTitle,
   updateMessage,
 } from '@/lib/db/chat-queries';
-import { searchFeedback } from '@/lib/ai/tools/search-feedback';
+import { createSearchFeedbackTool } from '@/lib/ai/tools/search-feedback';
 import { systemPrompt } from '@/lib/ai/prompts';
 import { generateTitleFromUserMessage } from '@/app/actions';
 
@@ -29,6 +32,17 @@ export async function POST(req: Request) {
   const organizationId = session.session.activeOrganizationId;
   if (!organizationId) {
     return new Response('No active organization', { status: 400 });
+  }
+
+  const [org] = await db
+    .select({ subscriptionStatus: organization.subscriptionStatus })
+    .from(organization)
+    .where(eq(organization.id, organizationId))
+    .limit(1);
+
+  const status = org?.subscriptionStatus ?? 'inactive';
+  if (status !== 'active' && status !== 'trialing') {
+    return new Response('Subscription required', { status: 402 });
   }
 
   const body = await req.json();
@@ -99,7 +113,7 @@ export async function POST(req: Request) {
           } satisfies GoogleLanguageModelOptions,
         },
         tools: {
-          searchFeedback,
+          searchFeedback: createSearchFeedbackTool(organizationId),
         },
       });
 
