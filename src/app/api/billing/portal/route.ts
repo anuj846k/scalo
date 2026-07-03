@@ -47,8 +47,11 @@ export async function POST() {
       org.dodoCustomerId,
       {
         return_url:
-          (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000') +
-          '/dashboard/billing',
+          (process.env.NEXT_PUBLIC_APP_URL ||
+            process.env.APP_BASE_URL ||
+            (process.env.VERCEL_URL
+              ? `https://${process.env.VERCEL_URL}`
+              : 'http://localhost:3000')) + '/dashboard/billing',
       },
     );
 
