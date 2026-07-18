@@ -11,13 +11,13 @@ export const metadata: Metadata = {
   },
   description: 'Scalo — Unified AI feedback.',
   keywords: ['AI', 'feedback', 'scalo', 'productivity', 'reviews'],
-  authors: [{ name: 'Scalo', url: 'https://example.com' }],
+  authors: [{ name: 'Scalo', url: 'https://scalocx.com' }],
   creator: 'Scalo',
   openGraph: {
     title: 'Scalo',
     description: 'Unified AI feedback for teams and products.',
     type: 'website',
-    url: 'https://example.com',
+    url: 'https://scalocx.com',
   },
 };
 
@@ -54,6 +54,7 @@ export default function RootLayout({
           }}
         />
       </body>
+      <Script src="https://scripts.simpleanalyticscdn.com/latest.js" />
     </html>
   );
 }
