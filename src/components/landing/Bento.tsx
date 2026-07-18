@@ -50,7 +50,10 @@ const KPI_TILE =
 
 export default function Bento() {
   return (
-    <section className="w-full bg-background px-4 py-24 md:px-8 lg:px-10">
+    <section
+      id="features"
+      className="w-full bg-background px-4 py-24 md:px-8 lg:px-10"
+    >
       <div className="mx-auto flex w-full max-w-[1024px] flex-col gap-6 xl:flex-row xl:gap-4">
         <div
           className={`flex w-full flex-col overflow-hidden bg-primary px-8 pt-8 xl:h-[658px] xl:w-2/5 ${ROUND_CARD}`}

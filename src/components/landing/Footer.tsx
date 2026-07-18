@@ -89,6 +89,19 @@ const Footer = () => {
             </nav>
           </div>
 
+          {/* Support line */}
+          <div className="flex flex-col items-start gap-1 self-stretch text-[13.6px] leading-5">
+            <span className="text-white/50 text-[12px] font-[510] uppercase tracking-[0.3px]">
+              Support
+            </span>
+            <a
+              href="mailto:anuj@scalocx.com"
+              className="text-white hover:text-white/80 transition-colors"
+            >
+              anuj@scalocx.com
+            </a>
+          </div>
+
           {/* Copyright */}
           <div className="flex flex-col md:flex-row items-center justify-between self-stretch text-white/50 text-[13.6px] leading-5 w-full gap-4 border-t border-white/10 pt-8">
             <p>© {new Date().getFullYear()} Scalo Inc. All rights reserved.</p>

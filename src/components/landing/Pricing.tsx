@@ -189,7 +189,10 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
 
 const Pricing: React.FC = () => {
   return (
-    <section className="flex w-full flex-col items-center bg-[#F5F5F5] px-4 md:px-12 lg:px-[223px] py-16 md:py-28">
+    <section
+      id="pricing"
+      className="flex w-full flex-col items-center bg-[#F5F5F5] px-4 md:px-12 lg:px-[223px] py-16 md:py-28"
+    >
       <div className="flex w-full max-w-5xl flex-col items-center lg:items-start gap-12 md:gap-16 self-stretch mx-auto">
         <div className="flex flex-col items-center gap-[13.3px] self-stretch pt-[2.75px]">
           <h2 className="self-stretch text-center text-primary text-[48px] leading-12 font-semibold">

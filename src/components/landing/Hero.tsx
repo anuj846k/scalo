@@ -6,7 +6,7 @@ import DashboardPreview from './DashboardPreview';
 
 export default function Hero() {
   return (
-    <section className="relative w-full overflow-hidden">
+    <section id="product" className="relative w-full overflow-hidden">
       <div className="mx-auto w-full max-w-[1440px] px-6 pb-12 pt-24">
         <div className="animate-fade-in-up relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-6 pb-24 pt-24">
           <div className="mb-6 inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-1.5 shadow-sm">
