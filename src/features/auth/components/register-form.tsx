@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
-import Image from 'next/image';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -66,30 +65,6 @@ export default function RegisterForm() {
         <h2 className="text-2xl font-medium tracking-tight">
           Create an account
         </h2>
-      </div>
-
-      <Link
-        href="/api/auth/google"
-        className="relative overflow-hidden flex items-center justify-center gap-2.5 w-full h-10 bg-canvas border border-ink/20 rounded-xl font-medium text-base text-ink cursor-pointer no-underline transition-all hover:bg-canvas-soft hover:border-ink/30"
-      >
-        <div className="absolute inset-y-0 left-0 w-12 bg-linear-to-r from-[#3a04ff]/15 to-transparent pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-12 bg-linear-to-l from-[#8b5cf6]/15 to-transparent pointer-events-none" />
-        <Image
-          src="/google.svg"
-          alt="Google"
-          width={16}
-          height={16}
-          className="z-10"
-        />
-        <span className="z-10">Continue with Google</span>
-      </Link>
-
-      <div className="flex items-center gap-3 my-4">
-        <div className="flex-1 border-t border-ink/20" />
-        <span className="text-sm font-medium text-ink/50 whitespace-nowrap">
-          or continue with email
-        </span>
-        <div className="flex-1 border-t border-ink/20" />
       </div>
 
       <form
