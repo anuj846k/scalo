@@ -18,7 +18,7 @@ export const PLANS: PlanConfig[] = [
       'Basic theme clustering',
       'Email support',
     ],
-    productId: 'pdt_0Ni96sDy7B8dp0wUQziSv',
+    productId: 'pdt_0NjRVz8C3SdvgAy2X8osA',
     highlight: false,
   },
 ];
