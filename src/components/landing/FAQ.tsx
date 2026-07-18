@@ -61,7 +61,7 @@ const FAQ = () => {
             </Link>
 
             <a
-              href="mailto:support@scalo.com"
+              href="mailto:anuj@scalocx.com"
               className="flex items-center justify-center rounded-xl border border-[#E5E5E5] bg-white px-6 py-2.5 text-center text-[#0A0A0A] text-[13.7px] font-[590] leading-5 hover:bg-gray-50"
             >
               Contact Support

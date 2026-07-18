@@ -21,19 +21,15 @@ const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
   {
     title: 'COMPANY',
     links: [
-      { label: 'Terms of Service', href: '/terms' },
-      { label: 'Privacy Policy', href: '/privacy' },
-      { label: 'Contact Us', href: 'mailto:support@scalo.com' },
+      // { label: 'Terms of Service', href: '/terms' },
+      // { label: 'Privacy Policy', href: '/privacy' },
+      { label: 'Contact Us', href: 'mailto:anuj@scalocx.com' },
     ],
   },
   {
     title: 'SOCIAL',
     minWidth: 'min-w-[68.17px]',
-    links: [
-      { label: 'X (Twitter)', href: '#' },
-      { label: 'LinkedIn', href: '#' },
-      { label: 'GitHub', href: '#' },
-    ],
+    links: [{ label: 'X (Twitter)', href: 'https://x.com/anujxforge' }],
   },
 ];
 

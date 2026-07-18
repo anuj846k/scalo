@@ -13,8 +13,8 @@ export const PLANS: PlanConfig[] = [
     price: '$20',
     billing: 'Billed monthly',
     features: [
-      'Up to 1,000 feedback items/month',
-      '2 active source connectors',
+      'Up to 2,000 feedback items/month',
+      'Unlimited active source connectors',
       'Basic theme clustering',
       'Email support',
     ],

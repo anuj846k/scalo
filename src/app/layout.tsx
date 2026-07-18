@@ -13,11 +13,29 @@ export const metadata: Metadata = {
   keywords: ['AI', 'feedback', 'scalo', 'productivity', 'reviews'],
   authors: [{ name: 'Scalo', url: 'https://scalocx.com' }],
   creator: 'Scalo',
+  icons: {
+    icon: [{ url: '/logos/logo.svg', type: 'image/svg+xml' }],
+    apple: '/logos/logo.svg',
+  },
   openGraph: {
     title: 'Scalo',
     description: 'Unified AI feedback for teams and products.',
     type: 'website',
     url: 'https://scalocx.com',
+    images: [
+      {
+        url: '/og.png',
+        width: 1200,
+        height: 630,
+        alt: 'Scalo — Unified AI feedback',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Scalo',
+    description: 'Unified AI feedback for teams and products.',
+    images: ['/og.png'],
   },
 };
 

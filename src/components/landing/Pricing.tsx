@@ -6,49 +6,36 @@ import Link from 'next/link';
 
 type Plan = {
   name: string;
-  price: string;
-  billing: string;
-  features: string[];
+  price?: string;
+  billing?: string;
+  features?: string[];
   highlight: boolean;
   badge?: string;
+  comingSoon?: boolean;
 };
 
 const plans: Plan[] = [
   {
-    name: 'Starter',
-    price: '$49',
-    billing: 'Billed annually, or $59/mo billed monthly',
+    name: 'Scalo',
+    price: '$20',
+    billing: 'Billed monthly',
     features: [
-      'Up to 1,000 feedback items/mo',
-      '2 active source connectors',
+      'Up to 2,000 feedback items/month',
+      'unlimited active source connectors ( ltd time)',
       'Basic theme clustering',
       'Email support',
     ],
+    highlight: true,
+    badge: 'Available Now',
+  },
+  {
+    name: 'Pro',
+    comingSoon: true,
     highlight: false,
   },
   {
-    name: 'Professional',
-    price: '$149',
-    billing: 'Billed annually, or $179/mo billed monthly',
-    features: [
-      'Up to 10,000 feedback items/mo',
-      'Unlimited source connectors',
-      'Semantic search & AI chat',
-      'Priority email & chat support',
-    ],
-    highlight: true,
-    badge: 'Most Popular',
-  },
-  {
     name: 'Enterprise',
-    price: '$399',
-    billing: 'Billed annually, or $499/mo billed monthly',
-    features: [
-      'Unlimited feedback items',
-      'Dedicated ingestion pipelines',
-      'Custom AI models & fine-tuning',
-      'Dedicated Account Manager',
-    ],
+    comingSoon: true,
     highlight: false,
   },
 ];
@@ -77,6 +64,52 @@ type PricingCardProps = {
 
 const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
   const cardBase = 'flex flex-1 flex-col items-start self-stretch bg-white p-8';
+
+  if (plan.comingSoon) {
+    return (
+      <div className="flex flex-1">
+        <div
+          className={`${cardBase} relative flex w-full rounded-3xl border border-dashed border-[#E5E5E5] opacity-70`}
+        >
+          <h3 className="flex w-full md:w-63.5 flex-col items-start text-[#0A0A0A] text-[18.8px] font-black leading-7">
+            {plan.name}
+          </h3>
+
+          <div className="flex flex-1 flex-col items-center justify-center self-stretch pt-10 pb-6 text-center">
+            <span className="rounded-full bg-[#F5F5F5] px-3 py-1 text-[11.6px] font-[590] uppercase tracking-[0.3px] text-[#737373]">
+              Coming Soon
+            </span>
+            <p className="mt-3 max-w-[200px] text-[13.6px] font-normal leading-5 text-[#737373]">
+              More plans launching soon.
+            </p>
+          </div>
+
+          <div className="flex w-full md:w-63.5 flex-col items-start pt-6">
+            <button
+              type="button"
+              disabled
+              className="flex w-full cursor-not-allowed flex-col items-center justify-center rounded-2xl bg-[#F5F5F5] py-3 text-center text-[13.7px] font-[590] leading-5 text-[#737373]"
+            >
+              Coming Soon
+            </button>
+          </div>
+
+          <div className="flex w-full md:w-63.5 flex-col items-start pt-6 opacity-50">
+            <div className="flex flex-col items-start gap-4 self-stretch">
+              <p className="flex flex-col items-start self-stretch text-[#737373] text-[13.6px] font-[510] leading-5">
+                Includes:
+              </p>
+              <ul className="flex flex-col items-start gap-3 self-stretch">
+                <li className="h-4 w-3/4 rounded bg-[#F5F5F5]" />
+                <li className="h-4 w-2/3 rounded bg-[#F5F5F5]" />
+                <li className="h-4 w-1/2 rounded bg-[#F5F5F5]" />
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const cardStyle = plan.highlight
     ? 'relative rounded-2xl'
@@ -135,7 +168,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
             </p>
 
             <ul className="flex flex-col items-start gap-3 self-stretch">
-              {plan.features.map((feature: string, index: number) => (
+              {plan.features?.map((feature: string, index: number) => (
                 <FeatureItem key={index} text={feature} />
               ))}
             </ul>
