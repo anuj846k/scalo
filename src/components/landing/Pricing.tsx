@@ -17,7 +17,7 @@ type Plan = {
 const plans: Plan[] = [
   {
     name: 'Scalo',
-    price: '$20',
+    price: '$10',
     billing: 'Billed monthly',
     features: [
       'Up to 2,000 feedback items/month',
