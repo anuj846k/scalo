@@ -5,3 +5,4 @@ postcss.config.mjs
 next.config.ts
 src/components/ui
 chatbot/
+.claude/
