@@ -3,7 +3,7 @@ import Hero from '@/components/landing/Hero';
 import Description from '@/components/landing/Description';
 import IntegrationsSection from '@/components/landing/IntegrationsSection';
 import Bento from '@/components/landing/Bento';
-import TrustedBy from '@/components/landing/TrustedBy';
+// import TrustedBy from '@/components/landing/TrustedBy';
 import HowItWorks from '@/components/landing/HowItWorks';
 import Pricing from '@/components/landing/Pricing';
 import CTA from '@/components/landing/CTA';
@@ -43,7 +43,7 @@ export default function Home() {
           <Description />
           <IntegrationsSection />
           <Bento />
-          <TrustedBy />
+          {/* <TrustedBy /> */}
           <HowItWorks />
           <Pricing />
           <CTA />
