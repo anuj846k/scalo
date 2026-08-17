@@ -1,15 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Eye, EyeOff } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Eye, EyeOff } from 'lucide-react';
 
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
   Field,
@@ -17,6 +16,8 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { GoogleSignInButton } from '@/features/auth/components/google-sign-in-button';
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -65,6 +66,16 @@ export default function RegisterForm() {
         <h2 className="text-2xl font-medium tracking-tight">
           Create an account
         </h2>
+      </div>
+
+      <GoogleSignInButton label="Sign up with Google" />
+
+      <div className="flex items-center gap-3 my-4">
+        <div className="flex-1 border-t border-ink/20" />
+        <span className="text-sm font-medium text-ink/50 whitespace-nowrap">
+          or continue with email
+        </span>
+        <div className="flex-1 border-t border-ink/20" />
       </div>
 
       <form

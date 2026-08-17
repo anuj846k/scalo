@@ -13,9 +13,8 @@ import {
 } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
 
-const isDev = process.env.NODE_ENV === 'development';
-const INITIAL_SYNC_DEPTH = isDev ? 20 : 200;
-const INCREMENTAL_SYNC_DEPTH = isDev ? 20 : 40;
+const INITIAL_SYNC_DEPTH = 20;
+const INCREMENTAL_SYNC_DEPTH = 20;
 const PINGBACK_TIMEOUT = '2h';
 
 export const syncTrustpilot = inngest.createFunction(
@@ -145,7 +144,7 @@ export const syncTrustpilot = inngest.createFunction(
               text: normalized.text,
               rating: normalized.rating,
               authorName: normalized.authorName,
-              metadataJson: metadataJson as any,
+              metadataJson,
             })
             .where(eq(feedbackItems.id, existing[0].id));
         } else {
@@ -160,7 +159,7 @@ export const syncTrustpilot = inngest.createFunction(
             rating: normalized.rating,
             authorName: normalized.authorName,
             createdAt: normalized.createdAt,
-            metadataJson: metadataJson as any,
+            metadataJson,
           });
 
           inserted.push({ id, text: normalized.text });
@@ -181,7 +180,7 @@ export const syncTrustpilot = inngest.createFunction(
         const embeddingRows = newItems.map((item, idx) => ({
           id: crypto.randomUUID(),
           feedbackItemId: item.id,
-          embedding: embeddings[idx] as any,
+          embedding: embeddings[idx],
           modelName: 'gemini-embedding-001',
           createdAt: new Date(),
         }));

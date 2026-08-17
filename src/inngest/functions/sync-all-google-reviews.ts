@@ -3,15 +3,11 @@ import { db } from '@/db/drizzle';
 import { connectorConfigs } from '@/db/schema';
 import { eq, and, or } from 'drizzle-orm';
 
-const isDev = process.env.NODE_ENV === 'development';
-
 export const syncAllGoogleReviews = inngest.createFunction(
   {
     id: 'sync-all-google-reviews',
     name: 'Sync All Google Reviews',
-    triggers: isDev
-      ? [{ event: 'google-reviews.sync-all' as const }]
-      : [{ cron: '0 0 * * *' }],
+    triggers: [{ event: 'google-reviews.sync-all' }],
   },
   async ({ step }) => {
     const configs = await step.run('fetch-active-configs', async () => {

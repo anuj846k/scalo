@@ -1,0 +1,14 @@
+[mcp_servers.scalo]
+command = "pnpm"
+args = ["mcp"]
+cwd = "/Users/anuj846k/Developer/Code/scalo"
+enabled = true
+startup_timeout_sec = 20
+tool_timeout_sec = 60
+default_tools_approval_mode = "auto"
+
+[mcp_servers.scalo.tools.list_connectors]
+approval_mode = "approve"
+
+[mcp_servers.scalo.tools.search_feedback]
+approval_mode = "approve"

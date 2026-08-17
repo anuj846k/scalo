@@ -22,6 +22,7 @@ import {
 import { createSearchFeedbackTool } from '@/lib/ai/tools/search-feedback';
 import { systemPrompt } from '@/lib/ai/prompts';
 import { generateTitleFromUserMessage } from '@/app/actions';
+import type { ChatMessage } from '@/lib/types';
 
 export async function POST(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -81,7 +82,7 @@ export async function POST(req: Request) {
     });
   }
 
-  let uiMessages: any[];
+  let uiMessages: ChatMessage[];
 
   if (isToolContinuation && body.messages) {
     uiMessages = body.messages;
@@ -95,7 +96,7 @@ export async function POST(req: Request) {
     uiMessages = [...dbUiMessages, body.message];
   }
 
-  const modelMessages = await convertToModelMessages(uiMessages as any);
+  const modelMessages = await convertToModelMessages(uiMessages);
 
   const stream = createUIMessageStream({
     originalMessages: isToolContinuation ? uiMessages : undefined,
@@ -128,7 +129,7 @@ export async function POST(req: Request) {
           const title = await titlePromise;
           dataStream.write({ type: 'data-chat-title', data: title });
           updateChatTitle(chatId, title);
-        } catch (_) {
+        } catch {
           /* non-fatal */
         }
       }

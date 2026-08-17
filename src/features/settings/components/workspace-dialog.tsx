@@ -2,17 +2,19 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Settings, Users, Mail, Loader2 } from 'lucide-react';
+import { Settings, Users, Mail, Loader2, KeyRound } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { authClient } from '@/lib/auth-client';
 import { WorkspaceGeneral } from './workspace-general';
 import { WorkspaceMembers } from './workspace-members';
 import { WorkspaceInvitations } from './workspace-invitations';
+import { McpAccessTokens } from './mcp-access-tokens';
 
 const navItems = [
   { id: 'general', label: 'General', icon: Settings },
   { id: 'members', label: 'Members', icon: Users },
   { id: 'invitations', label: 'Invites', icon: Mail },
+  { id: 'mcp-keys', label: 'MCP keys', icon: KeyRound },
 ] as const;
 
 type NavId = (typeof navItems)[number]['id'];
@@ -255,6 +257,9 @@ export function WorkspaceDialog({
                     invitations={incomingInvites}
                     onActionComplete={fetchOrgs}
                   />
+                )}
+                {activeNav === 'mcp-keys' && org?.id && (
+                  <McpAccessTokens organizationId={org.id} />
                 )}
               </>
             )}

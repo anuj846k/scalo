@@ -144,11 +144,39 @@ export const invitation = pgTable(
   ],
 );
 
+export const mcpAccessTokens = pgTable(
+  'mcp_access_tokens',
+  {
+    id: text('id').primaryKey(),
+    organizationId: text('organization_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    tokenPrefix: text('token_prefix').notNull(),
+    tokenHash: text('token_hash').notNull(),
+    lastUsedAt: timestamp('last_used_at'),
+    expiresAt: timestamp('expires_at').notNull(),
+    revokedAt: timestamp('revoked_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex('mcp_access_tokens_token_hash_uidx').on(table.tokenHash),
+    index('mcp_access_tokens_user_org_idx').on(
+      table.userId,
+      table.organizationId,
+    ),
+  ],
+);
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
   members: many(member),
   invitations: many(invitation),
+  mcpAccessTokens: many(mcpAccessTokens),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -239,7 +267,22 @@ export const organizationRelations = relations(organization, ({ many }) => ({
   invitations: many(invitation),
   feedbackItems: many(feedbackItems),
   connectorConfigs: many(connectorConfigs),
+  mcpAccessTokens: many(mcpAccessTokens),
 }));
+
+export const mcpAccessTokenRelations = relations(
+  mcpAccessTokens,
+  ({ one }) => ({
+    organization: one(organization, {
+      fields: [mcpAccessTokens.organizationId],
+      references: [organization.id],
+    }),
+    user: one(user, {
+      fields: [mcpAccessTokens.userId],
+      references: [user.id],
+    }),
+  }),
+);
 
 export const connectorConfigRelations = relations(
   connectorConfigs,

@@ -207,6 +207,35 @@ export default function TrustpilotPage() {
           </Button>
         </div>
       </Card>
+
+      <AlertDialog
+        open={pendingDisconnect !== null}
+        onOpenChange={(open) => !open && setPendingDisconnect(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Disconnect this integration?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will stop syncing new reviews. Existing synced reviews will
+              remain in your workspace.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (pendingDisconnect) {
+                  handleDisconnect(pendingDisconnect);
+                  setPendingDisconnect(null);
+                }
+              }}
+            >
+              Disconnect
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

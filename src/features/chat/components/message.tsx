@@ -6,6 +6,7 @@ import { Tool, ToolContent, ToolHeader, ToolInput, ToolOutput } from './tool';
 import { Reasoning, ReasoningTrigger, ReasoningContent } from './reasoning';
 import { MessageResponse } from './message-response';
 import { MessageActions } from './message-actions';
+import { collectCitationsFromParts, SourceCitations } from './source-citations';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
@@ -112,6 +113,12 @@ const PurePreviewMessage = ({
     return null;
   });
 
+  const citations = isAssistant
+    ? collectCitationsFromParts(
+        message.parts as Array<Record<string, unknown>> | undefined,
+      )
+    : [];
+
   const actions = (
     <MessageActions
       chatId={chatId}
@@ -135,6 +142,7 @@ const PurePreviewMessage = ({
   ) : (
     <>
       <div className="flex flex-col gap-2">{parts}</div>
+      {citations.length > 0 && <SourceCitations citations={citations} />}
       {actions}
     </>
   );

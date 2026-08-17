@@ -21,15 +21,21 @@ const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
   {
     title: 'COMPANY',
     links: [
-      // { label: 'Terms of Service', href: '/terms' },
-      // { label: 'Privacy Policy', href: '/privacy' },
+      { label: 'Terms of Service', href: '/terms' },
+      { label: 'Privacy Policy', href: '/privacy' },
       { label: 'Contact Us', href: 'mailto:anuj@scalocx.com' },
     ],
   },
   {
     title: 'SOCIAL',
     minWidth: 'min-w-[68.17px]',
-    links: [{ label: 'X (Twitter)', href: 'https://x.com/anujxforge' }],
+    links: [
+      { label: 'X (Twitter)', href: 'https://x.com/anujxforge' },
+      {
+        label: 'LinkedIn',
+        href: 'https://www.linkedin.com/in/anuj-kumar-jaiswal-6aa13b264/',
+      },
+    ],
   },
 ];
 
@@ -87,19 +93,6 @@ const Footer = () => {
                 </div>
               ))}
             </nav>
-          </div>
-
-          {/* Support line */}
-          <div className="flex flex-col items-start gap-1 self-stretch text-[13.6px] leading-5">
-            <span className="text-white/50 text-[12px] font-[510] uppercase tracking-[0.3px]">
-              Support
-            </span>
-            <a
-              href="mailto:anuj@scalocx.com"
-              className="text-white hover:text-white/80 transition-colors"
-            >
-              anuj@scalocx.com
-            </a>
           </div>
 
           {/* Copyright */}

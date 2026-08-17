@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "scalo": {
+      "command": "pnpm",
+      "args": ["mcp"],
+      "cwd": "/Users/anuj846k/Developer/Code/scalo"
+    }
+  }
+}
