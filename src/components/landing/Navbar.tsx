@@ -7,7 +7,7 @@ import { getUser } from '@/lib/auth-utils';
 const navItems = [
   { label: 'Product', href: '#product', hasDropdown: false },
   { label: 'Features', href: '#features', hasDropdown: false },
-  { label: 'Pricing', href: '#pricing', hasDropdown: false },
+  // { label: 'Pricing', href: '#pricing', hasDropdown: false },
 ];
 
 export default async function Navbar() {

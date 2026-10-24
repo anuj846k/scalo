@@ -1,7 +1,7 @@
 import {
   requireAuth,
   ensureActiveOrg,
-  requireActiveSubscription,
+  // requireActiveSubscription,
 } from '@/lib/auth-utils';
 import { AppSidebar } from '@/features/dashboard/components/app-sidebar';
 import { DashboardHeader } from '@/features/dashboard/components/dashboard-header';
@@ -13,8 +13,9 @@ export default async function DashboardRootLayout({
   children: React.ReactNode;
 }) {
   const session = await requireAuth();
-  const orgId = await ensureActiveOrg(session);
-  await requireActiveSubscription(orgId);
+  await ensureActiveOrg(session);
+  // Payment gating disabled for now.
+  // await requireActiveSubscription(orgId);
 
   return (
     <SidebarProvider className="h-svh overflow-hidden">
