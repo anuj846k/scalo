@@ -5,7 +5,7 @@ import IntegrationsSection from '@/components/landing/IntegrationsSection';
 import Bento from '@/components/landing/Bento';
 // import TrustedBy from '@/components/landing/TrustedBy';
 import HowItWorks from '@/components/landing/HowItWorks';
-import Pricing from '@/components/landing/Pricing';
+// import Pricing from '@/components/landing/Pricing';
 import CTA from '@/components/landing/CTA';
 import FAQ from '@/components/landing/FAQ';
 import Footer from '@/components/landing/Footer';
@@ -45,7 +45,7 @@ export default function Home() {
           <Bento />
           {/* <TrustedBy /> */}
           <HowItWorks />
-          <Pricing />
+          {/* <Pricing /> */}
           <CTA />
           <FAQ />
           <Footer />

@@ -15,7 +15,7 @@ const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
     links: [
       { label: 'Product', href: '#product' },
       { label: 'Features', href: '#features' },
-      { label: 'Pricing', href: '#pricing' },
+      // { label: 'Pricing', href: '#pricing' },
     ],
   },
   {
