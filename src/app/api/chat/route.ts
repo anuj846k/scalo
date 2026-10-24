@@ -7,9 +7,10 @@ import {
 import { google, type GoogleLanguageModelOptions } from '@ai-sdk/google';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
-import { eq } from 'drizzle-orm';
-import { db } from '@/db/drizzle';
-import { organization } from '@/db/schema';
+// Payment gating disabled for now.
+// import { eq } from 'drizzle-orm';
+// import { db } from '@/db/drizzle';
+// import { organization } from '@/db/schema';
 import {
   createChat,
   deleteChat,
@@ -35,16 +36,16 @@ export async function POST(req: Request) {
     return new Response('No active organization', { status: 400 });
   }
 
-  const [org] = await db
-    .select({ subscriptionStatus: organization.subscriptionStatus })
-    .from(organization)
-    .where(eq(organization.id, organizationId))
-    .limit(1);
+  // const [org] = await db
+  //   .select({ subscriptionStatus: organization.subscriptionStatus })
+  //   .from(organization)
+  //   .where(eq(organization.id, organizationId))
+  //   .limit(1);
 
-  const status = org?.subscriptionStatus ?? 'inactive';
-  if (status !== 'active' && status !== 'trialing') {
-    return new Response('Subscription required', { status: 402 });
-  }
+  // const status = org?.subscriptionStatus ?? 'inactive';
+  // if (status !== 'active' && status !== 'trialing') {
+  //   return new Response('Subscription required', { status: 402 });
+  // }
 
   const body = await req.json();
   const chatId = body.id;
