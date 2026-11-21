@@ -15,8 +15,8 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: true,
     sendResetPassword: async ({ user, url }) => {
-      // Not awaited, to prevent timing attacks (per Better Auth docs).
-      void sendEmail({
+      // Awaited so the serverless function does not exit before SMTP finishes.
+      await sendEmail({
         to: user.email,
         subject: 'Reset your Scalo password',
         text: `Click the link to reset your password: ${url}\n\nThis link expires in 1 hour. If you did not request this, ignore this email.`,
